@@ -1,1 +1,64 @@
-<p>login works!</p>
+<div class="col-md-6 col-lg-4 col-xl-3">
+    <div class="card overflow-hidden">
+        <div class="bg-login">
+            <div class="position-relative">
+                <h5 class="text-white">Bienvenido</h5>
+                <p class="text-white-50">Inicia sesión para continuar a ERP</p>
+                <div class="logo-admin mt-4">
+                    <span class="material-icons logo-admin-icon">person_outline</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body pt-5">
+            <div class="p-2">
+                <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" (blur)="logValidationErrors()">
+                    <mat-form-field appearance="outline" class="w-100 mb-2">
+                        <mat-label>Email</mat-label>
+                        <input
+                                matInput
+                                placeholder="example@email.com"
+                                type="text"
+                                formControlName="email"
+                                (blur)="logValidationErrors()"
+                        />
+                        <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Contraseña</mat-label>
+                        <input
+                                [type]="hidePassword ? 'password' : 'text'"
+                                matInput
+                                formControlName="password"
+                                (blur)="logValidationErrors()"
+                        />
+                        <mat-icon (click)="hidePassword = !hidePassword" matSuffix>{{
+                            hidePassword ? 'visibility_off' : 'visibility'
+                            }}</mat-icon>
+                        <mat-error *ngIf="formErrors.password">{{ formErrors.password }}</mat-error>
+                    </mat-form-field>
+
+                    <div class="mt-3">
+                        <button
+                                mat-flat-button
+                                class="w-100"
+                                color="accent"
+                                type="submit"
+                                [disabled]="isLoading"
+                        >
+                            Iniciar sesión
+                        </button>
+                    </div>
+
+<!--                    <div class="mt-4 text-center">-->
+<!--                        <a href="#" class="text-muted">-->
+<!--                            <span class="material-icons lock-icon">lock</span>-->
+<!--                            ¿Olvidaste tu contraseña?-->
+<!--                        </a>-->
+<!--                    </div>-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,77 @@
+.login-box {
+  background: #ffffff;
+  border: 2px solid #dadada;
+  padding: 15px;
+}
+
+.card {
+  margin-bottom: 24px;
+  box-shadow: 0 1rem 1.5rem rgba(18, 38, 63, 0.1);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  //background-color: #1e2938;
+  background-clip: border-box;
+  border: 0 solid #f6f6f6;
+  border-radius: 0.25rem;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.25rem 1.25rem;
+}
+
+.bg-login {
+  background-image: url('~src/assets/img/logo-02.png');
+  background-size: cover;
+  background-position: center center;
+  padding: 60px 0;
+  position: relative;
+  border-radius: 0 0 50% 50%;
+  text-align: center;
+}
+
+.bg-login:before {
+  content: '';
+  position: absolute;
+  //background: -webkit-gradient(linear, left top, right top, from(#6e1e1e), to(#293e92));
+  background: linear-gradient(to right, var(--accent-lighter-color), var(--accent-darker-color));
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0 50% 50%;
+  opacity: 0.8;
+}
+
+.logo-admin {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 74px;
+  height: 74px;
+  line-height: 74px;
+  background: #fff;
+  border-radius: 50%;
+  text-align: center;
+  //-webkit-box-shadow: 0 0.75rem 1.5rem rgb(18 38 63 / 3%);
+  //box-shadow: 0 0.75rem 1.5rem rgb(18 38 63 / 3%);
+}
+
+.logo-admin-icon {
+  font-size: 75px;
+  color: #505050;
+}
+
+.lock-icon {
+  vertical-align: -3px;
+  font-size: 1rem;
+}

@@ -1,0 +1,5 @@
+:host {
+  display: grid;
+  grid-template-rows: 64px minmax(0, 1fr) 64px;
+  min-height: 100vh;
+}

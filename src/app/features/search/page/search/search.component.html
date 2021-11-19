@@ -1,1 +1,27 @@
-<p>search works!</p>
+<div class="row">
+    <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Buscar compañero</mat-label>
+        <input matInput placeholder="Busca por nombre o expediente">
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+</div>
+
+<div class="row">
+    <div class="col-3 mb-3" *ngFor="let person of people">
+        <mat-card>
+            <mat-card-title>{{person.name}} {{person.lastname}}</mat-card-title>
+            <mat-card-content class="mt-3">
+                <p class="title">Expediente</p>
+                <p class="subtitle">{{person.id}}</p>
+                <p class="title">Puesto</p>
+                <p class="subtitle">{{person.puesto}} </p>
+                <p class="title">Area de adscripcion</p>
+                <p class="subtitle">{{person.area}}</p>
+            </mat-card-content>
+            <mat-card-actions class="d-flex justify-content-between">
+                <button mat-flat-button color="primary" (click)="register('otro')">Otro</button>
+                <button mat-flat-button color="accent" (click)="register('MPLD')">MPLD</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

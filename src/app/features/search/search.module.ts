@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
 
-import { SearchRoutingModule } from './search-routing.module';
-import { SearchComponent } from './page/search/search.component';
+import {SearchRoutingModule} from './search-routing.module';
+import {SearchComponent} from './page/search/search.component';
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -10,7 +10,7 @@ import { SearchComponent } from './page/search/search.component';
     SearchComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     SearchRoutingModule
   ]
 })

@@ -1,0 +1,18 @@
+.footer {
+  //grid-area: footer;
+  background: var(--primary-color);
+  padding: 0 2rem;
+  height: 64px;
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  &__company {
+    width: 3rem;
+  }
+
+  &__developby {
+    font-size: var(--text-300);
+  }
+}

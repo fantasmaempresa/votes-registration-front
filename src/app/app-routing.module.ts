@@ -24,6 +24,10 @@ const routes: Routes = [
                 loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule)
             },
             {
+                path: 'results',
+                loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
+            },
+            {
                 path: '**',
                 redirectTo: '404',
                 pathMatch: 'full',
