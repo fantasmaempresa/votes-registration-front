@@ -8,12 +8,14 @@ import {AuthLayoutComponent} from './layout/auth-layout/auth-layout.component';
 import {ContentLayoutComponent} from './layout/content-layout/content-layout.component';
 import {CoreModule} from "./core/core.module";
 import {SharedModule} from "./shared/shared.module";
+import { ResultsLayoutComponent } from './layout/results-layout/results-layout.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AuthLayoutComponent,
-        ContentLayoutComponent
+        ContentLayoutComponent,
+        ResultsLayoutComponent
     ],
     imports: [
         BrowserModule,

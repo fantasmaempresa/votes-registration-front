@@ -1,12 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {ResultsComponent} from "./page/results/results.component";
+import {VotersComponent} from "./page/voters/voters.component";
+import {ResultsLayoutComponent} from "../../layout/results-layout/results-layout.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: ResultsComponent
-  }
+    component: ResultsLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'show',
+        pathMatch: 'full'
+      },
+      {
+        path: 'show',
+        component: ResultsComponent
+      },
+      {
+        path: 'voters',
+        component: VotersComponent
+      }
+    ]
+  },
 ];
 
 @NgModule({

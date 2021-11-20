@@ -3,12 +3,12 @@ export const validationMessages = {
         required: 'Name is required.',
     },
     email: {
-        required: 'Email is required.',
-        email: 'Please provide valid Email',
-        pattern: 'Please provide valid Email',
+        required: 'Email es obligatorio',
+        email: 'Por favor ingresa un email valido',
+        pattern: 'Por favor ingresa un email valido',
     },
     password: {
-        required: 'Password is required.',
+        required: 'Contraseña es obligatoria',
     },
     confirmPassword: {
         required: 'Confirm Password is required.',
