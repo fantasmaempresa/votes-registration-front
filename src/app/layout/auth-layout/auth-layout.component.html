@@ -1,5 +1,7 @@
 <router-outlet></router-outlet>
 
+<button mat-stroked-button *ngIf="this.showButton" (click)="addToHomeScreen()">Install</button>
+
 <footer>
     <p>© {{ date }} Crafted with ❤️ by Open2Code</p>
 </footer>
