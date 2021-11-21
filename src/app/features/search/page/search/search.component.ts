@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import Swal from 'sweetalert2'
-import {BluetoothCore} from "@manekinekko/angular-web-bluetooth";
-import {map, mergeMap, Observable} from "rxjs";
 
 
 @Component({
@@ -112,28 +110,29 @@ export class SearchComponent implements OnInit {
     }
 
     printTicket(voter: any) {
+        let mobileNavigatorObject: any = window.navigator;
         if (this.printCharacteristic === null) {
-            navigator.bluetooth.requestDevice({
+            mobileNavigatorObject.bluetooth.requestDevice({
                 filters: [{
                     name: '58HB6',
                 }],
                 optionalServices: ['0000ff00-0000-1000-8000-00805f9b34fb']
             })
-                .then(device => {
+                .then((device: any) => {
                     console.log('> Found ' + device.name);
                     console.log('Connecting to GATT Server...');
                     // @ts-ignore
                     return device.gatt.connect();
                 })
-                .then(server => server.getPrimaryService('0000ff00-0000-1000-8000-00805f9b34fb'))
-                .then(service => service.getCharacteristic('0000ff02-0000-1000-8000-00805f9b34fb'))
-                .then(characteristic => {
+                .then((server: any) => server.getPrimaryService('0000ff00-0000-1000-8000-00805f9b34fb'))
+                .then((service: any) => service.getCharacteristic('0000ff02-0000-1000-8000-00805f9b34fb'))
+                .then((characteristic: any) => {
                     this.printCharacteristic = characteristic;
-                    this.sendPrinterData(voter);
+                    this.sendPrinterData(voter).then(() => console.log('Terminado'));
                 })
-                .catch(e => console.log(e))
+                .catch((e: any) => console.log(e))
         } else {
-            this.sendPrinterData(voter);
+            this.sendPrinterData(voter).then(() => console.log('Terminado'));
         }
     }
 
