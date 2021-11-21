@@ -21,7 +21,7 @@ export class ResultsService {
     getTotalNoFavor() {
         return this.http.get(`${environment.base_url}/api/totalNoVoteLaborUnion`)
             .pipe(
-                map((res: any) => res.data)
+                map((res: any) => res.data),
             )
     }
 }

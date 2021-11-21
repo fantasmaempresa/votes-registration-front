@@ -104,10 +104,6 @@ export class SearchComponent implements OnInit {
             ),
             share()
         );
-
-        this.areMinimumCharactersTyped$ = this.searchControl.valueChanges.pipe(
-            map(searchString => searchString.length >= 3)
-        );
     }
 
 
@@ -165,7 +161,8 @@ export class SearchComponent implements OnInit {
         }
     }
 
-    register(option: string, voter: Object) {
+    register(option: string, voter: any) {
+        let vote: Observable<any>
         Swal.fire({
             title: `¿Confirmar voto por ${option}`,
             showDenyButton: true,
@@ -178,6 +175,14 @@ export class SearchComponent implements OnInit {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
+                if(option === 'MPLD') {
+                    vote = this.searchService.voteFavor(voter.id);
+                } else {
+                    vote = this.searchService.voteNoFavor(voter.id);
+                }
+                vote.subscribe(res => {
+                    console.log(res);
+                })
                 this.printTicket(voter);
             }
         })
