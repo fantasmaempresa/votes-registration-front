@@ -6,7 +6,7 @@
                     class="d-flex justify-content-center align-items-center" style="min-height: 50vh"
             >
                 <p class="text-result">
-                    150
+                    {{totalFavor$ | async}}
                 </p>
             </mat-card-content>
             <mat-card-actions>
@@ -19,7 +19,7 @@
             <mat-card-title>Otro</mat-card-title>
             <mat-card-content class="d-flex justify-content-center align-items-center" style="min-height: 50vh">
                 <p class="text-result">
-                    150
+                    {{totalNoFavor$ | async}}
                 </p>
             </mat-card-content>
             <mat-card-actions>

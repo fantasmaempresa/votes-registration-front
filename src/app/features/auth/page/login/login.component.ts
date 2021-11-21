@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {FormValidationService} from "../../../../shared/services/form-validation.service";
 import {validationMessages} from "../../../../core/constants/validationMessages";
+import {AuthService} from "../../../../core/services/auth.service";
 
 @Component({
     selector: 'app-login',
@@ -12,7 +13,8 @@ import {validationMessages} from "../../../../core/constants/validationMessages"
 export class LoginComponent implements OnInit {
     @HostBinding('class') classes = 'flex-fill justify-content-center row';
 
-    constructor(private formValidationService: FormValidationService, private router: Router) {
+    constructor(private formValidationService: FormValidationService, private router: Router,
+                private authService: AuthService) {
     }
 
     signUpForm!: FormGroup;
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit {
     ngOnInit(): void {
         this.signUpForm = new FormGroup(
             {
-                email: new FormControl('', [Validators.required, Validators.email]),
+                username: new FormControl('', [Validators.required, Validators.email]),
                 password: new FormControl('', Validators.required),
                 confirmPassword: new FormControl('', Validators.required),
             },
@@ -51,9 +53,12 @@ export class LoginComponent implements OnInit {
         this.signUpForm.markAllAsTouched();
         this.logValidationErrors();
         this.isLoading = true;
-        setTimeout(async () => {
-            this.isLoading = false;
-            await this.router.navigate(['/search']);
-        }, 3000);
+        this.authService.login(this.signUpForm.value).subscribe((res: any) => {
+            if(res.access_token) {
+                localStorage.setItem('token', res.access_token);
+                this.router.navigate(['search'])
+            }
+
+        })
     }
 }

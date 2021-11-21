@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {ResultsService} from "../../../../core/services/results.service";
 
 @Component({
   selector: 'app-results',
@@ -8,14 +10,19 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ResultsComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  totalFavor$!: Observable<any>;
+  totalNoFavor$!: Observable<any>;
+
+  constructor(private router: Router, private route: ActivatedRoute,
+              private resultsService: ResultsService) { }
 
   ngOnInit(): void {
+    this.totalFavor$ = this.resultsService.getTotalFavor();
+    this.totalNoFavor$ = this.resultsService.getTotalNoFavor();
   }
 
   goToVoters(party: string) {
     this.router.navigate(['voters'], {relativeTo: this.route.parent })
-
   }
 
 }

@@ -6,6 +6,7 @@ import {PageNotFoundComponent} from './components/page-not-found/page-not-found.
 import {MaterialModule} from "./material/material.module";
 import {NavbarComponent} from "../layout/navbar/navbar.component";
 import {FooterComponent} from "../layout/footer/footer.component";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import {FooterComponent} from "../layout/footer/footer.component";
         ReactiveFormsModule,
         RouterModule,
         MaterialModule,
+        HttpClientModule
     ],
     exports: [
         CommonModule,
@@ -27,6 +29,7 @@ import {FooterComponent} from "../layout/footer/footer.component";
         ReactiveFormsModule,
         RouterModule,
         MaterialModule,
+        HttpClientModule,
         NavbarComponent,
         FooterComponent
     ]

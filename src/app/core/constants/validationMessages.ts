@@ -2,7 +2,7 @@ export const validationMessages = {
     name: {
         required: 'Name is required.',
     },
-    email: {
+    username: {
         required: 'Email es obligatorio',
         email: 'Por favor ingresa un email valido',
         pattern: 'Por favor ingresa un email valido',

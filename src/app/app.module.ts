@@ -10,6 +10,8 @@ import {CoreModule} from "./core/core.module";
 import {SharedModule} from "./shared/shared.module";
 import {ResultsLayoutComponent} from './layout/results-layout/results-layout.component';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {JwtInterceptor} from "./core/interceptors/jwt.interceptor";
 
 @NgModule({
     declarations: [
@@ -30,7 +32,12 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
     ],
     exports: [],
     providers: [
-        {provide: LocationStrategy, useClass: HashLocationStrategy}
+        {provide: LocationStrategy, useClass: HashLocationStrategy},
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptor,
+            multi: true
+        },
     ],
     bootstrap: [AppComponent]
 })

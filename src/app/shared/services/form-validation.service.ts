@@ -42,9 +42,10 @@ export class FormValidationService {
       if (!control || !confirmControl) {
         return null;
       }
-      // if (confirmControl.errors && !confirmControl.errors.mismatch) {
-      //   return null;
-      // }
+      // @ts-ignore
+      if (confirmControl.errors && !confirmControl.errors.mismatch) {
+        return null;
+      }
       if (control.value !== confirmControl.value) {
         confirmControl.setErrors({ mismatch: true });
       } else {
