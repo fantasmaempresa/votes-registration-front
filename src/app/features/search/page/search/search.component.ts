@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
         this.searchResults$ = searchString$.pipe(
             tap(() => this.isLoadingResults = true),
             switchMap((searchString: string) =>
-                this.searchService.search(searchString)
+                searchString.length >= 3 ? this.searchService.search(searchString) : of([])
             ),
             share(),
             tap(() => this.isLoadingResults = false)
@@ -63,10 +63,19 @@ export class SearchComponent implements OnInit {
             + '\u000A\u000D'
             + '\u000A\u000D'
             + '\u000A\u000D'
-            + `${voter.name}-${voter.lastname}`
+            + `${voter.name} ${voter.last_name} ${voter.mother_last_name}`
             + '\u000A\u000D'
             + '\u000A\u000D'
-            + `${voter.area}`
+            + 'CATEGORIA/PUESTO'
+            + `${voter.denomination_jod_description}`
+            + '\u000A\u000D'
+            + '\u000A\u000D'
+            + 'ADSC'
+            + `${voter.dependency}`
+            + '\u000A\u000D'
+            + '\u000A\u000D'
+            + 'ADSC'
+            + `${voter.affiliation_area}`
             + '\u000A\u000D'
             + '\u000A\u000D'
             + 'INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA'
@@ -131,7 +140,6 @@ export class SearchComponent implements OnInit {
                     vote = this.searchService.voteNoFavor(voter.id);
                 }
                 vote.subscribe(res => {
-                    console.log(res);
                     const searchString$ = merge(
                         defer(() => of(this.searchControl.value)),
                         this.searchControl.valueChanges
