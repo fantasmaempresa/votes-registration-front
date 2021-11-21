@@ -11,73 +11,9 @@ import {SearchService} from "../../../../core/services/search.service";
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-    people = [
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-        {
-            id: '46188243',
-            name: 'Luis',
-            lastname: 'Osorio',
-            area: 'Direccion general de administracion',
-            puesto: 'Analista',
-            clave: 'G-1308',
-        },
-
-
-    ]
-
     // define your services and characteristics
     PRINTER_UUID = '0000180f-0000-1000-8000-00805f9b34fb'
-
-
     printCharacteristic: any = null;
-
     searchControl!: FormControl;
     searchResults$!: Observable<any>;
     public areMinimumCharactersTyped$!: Observable<boolean>;
@@ -105,7 +41,6 @@ export class SearchComponent implements OnInit {
             share()
         );
     }
-
 
     async sendPrinterData(voter: any) {
         let encoder = new TextEncoder();
@@ -182,6 +117,19 @@ export class SearchComponent implements OnInit {
                 }
                 vote.subscribe(res => {
                     console.log(res);
+                    const searchString$ = merge(
+                        defer(() => of(this.searchControl.value)),
+                        this.searchControl.valueChanges
+                    ).pipe(
+                        debounceTime(1000),
+                        distinctUntilChanged()
+                    );
+                    this.searchResults$ = searchString$.pipe(
+                        switchMap((searchString: string) =>
+                            this.searchService.search(searchString)
+                        ),
+                        share()
+                    );
                 })
                 this.printTicket(voter);
             }
