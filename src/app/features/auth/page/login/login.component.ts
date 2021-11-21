@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit {
 
     formErrors: any = {};
 
+    incorrectLogin = false;
+
     ngOnInit(): void {
         this.signUpForm = new FormGroup(
             {
@@ -63,6 +65,7 @@ export class LoginComponent implements OnInit {
                     },
                     error: () => {
                         this.isLoading = false;
+                        this.incorrectLogin = true;
                     },
                 }
             )

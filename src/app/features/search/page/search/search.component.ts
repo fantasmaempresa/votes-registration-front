@@ -1,7 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
-import {debounceTime, defer, distinctUntilChanged, filter, map, merge, Observable, of, share, switchMap} from "rxjs";
+import {
+    debounceTime,
+    defer,
+    distinctUntilChanged,
+    filter,
+    map,
+    merge,
+    Observable,
+    of,
+    share,
+    switchMap,
+    tap
+} from "rxjs";
 import {SearchService} from "../../../../core/services/search.service";
 
 
@@ -18,6 +30,7 @@ export class SearchComponent implements OnInit {
     searchResults$!: Observable<any>;
     public areMinimumCharactersTyped$!: Observable<boolean>;
     public areNoResultsFound$!: Observable<boolean>;
+    isLoadingResults = false;
 
     constructor(private searchService: SearchService) {
     }
@@ -35,10 +48,12 @@ export class SearchComponent implements OnInit {
             distinctUntilChanged()
         );
         this.searchResults$ = searchString$.pipe(
+            tap(() => this.isLoadingResults = true),
             switchMap((searchString: string) =>
                 this.searchService.search(searchString)
             ),
-            share()
+            share(),
+            tap(() => this.isLoadingResults = false)
         );
     }
 
@@ -125,10 +140,12 @@ export class SearchComponent implements OnInit {
                         distinctUntilChanged()
                     );
                     this.searchResults$ = searchString$.pipe(
+                        tap(() => this.isLoadingResults = true),
                         switchMap((searchString: string) =>
                             this.searchService.search(searchString)
                         ),
-                        share()
+                        share(),
+                        tap(() => this.isLoadingResults = true),
                     );
                 })
                 this.printTicket(voter);

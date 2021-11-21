@@ -11,8 +11,8 @@
         </div>
         <div class="card-body pt-5">
             <div class="p-2">
-                <div class="d-flex justify-content-center">
-                    <p>Usuario y/o contrasña invdalida</p>
+                <div class="d-flex justify-content-center" *ngIf="incorrectLogin">
+                    <p style="background-color: var(--warn-darker-color); color: white; padding: 1rem">Usuario y/o contrasña invalida</p>
                 </div>
                 <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" (blur)="logValidationErrors()">
                     <mat-form-field appearance="outline" class="w-100 mb-2">
