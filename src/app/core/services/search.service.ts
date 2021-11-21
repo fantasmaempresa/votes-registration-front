@@ -37,4 +37,9 @@ export class SearchService {
         let url = `${environment.base_url}/api/noVoteLaborUnion/${id}`
         return this.http.get(url);
     }
+
+    voteAttendance(id: number) {
+        let url = `${environment.base_url}/api/attendanceVoteLaborUnion/${id}`
+        return this.http.get(url);
+    }
 }

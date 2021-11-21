@@ -26,6 +26,12 @@
             </mat-card-content>
             <mat-card-actions class="d-flex justify-content-between">
                 <button mat-flat-button color="primary"
+                        (click)="register('attendance', person)"
+                        [disabled]="person.vote_labor_union !== null">
+                    Asistencia
+                    <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+                </button>
+                <button mat-flat-button color="primary"
                         (click)="register('otro', person)"
                         [disabled]="person.vote_labor_union !== null">
                     Otro

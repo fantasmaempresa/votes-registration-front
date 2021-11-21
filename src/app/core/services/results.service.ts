@@ -24,4 +24,11 @@ export class ResultsService {
                 map((res: any) => res.data),
             )
     }
+
+    getTotalAttendance() {
+        return this.http.get(`${environment.base_url}/api/totalAttendanceVote`)
+            .pipe(
+                map((res: any) => res.data),
+            )
+    }
 }

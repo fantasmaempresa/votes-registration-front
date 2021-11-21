@@ -57,43 +57,40 @@ export class SearchComponent implements OnInit {
         );
     }
 
-    async sendPrinterData(voter: any) {
+    async sendPrinterData(voter: any, option: string) {
         let encoder = new TextEncoder();
+        let date = new Date().toISOString()
         let ticket = '\u000A\u000D'
-            + '\u000A\u000D'
-            + '\u000A\u000D'
             + '\u000A\u000D'
             + `${voter.name} ${voter.last_name} ${voter.mother_last_name}`
             + '\u000A\u000D'
             + '\u000A\u000D'
-            + 'CATEGORIA/PUESTO'
-            + `${voter.denomination_jod_description}`
-            + '\u000A\u000D'
-            + '\u000A\u000D'
             + 'ADSC'
+            + '\u000A\u000D'
             + `${voter.dependency}`
             + '\u000A\u000D'
-            + '\u000A\u000D'
-            + 'ADSC'
-            + `${voter.affiliation_area}`
-            + '\u000A\u000D'
-            + '\u000A\u000D'
-            + 'INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA'
+            + 'AREA'
+            + `${voter.affiliation_area}`;
+        let text = encoder.encode(ticket);
+        console.log(text);
+        await this.printCharacteristic.writeValue(text);
+        text = encoder.encode('\u000A\u000D'
+            + 'INFORMACION OBTENIDA DE LA '
+            + 'PLATAFORMA NACIONAL DE TRANSPARENCIA'
             + '\u000A\u000D'
             + '\u000A\u000D'
             + 'https://www.plataformadetransparencia.org.mx'
             + '\u000A\u000D'
+            + `${option} -`
+            + `${date}`
             + '\u000A\u000D'
-            + '\u000A\u000D'
-            + '\u000A\u000D';
-        let text = encoder.encode(ticket);
-        console.log(text);
+        );
         await this.printCharacteristic.writeValue(text);
         // Print an image followed by the text
 
     }
 
-    printTicket(voter: any) {
+    printTicket(voter: any, option: string) {
         let mobileNavigatorObject: any = window.navigator;
         if (this.printCharacteristic === null) {
             mobileNavigatorObject.bluetooth.requestDevice({
@@ -112,11 +109,11 @@ export class SearchComponent implements OnInit {
                 .then((service: any) => service.getCharacteristic('0000ff02-0000-1000-8000-00805f9b34fb'))
                 .then((characteristic: any) => {
                     this.printCharacteristic = characteristic;
-                    this.sendPrinterData(voter).then(() => console.log('Terminado'));
+                    this.sendPrinterData(voter, option).then(() => console.log('Terminado'));
                 })
                 .catch((e: any) => console.log(e))
         } else {
-            this.sendPrinterData(voter).then(() => console.log('Terminado'));
+            this.sendPrinterData(voter, option).then(() => console.log('Terminado'));
         }
     }
 
@@ -136,6 +133,8 @@ export class SearchComponent implements OnInit {
                 Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
                 if(option === 'MPLD') {
                     vote = this.searchService.voteFavor(voter.id);
+                } else if ('attendance') {
+                    vote = this.searchService.voteAttendance(voter.id);
                 } else {
                     vote = this.searchService.voteNoFavor(voter.id);
                 }
@@ -156,7 +155,7 @@ export class SearchComponent implements OnInit {
                         tap(() => this.isLoadingResults = false),
                     );
                 })
-                this.printTicket(voter);
+                this.printTicket(voter, option);
             }
         })
     }
