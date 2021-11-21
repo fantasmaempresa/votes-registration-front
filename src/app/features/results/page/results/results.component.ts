@@ -14,7 +14,8 @@ export class ResultsComponent implements OnInit {
   totalNoFavor$!: Observable<any>;
 
   constructor(private router: Router, private route: ActivatedRoute,
-              private resultsService: ResultsService) { }
+              private resultsService: ResultsService) {
+  }
 
   ngOnInit(): void {
     this.totalFavor$ = this.resultsService.getTotalFavor();
@@ -22,7 +23,7 @@ export class ResultsComponent implements OnInit {
   }
 
   goToVoters(party: string) {
-    this.router.navigate(['voters'], {relativeTo: this.route.parent })
+    this.router.navigate(['voters'], {relativeTo: this.route.parent, queryParams: {party}},)
   }
 
 }

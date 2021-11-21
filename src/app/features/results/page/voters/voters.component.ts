@@ -1,6 +1,11 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
+import {FilterService} from "../../../../core/services/filter.service";
+import {ActivatedRoute} from "@angular/router";
+import {Observable, pluck, tap} from "rxjs";
+
+const MPLD = 'mpld';
 
 @Component({
   selector: 'app-voters',
@@ -9,25 +14,66 @@ import {MatPaginator} from "@angular/material/paginator";
 })
 export class VotersComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['created', 'state', 'number', 'title'];
-  // exampleDatabase: ExampleHttpDatabase | null;
+  displayedColumns: string[] = [
+    "id_register",
+    "last_name",
+    "mother_last_name",
+    "name",
+    "dependency",
+    "affiliation_area",
+    "cve_job_level",
+    "denomination_jod",
+    "denomination_jod_description",
+    "gender"
+  ];
+
   data = [];
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+  nextURL!: string;
+  prevURL!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  $sourceData!: Observable<Object>;
 
 
-  constructor() { }
+  constructor(private filterService: FilterService, private route: ActivatedRoute) {
+    if (this.route.snapshot.queryParams['party'] === MPLD) {
+      this.$sourceData = filterService.filterVoteFavor();
+      console.log('Voto');
+    } else {
+      this.$sourceData = filterService.filterNotVoteFavor();
+      console.log('NoVoto');
+    }
+    this.$sourceData
+      .pipe(
+        pluck('data'),
+        tap(
+          (data: any) => {
+            this.nextURL = data.next_page_url;
+            this.prevURL = data.prev_page_url;
+            console.log(this.nextURL, this.prevURL);
+          }
+        ),
+        pluck('data'),
+        tap(
+          (data: any) => {
+            this.resultsLength = data.count;
+            this.isLoadingResults = false;
+          }
+        ),
+      )
+      .subscribe((data: any) => (this.data = data));
+
+  }
 
   ngAfterViewInit() {
-    // this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
 
     // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     //
     // merge(this.sort.sortChange, this.paginator.page)
     //     .pipe(
