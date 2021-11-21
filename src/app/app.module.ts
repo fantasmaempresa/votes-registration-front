@@ -23,10 +23,15 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
         CoreModule,
         SharedModule,
         AppRoutingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        // WebBluetoothModule.forRoot({
+        //     enableTracing: true // or false, this will enable logs in the browser's console
+        // })
     ],
     exports: [],
-    providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
+    providers: [
+        {provide: LocationStrategy, useClass: HashLocationStrategy}
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
