@@ -153,7 +153,7 @@ export class SearchComponent implements OnInit {
                             this.searchService.search(searchString)
                         ),
                         share(),
-                        tap(() => this.isLoadingResults = true),
+                        tap(() => this.isLoadingResults = false),
                     );
                 })
                 this.printTicket(voter);
