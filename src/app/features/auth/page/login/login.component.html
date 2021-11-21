@@ -11,6 +11,9 @@
         </div>
         <div class="card-body pt-5">
             <div class="p-2">
+                <div class="d-flex justify-content-center">
+                    <p>Usuario y/o contrasña invdalida</p>
+                </div>
                 <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" (blur)="logValidationErrors()">
                     <mat-form-field appearance="outline" class="w-100 mb-2">
                         <mat-label>Email</mat-label>

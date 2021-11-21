@@ -12,6 +12,8 @@ import {ResultsLayoutComponent} from './layout/results-layout/results-layout.com
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {JwtInterceptor} from "./core/interceptors/jwt.interceptor";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -26,6 +28,12 @@ import {JwtInterceptor} from "./core/interceptors/jwt.interceptor";
         SharedModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          enabled: environment.production,
+          // Register the ServiceWorker as soon as the app is stable
+          // or after 30 seconds (whichever comes first).
+          registrationStrategy: 'registerWhenStable:30000'
+        }),
         // WebBluetoothModule.forRoot({
         //     enableTracing: true // or false, this will enable logs in the browser's console
         // })

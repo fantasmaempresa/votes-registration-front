@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {ContentLayoutComponent} from "./layout/content-layout/content-layout.component";
 import {AuthLayoutComponent} from "./layout/auth-layout/auth-layout.component";
 import {PageNotFoundComponent} from "./shared/components/page-not-found/page-not-found.component";
+import {LoginGuard} from "./core/guards/login.guard";
 
 const routes: Routes = [
     {
@@ -13,6 +14,7 @@ const routes: Routes = [
     {
         path: '',
         component: ContentLayoutComponent,
+        canActivate: [LoginGuard],
         children: [
             {
                 path: '',

@@ -53,12 +53,18 @@ export class LoginComponent implements OnInit {
         this.signUpForm.markAllAsTouched();
         this.logValidationErrors();
         this.isLoading = true;
-        this.authService.login(this.signUpForm.value).subscribe((res: any) => {
-            if(res.access_token) {
-                localStorage.setItem('token', res.access_token);
-                this.router.navigate(['search'])
-            }
-
-        })
+        this.authService.login(this.signUpForm.value)
+            .subscribe({
+                    next: (res: any) => {
+                        if (res.access_token) {
+                            localStorage.setItem('token', res.access_token);
+                            this.router.navigate(['search'])
+                        }
+                    },
+                    error: () => {
+                        this.isLoading = false;
+                    },
+                }
+            )
     }
 }
