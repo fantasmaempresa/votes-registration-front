@@ -12,6 +12,7 @@ export class ResultsComponent implements OnInit {
 
   totalFavor$!: Observable<any>;
   totalNoFavor$!: Observable<any>;
+  attendance$!: Observable<any>
 
   constructor(private router: Router, private route: ActivatedRoute,
               private resultsService: ResultsService) {
@@ -20,6 +21,7 @@ export class ResultsComponent implements OnInit {
   ngOnInit(): void {
     this.totalFavor$ = this.resultsService.getTotalFavor();
     this.totalNoFavor$ = this.resultsService.getTotalNoFavor();
+    this.attendance$ = this.resultsService.getTotalAttendance();
   }
 
   goToVoters(party: string) {

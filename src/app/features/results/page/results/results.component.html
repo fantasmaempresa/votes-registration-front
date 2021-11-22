@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-6">
+    <div class="col-4">
         <mat-card class="example-card">
             <mat-card-title>MPLD</mat-card-title>
             <mat-card-content
@@ -14,7 +14,22 @@
             </mat-card-actions>
         </mat-card>
     </div>
-    <div class="col-6">
+    <div class="col-4">
+        <mat-card class="example-card">
+            <mat-card-title>ASISTENCIA</mat-card-title>
+            <mat-card-content
+                    class="d-flex justify-content-center align-items-center" style="min-height: 50vh"
+            >
+                <p class="text-result">
+                    {{attendance$ | async}}
+                </p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="accent" class="w-100" (click)="goToVoters('attendance')">Ver votantes</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-4">
         <mat-card class="example-card">
             <mat-card-title>Otro</mat-card-title>
             <mat-card-content class="d-flex justify-content-center align-items-center" style="min-height: 50vh">

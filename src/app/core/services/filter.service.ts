@@ -20,6 +20,11 @@ export class FilterService {
     return this.http.get(url);
   }
 
+  filterAttendanceFavor() {
+    let url = `${environment.base_url}/api/filterAttendanceVote`;
+    return this.http.get(url);
+  }
+
   changePage(url: string) {
     return this.http.get(url);
   }

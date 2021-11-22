@@ -13,16 +13,24 @@
     </div>
     <div class="col-md-4 col-lg-3 col-6 col-sm-6 mb-3" *ngFor="let person of searchResults$ | async">
         <mat-card>
-            <mat-card-title>{{person.name}} {{person.last_name}}</mat-card-title>
+            <mat-card-title style="line-height: 1.2;">{{person.name}} {{person.last_name}} {{person.mother_last_name}}</mat-card-title>
             <mat-card-content class="mt-3">
-                <p class="title">Expediente</p>
-                <p class="subtitle">{{person.id_register}}</p>
-                <p class="title">Puesto</p>
+                <p class="title">CATEGORIA/PUESTO</p>
                 <p class="subtitle">{{person.denomination_jod_description}} </p>
-                <p class="title">Area de adscripcion</p>
+                <p class="title">ADSC</p>
                 <p class="subtitle">{{person.dependency}}</p>
+                <p class="title">DEPTO</p>
+                <p class="subtitle">{{person.affiliation_area}}</p>
+                <p class="subtitle">INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA</p>
+                <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
             </mat-card-content>
             <mat-card-actions class="d-flex justify-content-between">
+                <button mat-flat-button color="primary"
+                        (click)="register('attendance', person)"
+                        [disabled]="person.vote_labor_union !== null">
+                    Asistencia
+                    <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+                </button>
                 <button mat-flat-button color="primary"
                         (click)="register('otro', person)"
                         [disabled]="person.vote_labor_union !== null">

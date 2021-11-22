@@ -6,6 +6,8 @@ import {ActivatedRoute} from "@angular/router";
 import {merge, Observable, pluck, switchMap, tap} from "rxjs";
 
 const MPLD = 'mpld';
+const ATTENDANCE = 'attendance';
+
 
 @Component({
   selector: 'app-voters',
@@ -44,7 +46,9 @@ export class VotersComponent implements AfterViewInit {
   constructor(private filterService: FilterService, private route: ActivatedRoute) {
     if (this.route.snapshot.queryParams['party'] === MPLD) {
       this.$sourceData = filterService.filterVoteFavor();
-    } else {
+    } else if (this.route.snapshot.queryParams['party'] === ATTENDANCE){
+      this.$sourceData = filterService.filterAttendanceFavor();
+    }else{
       this.$sourceData = filterService.filterNotVoteFavor();
     }
     this.suscribeTable(this.$sourceData);
