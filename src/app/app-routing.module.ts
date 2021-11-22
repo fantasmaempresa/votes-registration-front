@@ -3,18 +3,25 @@ import {RouterModule, Routes} from '@angular/router';
 import {ContentLayoutComponent} from "./layout/content-layout/content-layout.component";
 import {AuthLayoutComponent} from "./layout/auth-layout/auth-layout.component";
 import {PageNotFoundComponent} from "./shared/components/page-not-found/page-not-found.component";
-import {LoginGuard} from "./core/guards/login.guard";
+import {AuthGuard} from "./core/guards/auth.guard";
+import {AppGuard} from "./core/guards/app.guard";
 
 const routes: Routes = [
     {
+        path: '',
+        redirectTo: 'auth',
+        pathMatch: 'full'
+    },
+    {
         path: 'auth',
         component: AuthLayoutComponent,
+        canActivate: [AuthGuard],
         loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule)
     },
     {
-        path: '',
+        path: 'app',
         component: ContentLayoutComponent,
-        canActivate: [LoginGuard],
+        canActivate: [AppGuard],
         children: [
             {
                 path: '',
@@ -23,10 +30,14 @@ const routes: Routes = [
             },
             {
                 path: 'search',
+                canActivate: [AppGuard],
+                canLoad: [AppGuard],
                 loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule)
             },
             {
                 path: 'results',
+                canActivate: [AppGuard],
+                canLoad: [AppGuard],
                 loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
             },
             {

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {ResultsComponent} from "./page/results/results.component";
 import {VotersComponent} from "./page/voters/voters.component";
 import {ResultsLayoutComponent} from "../../layout/results-layout/results-layout.component";
+import {AppGuard} from "../../core/guards/app.guard";
 
 const routes: Routes = [
   {
@@ -16,10 +17,12 @@ const routes: Routes = [
       },
       {
         path: 'show',
+        canActivate: [AppGuard],
         component: ResultsComponent
       },
       {
         path: 'voters',
+        canActivate: [AppGuard],
         component: VotersComponent
       }
     ]

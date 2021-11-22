@@ -57,11 +57,9 @@ export class LoginComponent implements OnInit {
         this.isLoading = true;
         this.authService.login(this.signUpForm.value)
             .subscribe({
-                    next: (res: any) => {
-                        if (res.access_token) {
-                            localStorage.setItem('token', res.access_token);
-                            this.router.navigate(['search'])
-                        }
+                    next: (tokens: any) => {
+                        this.authService.storeTokens(tokens);
+                        this.router.navigate(['app'])
                     },
                     error: () => {
                         this.isLoading = false;

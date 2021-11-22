@@ -1,24 +1,61 @@
-import { Injectable } from '@angular/core';
-import {HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
+import {BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError} from "rxjs";
+import {AuthService} from "../services/auth.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class JwtInterceptor {
+    private isRefreshing = false;
+    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor() { }
+    constructor(public authService: AuthService) {
+    }
 
-  public intercept( req: HttpRequest<any>,
-                    next: HttpHandler ): Observable<HttpEvent<any>> {
-    const authorizationReq = this.setAuthHeader(req);
-    return next.handle(authorizationReq);
-  }
+    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (this.authService.getJwtToken()) {
+            req = JwtInterceptor.addToken(req, this.authService.getJwtToken());
+        }
+        return next.handle(req).pipe(
+            catchError(error => {
+                if (error instanceof HttpErrorResponse && !req.url.includes('auth/login') && error.status === 401) {
+                    return this.handle401Error(req, next);
+                } else {
+                    return throwError(error);
+                }
+            })
+        )
+    }
 
-  private setAuthHeader(req: HttpRequest<any>): HttpRequest<any> {
-    const token = localStorage.getItem('token');
-    const authorization = `Bearer ${token}`;
-    const headers = req.headers.set('Authorization', authorization);
-    return req.clone({headers});
-  }
+    private static addToken(request: HttpRequest<any>, token: string | null) {
+        return request.clone({
+            setHeaders: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }
+
+    private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+        if (!this.isRefreshing) {
+            this.isRefreshing = true;
+            this.refreshTokenSubject.next(null);
+
+            return this.authService.refreshToken()
+                .pipe(
+                    switchMap((token: any) => {
+                        this.isRefreshing = false;
+                        this.refreshTokenSubject.next(token.access_token);
+                        return next.handle(JwtInterceptor.addToken(request, token.access_token));
+                    })
+                );
+        } else {
+            return this.refreshTokenSubject.pipe(
+                filter(token => token != null),
+                take(1),
+                switchMap(jwt => {
+                    return next.handle(JwtInterceptor.addToken(request, jwt));
+                }));
+        }
+    }
 }
