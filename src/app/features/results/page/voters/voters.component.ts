@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {FilterService} from "../../../../core/services/filter.service";
 import {ActivatedRoute} from "@angular/router";
-import {merge, Observable, pluck, switchMap, tap} from "rxjs";
+import {Observable, pluck, switchMap, tap} from "rxjs";
+import {MatTableDataSource} from "@angular/material/table";
 
 const MPLD = 'mpld';
 const ATTENDANCE = 'attendance';
@@ -29,7 +29,7 @@ export class VotersComponent implements AfterViewInit {
     "gender"
   ];
 
-  data = [];
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -38,59 +38,76 @@ export class VotersComponent implements AfterViewInit {
   prevURL!: string;
   pageIndex = 1;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  $sourceData!: Observable<Object>;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+  dataSource$!: Observable<Object>;
 
 
-  constructor(private filterService: FilterService, private route: ActivatedRoute) {
+  constructor(
+    private filterService: FilterService,
+    private route: ActivatedRoute,
+  ) {
     if (this.route.snapshot.queryParams['party'] === MPLD) {
-      this.$sourceData = filterService.filterVoteFavor();
-    } else if (this.route.snapshot.queryParams['party'] === ATTENDANCE){
-      this.$sourceData = filterService.filterAttendanceFavor();
-    }else{
-      this.$sourceData = filterService.filterNotVoteFavor();
+      this.dataSource$ = filterService.filterVoteFavor();
+    } else if (this.route.snapshot.queryParams['party'] === ATTENDANCE) {
+      this.dataSource$ = filterService.filterAttendanceFavor();
+    } else {
+      this.dataSource$ = filterService.filterNotVoteFavor();
     }
-    this.suscribeTable(this.$sourceData);
+
+    this.dataSource$.subscribe(
+      () => {
+        this.dataSource.paginator = this.paginator;
+      }
+    );
+
+    this.updateTable(this.dataSource$);
 
   }
 
   ngAfterViewInit() {
-
-    // // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    //
-    const $merge = merge(this.sort.sortChange, this.paginator.page)
+    let url = '';
+    const paginator$ = this.paginator.page
       .pipe(
-        switchMap(([sort, paginator]: any) => {
-          this.isLoadingResults = true;
-          const url = this.nextURL;
-          console.log(paginator);
-          return this.filterService.changePage(url);
-        }));
-    this.suscribeTable($merge);
-  }
-
-  private suscribeTable($observable: Observable<any>) {
-    $observable
-      .pipe(
-        pluck('data'),
         tap(
-          (data: any) => {
-            this.nextURL = data.next_page_url;
-            this.prevURL = data.prev_page_url;
-            console.log(this.nextURL, this.prevURL);
+          ({pageIndex, previousPageIndex}) => {
+            if (previousPageIndex !== undefined && pageIndex > previousPageIndex) {
+              url = this.nextURL;
+            } else {
+              url = this.prevURL;
+            }
+            this.isLoadingResults = true;
           }
         ),
+        switchMap(() => this.filterService.changePage(url)));
+    this.updateTable(paginator$);
+  }
+
+  private updateTable(observable$: Observable<any>) {
+    observable$
+      .pipe(
         pluck('data'),
         tap(
-          (data: any) => {
-            this.resultsLength = data.count;
+          () => {
             this.isLoadingResults = false;
           }
         ),
       )
-      .subscribe((data: any) => (this.data = data));
+      .subscribe((data: any) => {
+        this.pageIndex = data.current_page - 1;
+        this.prevURL = data.prev_page_url;
+        this.nextURL = data.next_page_url;
+        this.resultsLength = data.total;
+
+        this.dataSource.data = data.data;
+
+        this.resultsLength += 1;
+        // fix to solve visual bug;
+        setTimeout(
+          () => {
+            this.resultsLength -= 1;
+          }
+        );
+      });
   }
 
 }
