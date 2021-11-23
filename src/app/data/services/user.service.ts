@@ -15,5 +15,9 @@ export class UserService {
         map((data: any) => data.data)
     )
   }
+
+  delete(id: number) {
+    return this.http.delete(`${environment.base_url}/api/users`);
+  }
 }
 

@@ -6,12 +6,15 @@ import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
-  declarations: [
-    SearchComponent
-  ],
-  imports: [
-    SharedModule,
-    SearchRoutingModule
-  ]
+    declarations: [
+        SearchComponent
+    ],
+    exports: [
+        SearchComponent
+    ],
+    imports: [
+        SharedModule,
+        SearchRoutingModule
+    ]
 })
 export class SearchModule { }

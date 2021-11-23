@@ -1,49 +1,62 @@
 <div class="row">
-    <mat-form-field appearance="outline" class="col-12">
-        <mat-label>Buscar compañero</mat-label>
-        <input [formControl]="searchControl" matInput placeholder="Busca por nombre o expediente">
-        <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="col-12">
+    <mat-label>Buscar compañero</mat-label>
+    <input [formControl]="searchControl" matInput placeholder="Busca por nombre o expediente">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
 </div>
 
 <div class="row">
-    <div class="loading-shade"
-         *ngIf="isLoadingResults">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-    </div>
-    <div class="col-md-4 col-lg-3 col-6 col-sm-6 mb-3" *ngFor="let person of searchResults$ | async">
-        <mat-card>
-            <mat-card-title style="line-height: 1.2;">{{person.name}} {{person.last_name}} {{person.mother_last_name}}</mat-card-title>
-            <mat-card-content class="mt-3">
-                <p class="title">CATEGORIA/PUESTO</p>
-                <p class="subtitle">{{person.denomination_jod_description}} </p>
-                <p class="title">ADSC</p>
-                <p class="subtitle">{{person.dependency}}</p>
-                <p class="title">DEPTO</p>
-                <p class="subtitle">{{person.affiliation_area}}</p>
-                <p class="subtitle">INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA</p>
-                <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
-            </mat-card-content>
-            <mat-card-actions class="d-flex justify-content-between">
-                <button mat-flat-button color="primary"
-                        (click)="register('attendance', person)"
-                        [disabled]="person.vote_labor_union !== null">
-                    Asistencia
-                    <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
-                </button>
-                <button mat-flat-button color="primary"
-                        (click)="register('otro', person)"
-                        [disabled]="person.vote_labor_union !== null">
-                    Otro
-                    <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
-                </button>
-                <button mat-flat-button color="accent"
-                        (click)="register('MPLD', person)"
-                        [disabled]="person.vote_labor_union !== null">
-                    MPLD
-                    <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>
-                </button>
-            </mat-card-actions>
-        </mat-card>
-    </div>
+  <div *ngIf="isLoadingResults"
+       class="loading-shade">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
+  <div *ngFor="let person of searchResults$ | async" class="col-md-4 col-lg-3 col-6 col-sm-6 mb-3">
+    <mat-card>
+      <mat-card-title
+        style="line-height: 1.2;">{{person.name}} {{person.last_name}} {{person.mother_last_name}}</mat-card-title>
+      <mat-card-content class="mt-3">
+        <p class="title">CATEGORIA/PUESTO</p>
+        <p class="subtitle">{{person.denomination_jod_description}} </p>
+        <p class="title">ADSC</p>
+        <p class="subtitle">{{person.dependency}}</p>
+        <p class="title">DEPTO</p>
+        <p class="subtitle">{{person.affiliation_area}}</p>
+        <p class="subtitle">INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA</p>
+        <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
+      </mat-card-content>
+      <mat-card-actions class="d-flex justify-content-between" [ngSwitch]="actions">
+
+        <ng-container *ngSwitchCase="'user'">
+          <button  (click)="createUser(person)"
+                  color="accent"
+                  mat-flat-button>
+            Generar Usuario
+            <mat-icon>add</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <button (click)="register('attendance', person)" [disabled]="person.vote_labor_union !== null"
+                  color="primary"
+                  mat-flat-button>
+            Asistencia
+            <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+          </button>
+          <button (click)="register('otro', person)" [disabled]="person.vote_labor_union !== null"
+                  color="primary"
+                  mat-flat-button>
+            Otro
+            <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+          </button>
+          <button (click)="register('MPLD', person)" [disabled]="person.vote_labor_union !== null"
+                  color="accent"
+                  mat-flat-button>
+            MPLD
+            <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>
+          </button>
+        </ng-container>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

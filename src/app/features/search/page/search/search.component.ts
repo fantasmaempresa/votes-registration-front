@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
 import {debounceTime, defer, distinctUntilChanged, map, merge, Observable, of, share, switchMap, tap} from "rxjs";
 import {SearchService} from "../../../../core/services/search.service";
+import {BasePersonalService} from "../../../../core/services/base-personal.service";
 
 
 @Component({
@@ -20,7 +21,13 @@ export class SearchComponent implements OnInit {
   public areNoResultsFound$!: Observable<boolean>;
   isLoadingResults = false;
 
-  constructor(private searchService: SearchService) {
+  @Input()
+  actions = '';
+
+  constructor(
+    private searchService: SearchService,
+    private basePersonalService: BasePersonalService,
+  ) {
   }
 
   ngOnInit(): void {
@@ -146,5 +153,28 @@ export class SearchComponent implements OnInit {
         this.printTicket(voter, option);
       }
     })
+  }
+
+  createUser(person: any) {
+    Swal.fire({
+      title: `¿Estas seguro de crear un usuario para ${person.name} ${person.last_name} ${person.mother_last_name}?`,
+      showDenyButton: true,
+      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Crear Usuario',
+      confirmButtonColor: '#00d203',
+      reverseButtons: true
+    }).then(
+      (result) => {
+        if (result.isConfirmed) {
+          this.basePersonalService.createUser(person.id).subscribe(
+            () => {
+              Swal.fire('Usuario Creado', 'Se ha creado el usuario', 'success')
+            }, () => {
+              Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
+            }
+          );
+        }
+      }
+    );
   }
 }

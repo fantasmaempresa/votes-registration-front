@@ -16,6 +16,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { UsersComponent } from './features/users/page/users/users.component';
 import { NewUserComponent } from './features/users/page/new-user/new-user.component';
+import {SearchModule} from "./features/search/search.module";
 
 @NgModule({
     declarations: [
@@ -33,11 +34,12 @@ import { NewUserComponent } from './features/users/page/new-user/new-user.compon
         AppRoutingModule,
         BrowserAnimationsModule,
         ServiceWorkerModule.register('ngsw-worker.js', {
-          enabled: environment.production,
-          // Register the ServiceWorker as soon as the app is stable
-          // or after 30 seconds (whichever comes first).
-          registrationStrategy: 'registerWhenStable:30000'
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
         }),
+        SearchModule,
         // WebBluetoothModule.forRoot({
         //     enableTracing: true // or false, this will enable logs in the browser's console
         // })

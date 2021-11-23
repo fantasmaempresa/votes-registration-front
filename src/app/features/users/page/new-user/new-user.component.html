@@ -1,13 +1,17 @@
 <div class="container">
-    <mat-toolbar color="accent">
-        <span>Agregando usuario</span>
-        <span class="spacer"></span>
-        <button mat-icon-button
-                matTooltip="Guardar"
-                [matTooltipPosition]="'below'"
-                aria-label="Guardar"
-        >
-            <mat-icon>done</mat-icon>
-        </button>
-    </mat-toolbar>
+  <mat-toolbar class="mb-2" color="accent">
+    <span>Agregando usuario</span>
+    <span class="spacer"></span>
+    <button [matTooltipPosition]="'below'"
+            aria-label="Regresar"
+            mat-icon-button
+            matTooltip="Regresar"
+            routerLink="/app/users/list"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <app-search actions="user">
+  </app-search>
 </div>
