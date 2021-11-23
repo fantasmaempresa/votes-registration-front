@@ -41,6 +41,12 @@ const routes: Routes = [
                 loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
             },
             {
+                path: 'users',
+                canActivate: [AppGuard],
+                canLoad: [AppGuard],
+                loadChildren: () => import('./features/users/users.module').then((m) => m.UsersModule)
+            },
+            {
                 path: '**',
                 redirectTo: '404',
                 pathMatch: 'full',

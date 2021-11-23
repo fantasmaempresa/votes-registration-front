@@ -1,0 +1,31 @@
+<div class="container">
+    <mat-toolbar color="accent">
+        <span>Lista de usuarios</span>
+        <span class="spacer"></span>
+        <button mat-icon-button
+                matTooltip="Eliminar usuario"
+                [matTooltipPosition]="'below'"
+                aria-label="Eliminar usuario"
+                *ngIf="shoes.selectedOptions.selected[0]?.value"
+        >
+            <mat-icon>person_remove</mat-icon>
+        </button>
+        <button mat-icon-button
+                matTooltip="Agregar usuario"
+                [matTooltipPosition]="'below'"
+                aria-label="Agregar usuario"
+                (click)="rediretToNewUser()"
+        >
+            <mat-icon>person_add</mat-icon>
+        </button>
+    </mat-toolbar>
+    <mat-selection-list #shoes [multiple]="false">
+        <mat-list-option *ngFor="let user of (users$ | async)?.data" [value]="user">
+            {{user.email}}
+        </mat-list-option>
+    </mat-selection-list>
+
+    <p>
+        Option selected: {{shoes.selectedOptions.selected[0]?.value | json}}
+    </p>
+</div>

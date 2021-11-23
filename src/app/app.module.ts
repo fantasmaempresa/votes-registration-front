@@ -14,13 +14,17 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {JwtInterceptor} from "./core/interceptors/jwt.interceptor";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { UsersComponent } from './features/users/page/users/users.component';
+import { NewUserComponent } from './features/users/page/new-user/new-user.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AuthLayoutComponent,
         ContentLayoutComponent,
-        ResultsLayoutComponent
+        ResultsLayoutComponent,
+        UsersComponent,
+        NewUserComponent
     ],
     imports: [
         BrowserModule,

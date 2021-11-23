@@ -35,14 +35,18 @@ export class AuthService {
     }
 
     refreshToken() {
-        return this.http.post<any>(
-            `${environment.base_url}/refresh`,
-            {'refreshToken': this.getRefreshToken()}
-        ).pipe(
-            tap((tokens: Tokens) =>
-                this.storeJwtToken(tokens.access_token)
-            )
-        );
+        let body = {
+            grant_type: 'refresh_token',
+            client_id: environment.client_id,
+            client_secret: environment.client_secret,
+            refresh_token: this.getRefreshToken()
+        }
+        return this.http.post<any>(`${environment.base_url}/oauth/token`, body)
+            .pipe(
+                tap((tokens: Tokens) =>
+                    this.storeTokens(tokens)
+                )
+            );
     }
 
     private doLoginUser(username: string, tokens: Tokens) {

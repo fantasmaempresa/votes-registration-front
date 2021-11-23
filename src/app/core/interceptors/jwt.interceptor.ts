@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
 import {BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError} from "rxjs";
 import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@ export class JwtInterceptor {
     private isRefreshing = false;
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-    constructor(public authService: AuthService) {
+    constructor(public authService: AuthService, private router: Router) {
     }
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -47,7 +48,8 @@ export class JwtInterceptor {
                         this.isRefreshing = false;
                         this.refreshTokenSubject.next(token.access_token);
                         return next.handle(JwtInterceptor.addToken(request, token.access_token));
-                    })
+                    }),
+                    catchError(() => this.router.navigate(['auth']))
                 );
         } else {
             return this.refreshTokenSubject.pipe(
