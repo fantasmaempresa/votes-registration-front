@@ -48,8 +48,7 @@ export class JwtInterceptor {
                         this.isRefreshing = false;
                         this.refreshTokenSubject.next(token.access_token);
                         return next.handle(JwtInterceptor.addToken(request, token.access_token));
-                    }),
-                    catchError(() => this.router.navigate(['auth']))
+                    })
                 );
         } else {
             return this.refreshTokenSubject.pipe(
