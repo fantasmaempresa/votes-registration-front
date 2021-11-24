@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
 import {debounceTime, defer, distinctUntilChanged, map, merge, Observable, of, share, switchMap, tap} from "rxjs";
@@ -11,7 +11,8 @@ import {BasePersonalService} from "../../../../core/services/base-personal.servi
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, AfterViewInit{
+  @ViewChild("searchInput") searchInput!: ElementRef;
   // define your services and characteristics
   PRINTER_UUID = '0000180f-0000-1000-8000-00805f9b34fb'
   printCharacteristic: any = null;
@@ -50,6 +51,10 @@ export class SearchComponent implements OnInit {
       share(),
       tap(() => this.isLoadingResults = false)
     );
+  }
+
+  ngAfterViewInit() {
+    this.searchInput.nativeElement.focus();
   }
 
   async sendPrinterData(voter: any, option: string) {
@@ -128,7 +133,7 @@ export class SearchComponent implements OnInit {
         Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
         if (option === 'MPLD') {
           vote = this.searchService.voteFavor(voter.id);
-        } else if ('attendance') {
+        } else if (option === 'attendance') {
           vote = this.searchService.voteAttendance(voter.id);
         } else {
           vote = this.searchService.voteNoFavor(voter.id);

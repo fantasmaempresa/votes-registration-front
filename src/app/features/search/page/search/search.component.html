@@ -1,9 +1,18 @@
 <div class="row">
   <mat-form-field appearance="outline" class="col-12">
     <mat-label>Buscar compañero</mat-label>
-    <input [formControl]="searchControl" matInput placeholder="Busca por nombre o expediente">
+    <input [formControl]="searchControl"
+           #searchInput
+           matInput placeholder="Busca por nombre o expediente">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
+</div>
+
+<div class="no-results-container" *ngIf="(searchResults$ | async)?.length === 0">
+  <div class="no-results">(;-;)</div>
+  <div>
+    <p style="font-size: 2rem; margin-top: 1rem;">Empieza por escribir un nombre</p>
+  </div>
 </div>
 
 <div class="row">
@@ -11,6 +20,7 @@
        class="loading-shade">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
   </div>
+
   <div *ngFor="let person of searchResults$ | async" class="col-md-4 col-lg-3 col-6 col-sm-6 mb-3">
     <mat-card>
       <mat-card-title
@@ -37,19 +47,25 @@
         </ng-container>
 
         <ng-container *ngSwitchDefault>
-          <button (click)="register('attendance', person)" [disabled]="person.vote_labor_union !== null"
+          <button (click)="register('attendance', person)"
+                  [class.vote-attendance]="person.vote_labor_union === 2"
+                  [disabled]="person.vote_labor_union !== null"
                   color="primary"
                   mat-flat-button>
             Asistencia
-            <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+            <mat-icon *ngIf="person.vote_labor_union === 2">done</mat-icon>
           </button>
-          <button (click)="register('otro', person)" [disabled]="person.vote_labor_union !== null"
+          <button (click)="register('otro', person)"
+                  [class.vote-other]="person.vote_labor_union === 0"
+                  [disabled]="person.vote_labor_union !== null"
                   color="primary"
                   mat-flat-button>
             Otro
             <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
           </button>
-          <button (click)="register('MPLD', person)" [disabled]="person.vote_labor_union !== null"
+          <button (click)="register('MPLD', person)"
+                  [class.vote-mpld]="person.vote_labor_union === 1"
+                  [disabled]="person.vote_labor_union !== null"
                   color="accent"
                   mat-flat-button>
             MPLD
