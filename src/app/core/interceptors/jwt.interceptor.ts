@@ -20,7 +20,7 @@ export class JwtInterceptor {
         }
         return next.handle(req).pipe(
             catchError(error => {
-                if (error instanceof HttpErrorResponse && !req.url.includes('auth/login') && error.status === 401) {
+                if (error instanceof HttpErrorResponse && !req.url.includes('oauth') && error.status === 401) {
                     return this.handle401Error(req, next);
                 } else {
                     return throwError(error);
