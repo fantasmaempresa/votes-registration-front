@@ -37,6 +37,7 @@ export class VotersComponent implements AfterViewInit {
   nextURL!: string;
   prevURL!: string;
   pageIndex = 1;
+  party!: string;
 
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
   dataSource$!: Observable<Object>;
@@ -47,10 +48,13 @@ export class VotersComponent implements AfterViewInit {
     private route: ActivatedRoute,
   ) {
     if (this.route.snapshot.queryParams['party'] === MPLD) {
+      this.party = 'Movimiento por la democracia';
       this.dataSource$ = filterService.filterVoteFavor();
     } else if (this.route.snapshot.queryParams['party'] === ATTENDANCE) {
+      this.party = 'Asistencia';
       this.dataSource$ = filterService.filterAttendanceFavor();
     } else {
+      this.party = 'Otro';
       this.dataSource$ = filterService.filterNotVoteFavor();
     }
 
