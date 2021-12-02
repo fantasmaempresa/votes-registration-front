@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SocketService} from "../../core/services/socket.service";
 
 @Component({
   selector: 'app-auth-layout',
@@ -37,7 +38,8 @@ export class AuthLayoutComponent {
           this.deferredPrompt = null;
         });
   }
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(private _snackBar: MatSnackBar, private socketService: SocketService) {
+  }
 
   installPwa(message: string, action: string) {
     this._snackBar.open(message, action);

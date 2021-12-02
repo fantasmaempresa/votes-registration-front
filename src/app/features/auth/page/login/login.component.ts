@@ -4,6 +4,8 @@ import {Router} from "@angular/router";
 import {FormValidationService} from "../../../../shared/services/form-validation.service";
 import {validationMessages} from "../../../../core/constants/validationMessages";
 import {AuthService} from "../../../../core/services/auth.service";
+import {SocketService} from "../../../../core/services/socket.service";
+import {bindCallback, switchMap, tap} from "rxjs";
 
 @Component({
     selector: 'app-login',
@@ -13,7 +15,9 @@ import {AuthService} from "../../../../core/services/auth.service";
 export class LoginComponent implements OnInit {
     @HostBinding('class') classes = 'flex-fill justify-content-center row';
 
-    constructor(private formValidationService: FormValidationService, private router: Router,
+    constructor(private formValidationService: FormValidationService,
+                private router: Router,
+                private socketService: SocketService,
                 private authService: AuthService) {
     }
 
@@ -55,17 +59,48 @@ export class LoginComponent implements OnInit {
         this.signUpForm.markAllAsTouched();
         this.logValidationErrors();
         this.isLoading = true;
-        this.authService.login(this.signUpForm.value)
-            .subscribe({
-                    next: (tokens: any) => {
-                        this.authService.storeTokens(tokens);
-                        this.router.navigate(['app'])
-                    },
-                    error: () => {
-                        this.isLoading = false;
-                        this.incorrectLogin = true;
-                    },
-                }
-            )
+        this.authService.tryOfLogin(this.signUpForm.value)
+            .pipe(
+                switchMap((data: any) => {
+                    console.log(data);
+                    if (data.access) {
+                        console.log('Access true');
+                        return this.authService.login(this.signUpForm.value)
+                            .pipe(
+                                switchMap((tokens: any) => {
+                                    this.authService.storeTokens(tokens);
+                                    this.router.navigate(['app'])
+                                    return this.authService.getDataUserLogged()
+                                        .pipe(
+                                            tap((user: any) => this.authService.storeUser(user))
+                                        )
+                                })
+                            )
+                    } else {
+                        const getDataAsObservable = bindCallback(this.socketService.subscribeToChannel)
+                        return getDataAsObservable('authorize', 'AuthorizeLoginEvent');
+                    }
+                })
+            ).subscribe(res => {
+                console.log(res);
+        })
+        // this.authService.login(this.signUpForm.value)
+        //     .pipe(
+        //         switchMap((tokens: any) => {
+        //             this.authService.storeTokens(tokens);
+        //             this.router.navigate(['app'])
+        //             return this.authService.getDataUserLogged()
+        //         })
+        //     )
+        //     .subscribe({
+        //             next: (user: any) => {
+        //                 this.authService.storeUser(user);
+        //             },
+        //             error: () => {
+        //                 this.isLoading = false;
+        //                 this.incorrectLogin = true;
+        //             },
+        //         }
+        //     )
     }
 }

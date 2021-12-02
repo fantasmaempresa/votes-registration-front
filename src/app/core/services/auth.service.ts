@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Tokens} from "../../data/models/tokens";
-import {tap} from "rxjs";
+import {map, tap} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +12,17 @@ export class AuthService {
     private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
     constructor(public http: HttpClient) {
+    }
+
+    tryOfLogin({username, password}: any) {
+        let url = `${environment.base_url}/requestToLogin`;
+        let body = {
+            username,
+            password
+        };
+        return this.http.post(url, body).pipe(
+            map((data: any) => data.data)
+        );
     }
 
     login({username, password}: any) {
@@ -24,6 +35,13 @@ export class AuthService {
             password
         };
         return this.http.post(url, body);
+    }
+
+    getDataUserLogged() {
+        let url = `${environment.base_url}/getDataUserLogged`
+        return this.http.get(url).pipe(
+            map((data:any) => data.data)
+        );
     }
 
     logout() {
@@ -67,6 +85,10 @@ export class AuthService {
 
     private storeJwtToken(jwt: string) {
         localStorage.setItem(this.JWT_TOKEN, jwt);
+    }
+
+    storeUser(user: any) {
+        localStorage.setItem('user', JSON.stringify(user));
     }
 
     storeTokens(tokens: Tokens) {
