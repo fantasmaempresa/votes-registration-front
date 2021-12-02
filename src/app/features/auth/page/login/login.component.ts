@@ -5,7 +5,8 @@ import {FormValidationService} from "../../../../shared/services/form-validation
 import {validationMessages} from "../../../../core/constants/validationMessages";
 import {AuthService} from "../../../../core/services/auth.service";
 import {SocketService} from "../../../../core/services/socket.service";
-import {bindCallback, of, switchMap, tap} from "rxjs";
+import {bindCallback, of, switchMap, tap, throwError} from "rxjs";
+import Swal from "sweetalert2";
 
 @Component({
     selector: 'app-login',
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
                 private socketService: SocketService,
                 private authService: AuthService) {
     }
+
+    timeoutId!: any;
 
     signUpForm!: FormGroup;
 
@@ -59,48 +62,62 @@ export class LoginComponent implements OnInit {
         this.signUpForm.markAllAsTouched();
         this.logValidationErrors();
         this.isLoading = true;
-        this.authService.tryOfLogin(this.signUpForm.value)
+        this.timeoutId = setTimeout(async () => {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops... ☹',
+                text: 'En este momento no hay administradores para autorizar tu inicio de sesión',
+            });
+            clearTimeout(this.timeoutId);
+            tryoFLogin$.unsubscribe();
+        }, 5000);
+        let requestLogin$ = this.authService.login(this.signUpForm.value)
+            .pipe(
+                switchMap((tokens: any) => {
+                    this.authService.storeTokens(tokens);
+                    this.router.navigate(['app'])
+                    return this.authService.getDataUserLogged()
+                        .pipe(
+                            tap((user: any) => this.authService.storeUser(user))
+                        )
+                })
+            );
+        let tryoFLogin$ = this.authService.tryOfLogin(this.signUpForm.value)
             .pipe(
                 switchMap((data: any) => {
                     if (data.access) {
-                        return this.authService.login(this.signUpForm.value)
-                            .pipe(
-                                switchMap((tokens: any) => {
-                                    this.authService.storeTokens(tokens);
-                                    this.router.navigate(['app'])
-                                    return this.authService.getDataUserLogged()
-                                        .pipe(
-                                            tap((user: any) => this.authService.storeUser(user))
-                                        )
-                                })
-                            )
+                        return requestLogin$;
                     } else {
                         const getDataAsObservable = bindCallback(this.socketService.subscribeToChannel)
                         return getDataAsObservable('authorize', 'AuthorizeLoginEvent')
                             .pipe(
                                 switchMap((res: any) => {
                                     console.log(res);
-                                    if(res.user.email === this.signUpForm.value.username && res.user.access) {
-                                        return this.authService.login(this.signUpForm.value)
-                                            .pipe(
-                                                switchMap((tokens: any) => {
-                                                    this.authService.storeTokens(tokens);
-                                                    this.router.navigate(['app'])
-                                                    return this.authService.getDataUserLogged()
-                                                        .pipe(
-                                                            tap((user: any) => this.authService.storeUser(user))
-                                                        )
-                                                })
-                                            )
+                                    if (res.user.email === this.signUpForm.value.username && res.user.access) {
+                                        return requestLogin$;
+                                    } else {
+                                        return throwError(() => new Error(`Inicio de sesión rechazado por el administrador`));
                                     }
-                                    return of(null)
                                 })
                             );
                     }
                 })
-            ).subscribe(res => {
-                console.log(res);
-        })
+            )
+            .subscribe({
+                    next: (res: any) => {
+                        clearTimeout(this.timeoutId);
+                    },
+                    error: async (err: any) => {
+                        this.isLoading = false;
+                        clearTimeout(this.timeoutId);
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Oops... ☹',
+                            text: 'Se ha rechazado tu intento de inicio de sesión',
+                        })
+                    }
+                }
+            )
         // this.authService.login(this.signUpForm.value)
         //     .pipe(
         //         switchMap((tokens: any) => {

@@ -11,17 +11,17 @@ export class FilterService {
   }
 
   filterVoteFavor() {
-    let url = `${environment.base_url}/api/filterVoteLaborUnion`;
+    let url = `${environment.base_url}/filterVoteLaborUnion`;
     return this.http.get(url);
   }
 
   filterNotVoteFavor() {
-    let url = `${environment.base_url}/api/filterNoVoteLaborUnion`;
+    let url = `${environment.base_url}/filterNoVoteLaborUnion`;
     return this.http.get(url);
   }
 
   filterAttendanceFavor() {
-    let url = `${environment.base_url}/api/filterAttendanceVote`;
+    let url = `${environment.base_url}/filterAttendanceVote`;
     return this.http.get(url);
   }
 

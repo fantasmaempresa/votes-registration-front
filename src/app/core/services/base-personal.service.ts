@@ -11,22 +11,22 @@ export class BasePersonalService {
   }
 
   createUser(id: number) {
-    let url = `${environment.base_url}/api/createUser/${id}`;
+    let url = `${environment.base_url}/createUser/${id}`;
     return this.http.post(url, {});
   }
 
   createReferred(id: number) {
-    let url = `${environment.base_url}/api/referred/${id}`;
+    let url = `${environment.base_url}/referred/${id}`;
     return this.http.post(url, {});
   }
 
   deleteReferred(id: number) {
-    let url = `${environment.base_url}/api/referred/${id}`;
+    let url = `${environment.base_url}/referred/${id}`;
     return this.http.delete(url);
   }
 
   getAllReferred() {
-    let url = `${environment.base_url}/api/referred`;
+    let url = `${environment.base_url}/referred`;
     return this.http.get(url);
   }
 }

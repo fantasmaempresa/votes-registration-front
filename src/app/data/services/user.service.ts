@@ -11,7 +11,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   fetchAll() {
-    return this.http.get(`${environment.base_url}/api/users`).pipe(
+    return this.http.get(`${environment.base_url}/users`).pipe(
         map((data: any) => data.data)
     )
   }
