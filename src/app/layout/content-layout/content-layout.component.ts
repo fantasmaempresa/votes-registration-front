@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {SocketService} from "../../core/services/socket.service";
 import {AuthService} from "../../core/services/auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-content-layout',
@@ -9,7 +11,10 @@ import {AuthService} from "../../core/services/auth.service";
 })
 export class ContentLayoutComponent implements OnInit {
 
-  constructor(private socketService: SocketService, private authService: AuthService) { }
+  constructor(private socketService: SocketService,
+              private authService: AuthService,
+              private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     // @ts-ignore
@@ -17,13 +22,34 @@ export class ContentLayoutComponent implements OnInit {
     console.log(user);
     if(user.type === 1) {
       console.log('Soy admin estoy esperando usuarios')
-      this.socketService.subscribeToChannel('oauth', 'OauthEvent', (data: any) => {
-        console.log(data);
+      this.socketService.subscribeToChannel('oauth', 'OauthEvent', ({user}: any) => {
+
+        Swal.fire({
+          title: `El usuario ${user.email} esta intentando conectarse`,
+          showDenyButton: true,
+          // showCancelButton: true,
+          denyButtonText: `Denegar`,
+          confirmButtonText: 'Autorizar',
+          confirmButtonColor: '#00d203',
+          reverseButtons: true
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            this.authService.authorizeLogin(user.id).subscribe(res => console.log(res));
+          } else {
+            this.authService.unauthorizeLogin(user.id).subscribe(res => console.log(res));
+          }
+        })
+        // this.openSnackBar(`El usuario ${user.email} esta intentando conectarse`, 'Aceptar');
       });
       // this.socketService.subscribeToChannel('authorize', 'AuthorizeLoginEvent', (data: any) => {
       //   console.log(data);
       // });
     }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action);
   }
 
 }

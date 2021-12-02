@@ -37,6 +37,16 @@ export class AuthService {
         return this.http.post(url, body);
     }
 
+    authorizeLogin(id: number) {
+        let url = `${environment.base_url}/authorizeUser/${id}`
+        return this.http.get(url);
+    }
+
+    unauthorizeLogin(id: number) {
+        let url = `${environment.base_url}/notAuthorizeUser/${id}`;
+        return this.http.get(url);
+    }
+
     getDataUserLogged() {
         let url = `${environment.base_url}/getDataUserLogged`
         return this.http.get(url).pipe(

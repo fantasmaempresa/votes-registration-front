@@ -26,7 +26,6 @@ export class SocketService {
     let channel = echo.channel(channelName);
 
     channel.listen(event, (data: any) => {
-      console.log(data);
       cb(data);
     })
   }

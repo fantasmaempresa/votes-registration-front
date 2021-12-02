@@ -5,7 +5,7 @@ import {FormValidationService} from "../../../../shared/services/form-validation
 import {validationMessages} from "../../../../core/constants/validationMessages";
 import {AuthService} from "../../../../core/services/auth.service";
 import {SocketService} from "../../../../core/services/socket.service";
-import {bindCallback, switchMap, tap} from "rxjs";
+import {bindCallback, of, switchMap, tap} from "rxjs";
 
 @Component({
     selector: 'app-login',
@@ -62,9 +62,7 @@ export class LoginComponent implements OnInit {
         this.authService.tryOfLogin(this.signUpForm.value)
             .pipe(
                 switchMap((data: any) => {
-                    console.log(data);
                     if (data.access) {
-                        console.log('Access true');
                         return this.authService.login(this.signUpForm.value)
                             .pipe(
                                 switchMap((tokens: any) => {
@@ -78,7 +76,26 @@ export class LoginComponent implements OnInit {
                             )
                     } else {
                         const getDataAsObservable = bindCallback(this.socketService.subscribeToChannel)
-                        return getDataAsObservable('authorize', 'AuthorizeLoginEvent');
+                        return getDataAsObservable('authorize', 'AuthorizeLoginEvent')
+                            .pipe(
+                                switchMap((res: any) => {
+                                    console.log(res);
+                                    if(res.user.email === this.signUpForm.value.username && res.user.access) {
+                                        return this.authService.login(this.signUpForm.value)
+                                            .pipe(
+                                                switchMap((tokens: any) => {
+                                                    this.authService.storeTokens(tokens);
+                                                    this.router.navigate(['app'])
+                                                    return this.authService.getDataUserLogged()
+                                                        .pipe(
+                                                            tap((user: any) => this.authService.storeUser(user))
+                                                        )
+                                                })
+                                            )
+                                    }
+                                    return of(null)
+                                })
+                            );
                     }
                 })
             ).subscribe(res => {
