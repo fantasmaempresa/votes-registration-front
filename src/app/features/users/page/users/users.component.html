@@ -21,8 +21,22 @@
     </button>
   </mat-toolbar>
   <mat-selection-list #users [multiple]="false">
-    <mat-list-option *ngFor="let user of (users$ | async)?.data" [value]="user">
-      {{user.email}} {{user.name}}
+    <mat-list-option *ngFor="let user of (users$ | async)" [value]="user">
+      <div class="row">
+        <div class="col-md-10">
+          {{user.email}} {{user.name}}
+        </div>
+        <div class="col d-flex justify-content-end">
+          <button
+            (click)="setPassword(user)"
+            color="accent"
+            mat-icon-button
+            matTooltip="Cambiar Contraseña"
+          >
+            <mat-icon>lock</mat-icon>
+          </button>
+        </div>
+      </div>
     </mat-list-option>
   </mat-selection-list>
 </div>

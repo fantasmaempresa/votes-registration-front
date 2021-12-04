@@ -1,18 +1,25 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {map, tap} from "rxjs";
+import {map} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   fetchAll() {
     return this.http.get(`${environment.base_url}/users`).pipe(
-        map((data: any) => data.data)
+      map((data: any) => data.data)
+    )
+  }
+
+  update(user: any) {
+    return this.http.get(`${environment.base_url}/users/${user.id}`).pipe(
+      map((data: any) => data.data)
     )
   }
 

@@ -11,7 +11,7 @@ import {BasePersonalService} from "../../../../core/services/base-personal.servi
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit, AfterViewInit{
+export class SearchComponent implements OnInit, AfterViewInit {
   @ViewChild("searchInput") searchInput!: ElementRef;
   // define your services and characteristics
   PRINTER_UUID = '0000180f-0000-1000-8000-00805f9b34fb'
@@ -172,8 +172,8 @@ export class SearchComponent implements OnInit, AfterViewInit{
       (result) => {
         if (result.isConfirmed) {
           this.basePersonalService.createUser(person.id).subscribe(
-            () => {
-              Swal.fire('Usuario Creado', 'Se ha creado el usuario', 'success')
+            (user: any) => {
+              Swal.fire('Usuario Creado', `Se ha creado el usuario, contraseña: ${user.password}`, 'success')
             }, () => {
               Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
             }
