@@ -7,6 +7,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {SocketService} from "../../../../core/services/socket.service";
 import {bindCallback, of, switchMap, tap, throwError} from "rxjs";
 import Swal from "sweetalert2";
+import {MINUTE} from "../../../../core/constants/constants";
 
 @Component({
     selector: 'app-login',
@@ -70,7 +71,7 @@ export class LoginComponent implements OnInit {
             });
             clearTimeout(this.timeoutId);
             tryoFLogin$.unsubscribe();
-        }, 5000);
+        }, (MINUTE * 5));
         let requestLogin$ = this.authService.login(this.signUpForm.value)
             .pipe(
                 switchMap((tokens: any) => {
