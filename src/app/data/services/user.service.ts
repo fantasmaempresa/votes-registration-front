@@ -24,7 +24,7 @@ export class UserService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${environment.base_url}/api/users`);
+    return this.http.delete(`${environment.base_url}/users/${id}`);
   }
 }
 
