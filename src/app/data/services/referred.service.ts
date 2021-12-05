@@ -24,7 +24,7 @@ export class ReferredService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${environment.base_url}/api/referred`);
+    return this.http.delete(`${environment.base_url}/referred/${id}`);
   }
 }
 

@@ -11,6 +11,10 @@
     <li *ngIf="user.type === 1">
       <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
     </li>
+
+    <li *ngIf="user.type === 2">
+      <a routerLink="referred" routerLinkActive="active-link">Mis Promovidos</a>
+    </li>
   </ul>
 
   <span class="spacer"></span>

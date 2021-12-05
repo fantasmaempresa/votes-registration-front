@@ -1,0 +1,20 @@
+<div class="container">
+  <mat-toolbar color="accent">
+    <span>Lista de promovidos</span>
+    <span class="spacer"></span>
+    <button (click)="deleteReferred(referer)"
+            *ngIf="users.selectedOptions.selected[0]?.value as referer"
+            [matTooltipPosition]="'below'"
+            aria-label="Eliminar promovido"
+            mat-icon-button
+            matTooltip="Eliminar promovido"
+    >
+      <mat-icon>person_remove</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-selection-list #users [multiple]="false">
+    <mat-list-option *ngFor="let referer of (referrers$ | async)" [value]="referer">
+      {{referer.name}} {{referer.last_name}} {{referer.mother_last_name}}
+    </mat-list-option>
+  </mat-selection-list>
+</div>

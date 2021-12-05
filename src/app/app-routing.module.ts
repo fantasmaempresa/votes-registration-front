@@ -7,62 +7,68 @@ import {AuthGuard} from "./core/guards/auth.guard";
 import {AppGuard} from "./core/guards/app.guard";
 
 const routes: Routes = [
-    {
+  {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full'
+  },
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule)
+  },
+  {
+    path: 'app',
+    component: ContentLayoutComponent,
+    canActivate: [AppGuard],
+    children: [
+      {
         path: '',
-        redirectTo: 'auth',
+        redirectTo: 'search',
         pathMatch: 'full'
-    },
-    {
-        path: 'auth',
-        component: AuthLayoutComponent,
-        canActivate: [AuthGuard],
-        loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule)
-    },
-    {
-        path: 'app',
-        component: ContentLayoutComponent,
+      },
+      {
+        path: 'search',
         canActivate: [AppGuard],
-        children: [
-            {
-                path: '',
-                redirectTo: 'search',
-                pathMatch: 'full'
-            },
-            {
-                path: 'search',
-                canActivate: [AppGuard],
-                canLoad: [AppGuard],
-                loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule)
-            },
-            {
-                path: 'results',
-                canActivate: [AppGuard],
-                canLoad: [AppGuard],
-                loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
-            },
-            {
-                path: 'users',
-                canActivate: [AppGuard],
-                canLoad: [AppGuard],
-                loadChildren: () => import('./features/users/users.module').then((m) => m.UsersModule)
-            },
-            {
-                path: '**',
-                redirectTo: '404',
-                pathMatch: 'full',
-            },
-            {
-                path: '404',
-                component: PageNotFoundComponent,
-                data: {breadcrumb: {skip: true, alias: 'pageNotFound'}},
-            },
-        ],
-    }
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule)
+      },
+      {
+        path: 'results',
+        canActivate: [AppGuard],
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
+      },
+      {
+        path: 'users',
+        canActivate: [AppGuard],
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/users/users.module').then((m) => m.UsersModule)
+      },
+      {
+        path: 'referred',
+        canActivate: [AppGuard],
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/referred/referred.module').then((m) => m.ReferredModule)
+      },
+      {
+        path: '**',
+        redirectTo: '404',
+        pathMatch: 'full',
+      },
+      {
+        path: '404',
+        component: PageNotFoundComponent,
+        data: {breadcrumb: {skip: true, alias: 'pageNotFound'}},
+      },
+    ],
+  }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {
 }
