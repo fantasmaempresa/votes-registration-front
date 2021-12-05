@@ -38,7 +38,7 @@
       <mat-card-actions class="d-flex justify-content-between" [ngSwitch]="actions">
 
         <ng-container *ngSwitchCase="'user'">
-          <button  (click)="createUser(person)"
+          <button (click)="createUser(person)"
                   color="accent"
                   mat-flat-button>
             Generar Usuario
@@ -47,31 +47,41 @@
         </ng-container>
 
         <ng-container *ngSwitchDefault>
-          <button (click)="register('attendance', person)"
-                  [class.vote-attendance]="person.vote_labor_union === 2"
-                  [disabled]="person.vote_labor_union !== null"
-                  color="primary"
-                  mat-flat-button>
-            Asistencia
-            <mat-icon *ngIf="person.vote_labor_union === 2">done</mat-icon>
-          </button>
-          <button (click)="register('otro', person)"
-                  [class.vote-other]="person.vote_labor_union === 0"
-                  [disabled]="person.vote_labor_union !== null"
-                  color="primary"
-                  mat-flat-button>
-            Otro
-            <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
-          </button>
-          <button (click)="register('MPLD', person)"
-                  [class.vote-mpld]="person.vote_labor_union === 1"
-                  [disabled]="person.vote_labor_union !== null"
-                  color="accent"
-                  mat-flat-button>
-            MPLD
-            <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>
-          </button>
+          <ng-container *ngIf="user.type === 1; else promote">
+            <button (click)="register('attendance', person)"
+                    [class.vote-attendance]="person.vote_labor_union === 2"
+                    [disabled]="person.vote_labor_union !== null"
+                    color="primary"
+                    mat-flat-button>
+              Asistencia
+              <mat-icon *ngIf="person.vote_labor_union === 2">done</mat-icon>
+            </button>
+            <button (click)="register('otro', person)"
+                    [class.vote-other]="person.vote_labor_union === 0"
+                    [disabled]="person.vote_labor_union !== null"
+                    color="primary"
+                    mat-flat-button>
+              Otro
+              <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>
+            </button>
+            <button (click)="register('MPLD', person)"
+                    [class.vote-mpld]="person.vote_labor_union === 1"
+                    [disabled]="person.vote_labor_union !== null"
+                    color="accent"
+                    mat-flat-button>
+              MPLD
+              <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #promote>
+            <button (click)="promoteVoter(person)"
+                    color="accent"
+                    mat-flat-button>
+              Promover
+            </button>
+          </ng-template>
         </ng-container>
+
       </mat-card-actions>
     </mat-card>
   </div>

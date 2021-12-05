@@ -4,6 +4,9 @@ import {FormControl} from "@angular/forms";
 import {debounceTime, defer, distinctUntilChanged, map, merge, Observable, of, share, switchMap, tap} from "rxjs";
 import {SearchService} from "../../../../core/services/search.service";
 import {BasePersonalService} from "../../../../core/services/base-personal.service";
+import {ReferredService} from "../../../../data/services/referred.service";
+import {AuthService} from "../../../../core/services/auth.service";
+import {UserModel} from "../../../../data/models/user.model";
 
 
 @Component({
@@ -21,17 +24,21 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public areMinimumCharactersTyped$!: Observable<boolean>;
   public areNoResultsFound$!: Observable<boolean>;
   isLoadingResults = false;
+  user!: UserModel;
 
   @Input()
   actions = '';
 
   constructor(
+    private authService: AuthService,
     private searchService: SearchService,
+    private referredService: ReferredService,
     private basePersonalService: BasePersonalService,
   ) {
   }
 
   ngOnInit(): void {
+    this.user = this.authService.getUser();
     this.searchControl = new FormControl('');
     this.areMinimumCharactersTyped$ = this.searchControl.valueChanges.pipe(
       map(searchString => searchString.length >= 3)
@@ -181,5 +188,29 @@ export class SearchComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  promoteVoter(voter: any) {
+    Swal.fire({
+      title: `¿Estas seguro de promover a  ${voter.name} ${voter.last_name} ${voter.mother_last_name}?`,
+      showDenyButton: true,
+      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Promover votante',
+      confirmButtonColor: '#00d203',
+      reverseButtons: true
+    }).then(
+      (result) => {
+        if (result.isConfirmed) {
+          this.referredService.create(voter.id).subscribe(
+            () => {
+              Swal.fire('Votante Promovido', `Haz promovido con éxito a ${voter.name} ${voter.last_name} ${voter.mother_last_name}`, 'success')
+            }, () => {
+              Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
+            }
+          );
+        }
+      }
+    )
+
   }
 }
