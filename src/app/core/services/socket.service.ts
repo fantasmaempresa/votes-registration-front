@@ -18,6 +18,7 @@ export class SocketService {
       forceTLS: false,
       wsHost: 'back.movimientoporlademocracia.com',
       wsPort: 6001,
+      wssPort: 6001,
       authEndpoint : 'broadcasting/auth'
     })
 

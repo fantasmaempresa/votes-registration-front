@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  base_url: 'http://back.movimientoporlademocracia.com/api',
+  base_url: 'https://back.movimientoporlademocracia.com/api',
   grant_type: 'password',
   client_id: '95010e64-1bf4-4485-9d5c-3faba363c35a',
   client_secret: 'IFsMZjlHL8PdG307VF0iYBxd8sgR5XFvqDgzzvJU',
