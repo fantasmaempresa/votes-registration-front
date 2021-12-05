@@ -1,25 +1,25 @@
 <mat-toolbar color="primary">
-    <img src="../../../assets/img/logo-03.png" alt="logo" height="64">
+  <img src="../../../assets/img/logo-03.png" alt="logo" height="64">
 
-    <ul class="navigation-items">
-        <li>
-            <a routerLink="search" routerLinkActive="active-link">Busqueda</a>
-        </li>
-        <li>
-            <a routerLink="results" routerLinkActive="active-link">Resultados</a>
-        </li>
-        <li>
-            <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
-        </li>
-    </ul>
+  <ul class="navigation-items">
+    <li>
+      <a routerLink="search" routerLinkActive="active-link">Busqueda</a>
+    </li>
+    <li>
+      <a routerLink="results" routerLinkActive="active-link">Resultados</a>
+    </li>
+    <li *ngIf="user.type === 1">
+      <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
+    </li>
+  </ul>
 
-    <span class="spacer"></span>
-    <button mat-icon-button
-            matTooltip="Cerrar sesión"
-            [matTooltipPosition]="'below'"
-            aria-label="Logout"
-            (click)="logout()"
-    >
-        <mat-icon>logout</mat-icon>
-    </button>
+  <span class="spacer"></span>
+  <button mat-icon-button
+          matTooltip="Cerrar sesión"
+          [matTooltipPosition]="'below'"
+          aria-label="Logout"
+          (click)="logout()"
+  >
+    <mat-icon>logout</mat-icon>
+  </button>
 </mat-toolbar>
