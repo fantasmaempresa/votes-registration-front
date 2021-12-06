@@ -81,10 +81,10 @@ export class LoginComponent implements OnInit {
         switchMap((tokens: any) => {
           Swal.close();
           this.authService.storeTokens(tokens);
-          this.router.navigate(['app'])
           return this.authService.getDataUserLogged()
             .pipe(
-              tap((user: any) => this.authService.storeUser(user))
+                tap((user: any) => this.authService.storeUser(user)),
+                tap(() => this.router.navigate(['app']))
             )
         })
       );
