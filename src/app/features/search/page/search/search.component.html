@@ -32,6 +32,14 @@
         <p class="subtitle">{{person.dependency}}</p>
         <p class="title">DEPTO</p>
         <p class="subtitle">{{person.affiliation_area}}</p>
+        <ng-container *ngIf="person.phone_number">
+          <p class="title">Teléfono</p>
+          <p class="subtitle">{{person.phone_number}}</p>
+        </ng-container>
+        <ng-container *ngIf="person.expedient">
+          <p class="title"># Expediente</p>
+          <p class="subtitle">{{person.expedient}}</p>
+        </ng-container>
         <p class="subtitle">INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA</p>
         <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
       </mat-card-content>
@@ -73,6 +81,7 @@
               <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>
             </button>
           </ng-container>
+
           <ng-template #promote>
             <button (click)="promoteVoter(person)"
                     color="accent"
@@ -80,6 +89,13 @@
               Promover
             </button>
           </ng-template>
+
+          <button (click)="updateInformation(person)"
+                  color="warn"
+                  mat-flat-button>
+            Actualizar información
+          </button>
+
         </ng-container>
 
       </mat-card-actions>

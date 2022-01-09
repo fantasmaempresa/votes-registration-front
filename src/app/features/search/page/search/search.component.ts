@@ -191,8 +191,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   promoteVoter(voter: any) {
+    const fullName = `${voter.name} ${voter.last_name} ${voter.mother_last_name}`;
     Swal.fire({
-      title: `¿Estas seguro de promover a  ${voter.name} ${voter.last_name} ${voter.mother_last_name}?`,
+      title: `¿Estas seguro de promover a  ${fullName}?`,
       showDenyButton: true,
       denyButtonText: `Cancelar`,
       confirmButtonText: 'Promover votante',
@@ -203,7 +204,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         if (result.isConfirmed) {
           this.referredService.create(voter.id).subscribe(
             () => {
-              Swal.fire('Votante Promovido', `Haz promovido con éxito a ${voter.name} ${voter.last_name} ${voter.mother_last_name}`, 'success')
+              Swal.fire('Votante Promovido', `Haz promovido con éxito a ${fullName}`, 'success')
             }, () => {
               Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
             }
@@ -211,6 +212,55 @@ export class SearchComponent implements OnInit, AfterViewInit {
         }
       }
     )
-
   }
+
+  updateInformation(voter: any) {
+    const fullName = `${voter.name} ${voter.last_name} ${voter.mother_last_name}`;
+    const {phone_number, expedient} = voter;
+    Swal.fire({
+      title: `Actualizando información de ${fullName}`,
+      html: `
+                <input type="tel" id="phoneSwal" class="swal2-input" placeholder="Teléfono">
+                <input type="text" id="recordSwal" class="swal2-input" placeholder="Expediente">`,
+      confirmButtonText: 'Actualizar Información',
+      showCancelButton: true,
+      confirmButtonColor: '#00d203',
+      cancelButtonText: 'Omitir',
+      focusConfirm: false,
+      allowOutsideClick: false,
+      didOpen: (popup: HTMLElement) => {
+        const phone = (document.querySelector('#phoneSwal') as HTMLInputElement);
+        const record = (document.querySelector('#recordSwal') as HTMLInputElement);
+
+        phone.value = phone_number || '';
+        record.value = expedient || '';
+      },
+      preConfirm: () => {
+        const phone = (document.querySelector('#phoneSwal') as HTMLInputElement).value;
+        const record = (document.querySelector('#recordSwal') as HTMLInputElement).value;
+        if (!phone || !record) {
+          Swal.showValidationMessage(`Ambos campos son requeridos`);
+        }
+
+        return {record, phone};
+      }
+    }).then((result: any) => {
+      console.log({result, voter});
+      if (result.isConfirmed) {
+        const info = {
+          phone_number: result.value.phone,
+          expedient: result.value.record,
+        };
+        this.basePersonalService.updateBasePersonal(voter.id, info).subscribe(
+          () => {
+            Swal.fire('Información Actualizada', `La información de ${fullName} ha sido actualizada correctamente`, 'success');
+          }, () => {
+            Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
+          }
+        );
+      }
+    });
+  }
+
+
 }

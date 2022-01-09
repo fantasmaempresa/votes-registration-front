@@ -16,6 +16,11 @@ export class BasePersonalService {
     return this.http.post(url, {}).pipe(pluck('data'));
   }
 
+  updateBasePersonal(id: number, data: any) {
+    let url = `${environment.base_url}/basePersonals/${id}`;
+    return this.http.put(url, data);
+  }
+
   createReferred(id: number) {
     let url = `${environment.base_url}/referred/${id}`;
     return this.http.post(url, {});
