@@ -24,7 +24,18 @@
   <div *ngFor="let person of searchResults$ | async" class="col-md-4 col-lg-3 col-6 col-sm-6 mb-3">
     <mat-card>
       <mat-card-title
-        style="line-height: 1.2;">{{person.name}} {{person.last_name}} {{person.mother_last_name}}</mat-card-title>
+        style="line-height: 1.2;">
+        <p style="width: calc(100% - 40px);">
+          {{person.name}} {{person.last_name}} {{person.mother_last_name}}
+        </p>
+        <div class="edit-button" *ngIf="!person.phone_number">
+          <button mat-mini-fab aria-label="Actualizar información"
+                  matTooltip="Actualizar información"
+                  (click)="updateInformation(person)">
+            <mat-icon>edit_note</mat-icon>
+          </button>
+        </div>
+      </mat-card-title>
       <mat-card-content class="mt-3">
         <p class="title">CATEGORIA/PUESTO</p>
         <p class="subtitle">{{person.denomination_jod_description}} </p>
@@ -89,12 +100,6 @@
               Promover
             </button>
           </ng-template>
-
-          <button (click)="updateInformation(person)"
-                  color="warn"
-                  mat-flat-button>
-            Actualizar información
-          </button>
 
         </ng-container>
 

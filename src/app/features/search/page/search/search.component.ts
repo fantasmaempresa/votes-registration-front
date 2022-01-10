@@ -254,6 +254,21 @@ export class SearchComponent implements OnInit, AfterViewInit {
         this.basePersonalService.updateBasePersonal(voter.id, info).subscribe(
           () => {
             Swal.fire('Información Actualizada', `La información de ${fullName} ha sido actualizada correctamente`, 'success');
+            const searchString$ = merge(
+                defer(() => of(this.searchControl.value)),
+                this.searchControl.valueChanges
+            ).pipe(
+                debounceTime(1000),
+                distinctUntilChanged()
+            );
+            this.searchResults$ = searchString$.pipe(
+                tap(() => this.isLoadingResults = true),
+                switchMap((searchString: string) =>
+                    this.searchService.search(searchString)
+                ),
+                share(),
+                tap(() => this.isLoadingResults = false),
+            );
           }, () => {
             Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
           }
