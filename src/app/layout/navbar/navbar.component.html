@@ -8,10 +8,12 @@
     <li>
       <a routerLink="results" routerLinkActive="active-link">Resultados</a>
     </li>
+    <li>
+      <a routerLink="assembly" routerLinkActive="active-link">Asamblea</a>
+    </li>
     <li *ngIf="user.type === 1">
       <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
     </li>
-
     <li *ngIf="user.type === 2">
       <a routerLink="referred" routerLinkActive="active-link">Mis Promovidos</a>
     </li>

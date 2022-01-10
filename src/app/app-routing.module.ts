@@ -41,6 +41,12 @@ const routes: Routes = [
         loadChildren: () => import('./features/results/results.module').then((m) => m.ResultsModule)
       },
       {
+        path: 'assembly',
+        canActivate: [AppGuard],
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/assembly/assembly.module').then((m) => m.AssemblyModule)
+      },
+      {
         path: 'users',
         canActivate: [AppGuard],
         canLoad: [AppGuard],
