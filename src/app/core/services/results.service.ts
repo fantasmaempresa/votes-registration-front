@@ -31,4 +31,11 @@ export class ResultsService {
                 map((res: any) => res.data),
             )
     }
+
+    getByDependencies() {
+        return this.http.get(`${environment.base_url}/filterCountByDependency`)
+            .pipe(
+                map((res: any) => res.data)
+            )
+    }
 }
