@@ -45,23 +45,3 @@
         </mat-card>
     </div>
 </div>
-<hr>
-<h2 class="my-3">Resultados por dependencia</h2>
-<div class="row mt-3">
-    <div class="col-4" *ngFor="let dependency of byDependency$ | async">
-        <mat-card class="example-card">
-            <mat-card-title>{{dependency.dependency}}</mat-card-title>
-            <mat-card-content
-                    class="d-flex justify-content-center align-items-center" style="min-height: 50vh"
-            >
-                <p class="text-result">
-                    {{dependency.quantity}}
-                </p>
-            </mat-card-content>
-<!--            <mat-card-actions>-->
-<!--                <button mat-raised-button color="accent" class="w-100" (click)="goToVoters('mpld')">Ver votantes</button>-->
-<!--            </mat-card-actions>-->
-        </mat-card>
-    </div>
-
-</div>

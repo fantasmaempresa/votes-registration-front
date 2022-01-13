@@ -55,7 +55,7 @@ export class SignaturesComponent implements AfterViewInit {
     this.dependencyFilter.valueChanges.subscribe(
         {
           next: (val) => {
-            console.log(val)
+            this.isLoadingResults = true;
             this.updateTable(this.filterService.filterByDependency(val));
           }
         }
@@ -131,6 +131,11 @@ export class SignaturesComponent implements AfterViewInit {
               }
           );
         });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

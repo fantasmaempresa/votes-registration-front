@@ -14,7 +14,7 @@ export class ResultsComponent implements OnInit {
   totalNoFavor$!: Observable<any>;
   attendance$!: Observable<any>
 
-  byDependency$!: Observable<any>;
+  isLoadingResults = true;
 
   constructor(private router: Router, private route: ActivatedRoute,
               private resultsService: ResultsService) {
@@ -24,7 +24,6 @@ export class ResultsComponent implements OnInit {
     this.totalFavor$ = this.resultsService.getTotalFavor();
     this.totalNoFavor$ = this.resultsService.getTotalNoFavor();
     this.attendance$ = this.resultsService.getTotalAttendance();
-    this.byDependency$ = this.resultsService.getByDependencies();
   }
 
   goToVoters(party: string) {

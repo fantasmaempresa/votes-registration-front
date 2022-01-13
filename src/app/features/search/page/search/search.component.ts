@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
 import {debounceTime, defer, distinctUntilChanged, map, merge, Observable, of, share, switchMap, tap} from "rxjs";
@@ -34,6 +34,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     private searchService: SearchService,
     private referredService: ReferredService,
     private basePersonalService: BasePersonalService,
+    private cdRef:ChangeDetectorRef
   ) {
   }
 
@@ -62,6 +63,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchInput.nativeElement.focus();
+    this.cdRef.detectChanges();
   }
 
   async sendPrinterData(voter: any, option: string) {
