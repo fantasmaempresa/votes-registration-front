@@ -7,6 +7,8 @@ import {BasePersonalService} from "../../../../core/services/base-personal.servi
 import {ReferredService} from "../../../../data/services/referred.service";
 import {AuthService} from "../../../../core/services/auth.service";
 import {UserModel} from "../../../../data/models/user.model";
+import {AttendanceService} from "../../../../core/services/attendance.service";
+import {PrinterService} from "../../../../core/services/printer.service";
 
 
 @Component({
@@ -17,8 +19,6 @@ import {UserModel} from "../../../../data/models/user.model";
 export class SearchComponent implements OnInit, AfterViewInit {
   @ViewChild("searchInput") searchInput!: ElementRef;
   // define your services and characteristics
-  PRINTER_UUID = '0000180f-0000-1000-8000-00805f9b34fb'
-  printCharacteristic: any = null;
   searchControl!: FormControl;
   searchResults$!: Observable<any>;
   public areMinimumCharactersTyped$!: Observable<boolean>;
@@ -34,7 +34,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
     private searchService: SearchService,
     private referredService: ReferredService,
     private basePersonalService: BasePersonalService,
-    private cdRef:ChangeDetectorRef
+    private attendanceService: AttendanceService,
+    private printerService: PrinterService,
+    private cdRef: ChangeDetectorRef
   ) {
   }
 
@@ -64,66 +66,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.searchInput.nativeElement.focus();
     this.cdRef.detectChanges();
-  }
-
-  async sendPrinterData(voter: any, option: string) {
-    let encoder = new TextEncoder();
-    let date = new Date().toISOString()
-    let ticket = '\u000A\u000D'
-      + '\u000A\u000D'
-      + `${voter.name} ${voter.last_name} ${voter.mother_last_name}`
-      + '\u000A\u000D'
-      + '\u000A\u000D'
-      + 'ADSC'
-      + '\u000A\u000D'
-      + `${voter.dependency}`
-      + '\u000A\u000D'
-      + 'AREA'
-      + `${voter.affiliation_area}`;
-    let text = encoder.encode(ticket);
-    console.log(text);
-    await this.printCharacteristic.writeValue(text);
-    text = encoder.encode('\u000A\u000D'
-      + 'INFORMACION OBTENIDA DE LA '
-      + 'PLATAFORMA NACIONAL DE TRANSPARENCIA'
-      + '\u000A\u000D'
-      + '\u000A\u000D'
-      + 'https://www.plataformadetransparencia.org.mx'
-      + '\u000A\u000D'
-      + `${option} -`
-      + `${date}`
-      + '\u000A\u000D'
-    );
-    await this.printCharacteristic.writeValue(text);
-    // Print an image followed by the text
-
-  }
-
-  printTicket(voter: any, option: string) {
-    let mobileNavigatorObject: any = window.navigator;
-    if (this.printCharacteristic === null) {
-      mobileNavigatorObject.bluetooth.requestDevice({
-        filters: [{
-          name: '58HB6',
-        }],
-        optionalServices: ['0000ff00-0000-1000-8000-00805f9b34fb']
-      })
-        .then((device: any) => {
-          console.log('> Found ' + device.name);
-          console.log('Connecting to GATT Server...');
-          // @ts-ignore
-          return device.gatt.connect();
-        })
-        .then((server: any) => server.getPrimaryService('0000ff00-0000-1000-8000-00805f9b34fb'))
-        .then((service: any) => service.getCharacteristic('0000ff02-0000-1000-8000-00805f9b34fb'))
-        .then((characteristic: any) => {
-          this.printCharacteristic = characteristic;
-          this.sendPrinterData(voter, option).then(() => console.log('Terminado'));
-        })
-        .catch((e: any) => console.log(e))
-    } else {
-      this.sendPrinterData(voter, option).then(() => console.log('Terminado'));
-    }
   }
 
   register(option: string, voter: any) {
@@ -164,7 +106,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
             tap(() => this.isLoadingResults = false),
           );
         })
-        this.printTicket(voter, option);
+        this.printerService.printTicket(voter, option);
       }
     })
   }
@@ -257,19 +199,19 @@ export class SearchComponent implements OnInit, AfterViewInit {
           () => {
             Swal.fire('Información Actualizada', `La información de ${fullName} ha sido actualizada correctamente`, 'success');
             const searchString$ = merge(
-                defer(() => of(this.searchControl.value)),
-                this.searchControl.valueChanges
+              defer(() => of(this.searchControl.value)),
+              this.searchControl.valueChanges
             ).pipe(
-                debounceTime(1000),
-                distinctUntilChanged()
+              debounceTime(1000),
+              distinctUntilChanged()
             );
             this.searchResults$ = searchString$.pipe(
-                tap(() => this.isLoadingResults = true),
-                switchMap((searchString: string) =>
-                    this.searchService.search(searchString)
-                ),
-                share(),
-                tap(() => this.isLoadingResults = false),
+              tap(() => this.isLoadingResults = true),
+              switchMap((searchString: string) =>
+                this.searchService.search(searchString)
+              ),
+              share(),
+              tap(() => this.isLoadingResults = false),
             );
           }, () => {
             Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
@@ -280,4 +222,16 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
 
+  passAttendance(person: any) {
+    const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
+    const randNumber = this.attendanceService.generateRandomNumber();
+
+    this.attendanceService.passAttendance(person.id, randNumber).subscribe(
+      response => {
+        Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+      }, () => {
+        Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
+      }
+    );
+  }
 }

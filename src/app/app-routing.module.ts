@@ -59,6 +59,12 @@ const routes: Routes = [
         loadChildren: () => import('./features/referred/referred.module').then((m) => m.ReferredModule)
       },
       {
+        path: 'attendance',
+        canActivate: [AppGuard],
+        canLoad: [AppGuard],
+        loadChildren: () => import('./features/attendance/attendance.module').then((m) => m.AttendanceModule)
+      },
+      {
         path: '**',
         redirectTo: '404',
         pathMatch: 'full',

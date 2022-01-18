@@ -65,6 +65,15 @@
           </button>
         </ng-container>
 
+        <ng-container *ngSwitchCase="'assistance'">
+          <button *ngIf="!person?.number_list" (click)="passAttendance(person)"
+                  color="accent"
+                  mat-flat-button>
+            Pasar Asistencia
+            <mat-icon>check</mat-icon>
+          </button>
+        </ng-container>
+
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="user.type === 1; else promote">
             <button (click)="register('attendance', person)"

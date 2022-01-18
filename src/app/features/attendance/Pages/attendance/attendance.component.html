@@ -1,0 +1,17 @@
+<div class="container">
+  <mat-toolbar class="mb-2" color="accent">
+    <span>Pase de Lista</span>
+    <span class="spacer"></span>
+    <button [matTooltipPosition]="'below'"
+            aria-label="Ver Lista de personas que confirmaron asistencia"
+            mat-icon-button
+            matTooltip="Ver Lista de personas que confirmaron asistencia"
+            routerLink="/app/attendance/list"
+    >
+      <mat-icon>checklist</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <app-search actions="assistance">
+  </app-search>
+</div>
