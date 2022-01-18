@@ -95,4 +95,27 @@ export class PrinterService {
     Swal.fire("Impresora no conectada aún", "Conecta la impresora primero, presionando el botón rojo en la esquina superior derecha", "warning");
   }
 
+  async printAttendanceTicket(person: any, randNumber: string) {
+    const date = new Date().toISOString()
+    let text =
+      SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + `${person.name} ${person.last_name} ${person.mother_last_name}`
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + '# de Comprobacion'
+      + SPACE_CONSTANT
+      + `${randNumber}`
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + 'Fecha:'
+      + SPACE_CONSTANT
+      + `${date}`
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT;
+    await this.writeText(text);
+  }
 }

@@ -228,12 +228,18 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
 
   passAttendance(person: any) {
+    if (!this.printerService.printCharacteristic) {
+      this.printerService.messageConnectPrinter();
+      return;
+    }
     const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
     const randNumber = this.attendanceService.generateRandomNumber();
 
     this.attendanceService.passAttendance(person.id, randNumber).subscribe(
       response => {
         Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+        this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+        });
       }, () => {
         Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
       }
