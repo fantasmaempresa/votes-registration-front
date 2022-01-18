@@ -24,6 +24,15 @@
 
   <span class="spacer"></span>
   <button mat-icon-button
+          color="warn"
+          matTooltip="Conectar impresora"
+          [matTooltipPosition]="'below'"
+          aria-label="Conectar impresora"
+          (click)="findDevice()"
+  >
+    <mat-icon>bluetooth_searching</mat-icon>
+  </button>
+  <button mat-icon-button
           matTooltip="Cerrar sesión"
           [matTooltipPosition]="'below'"
           aria-label="Logout"

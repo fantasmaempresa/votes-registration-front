@@ -69,6 +69,11 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   register(option: string, voter: any) {
+    if (!this.printerService.printCharacteristic) {
+      this.printerService.messageConnectPrinter();
+      return;
+    }
+
     let vote: Observable<any>
     Swal.fire({
       title: `¿Confirmar voto por ${option}`,
