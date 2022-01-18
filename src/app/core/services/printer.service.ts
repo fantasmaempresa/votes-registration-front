@@ -86,9 +86,9 @@ export class PrinterService {
 
   async writeText(text: string) {
     const encoder = new TextEncoder();
-    let textEnconde = encoder.encode(text);
-    console.log(textEnconde);
-    await this.printCharacteristic.writeValue(textEnconde);
+    let textEncoder = encoder.encode(text);
+    console.log(textEncoder);
+    await this.printCharacteristic.writeValue(textEncoder);
   }
 
   messageConnectPrinter() {
