@@ -8,7 +8,7 @@
 }
 
 .vote-mpld {
-  background-color:  var(--accent-lighter-color) !important;
+  background-color: var(--accent-lighter-color) !important;
 }
 
 .vote-attendance {
@@ -49,4 +49,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.mat-card-vote:hover {
+  cursor: pointer;
 }

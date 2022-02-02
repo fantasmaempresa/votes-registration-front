@@ -10,7 +10,6 @@ import {UserModel} from "../../../../data/models/user.model";
 import {AttendanceService} from "../../../../core/services/attendance.service";
 import {PrinterService} from "../../../../core/services/printer.service";
 
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -244,5 +243,56 @@ export class SearchComponent implements OnInit, AfterViewInit {
         Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
       }
     );
+  }
+
+  showInformation(person: any) {
+    console.log(person);
+    const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
+    let htmlArray = [
+      // '<div class="container">',
+      '<div class="row">',
+      '<div class="col-6"><span class="dialog__label">Nombre Completo:</span></div>',
+      `<div class="col-6"><span class="dialog__value">${fullName}</span></div>`,
+      '<div class="col-6"><span class="dialog__label">ID de registro:</span></div>',
+      `<div class="col-6"><span class="dialog__value">${person.id_register}</span></div>`,
+      person.affiliation_area ? '<div class="col-6"><span class="dialog__label">Area de Adscripción:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.affiliation_area}</span></div>` : '',
+      person.exercise ? '<div class="col-6"><span class="dialog__label">Ejercicio:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.exercise}</span></div>` : '',
+      person.cve_job_level ? '<div class="col-6"><span class="dialog__label">Clave Cat:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.cve_job_level}</span></div>` : '',
+      person.denomination_jod_description ? '<div class="col-6"><span class="dialog__label">Descripción Del Puesto:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.denomination_jod_description}</span></div>` : '',
+      person.denomination_jod ? '<div class="col-6"><span class="dialog__label">Denominacion Del Cargo:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.denomination_jod}</span></div>` : '',
+      person.gender ? '<div class="col-6"><span class="dialog__label">Sexo:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.gender}</span></div>` : '',
+      person.gross_monthly_amount ? '<div class="col-6"><span class="dialog__label">Monto Mensual Bruto:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.gross_monthly_amount}</span></div>` : '',
+      person.currency_type_of_gross_remuneration ? '<div class="col-6"><span class="dialog__label">Tipo de Moneda de La Remuneración Bruta:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.currency_type_of_gross_remuneration}</span></div>` : '',
+      person.net_monthly_amount ? '<div class="col-6"><span class="dialog__label">Monto Mensual Neto:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.net_monthly_amount}</span></div>` : '',
+      person.net_remuneration_currency_type ? '<div class="col-6"><span class="dialog__label">Tipo de Moneda de La Remuneración Neta:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.net_remuneration_currency_type}</span></div>` : '',
+      person.phone_number ? '<div class="col-6"><span class="dialog__label">Télefono:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.phone_number}</span></div>` : '',
+      person.list_number ? '<div class="col-6"><span class="dialog__label">Número de Lista:</span></div>' +
+        `<div class="col-6"><span class="dialog__value">${person.list_number}</span></div>` : '',
+      '</div>',
+      // '</div>'
+    ];
+    const content = document.createElement('div');
+    content.classList.add('container');
+    content.innerHTML = htmlArray.join('');
+
+    Swal.fire({
+      title: `Información completa de ${fullName}`,
+      html: content,
+      icon: "info",
+      confirmButtonText: 'Cerrar',
+      customClass: {}
+    }).then(r => {
+    });
   }
 }

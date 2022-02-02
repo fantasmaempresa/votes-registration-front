@@ -1,14 +1,14 @@
 <div class="row">
   <mat-form-field appearance="outline" class="col-12">
     <mat-label>Buscar compañero</mat-label>
-    <input [formControl]="searchControl"
-           #searchInput
+    <input #searchInput
+           [formControl]="searchControl"
            matInput placeholder="Busca por nombre o expediente">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 </div>
 
-<div class="no-results-container" *ngIf="(searchResults$ | async)?.length === 0">
+<div *ngIf="(searchResults$ | async)?.length === 0" class="no-results-container">
   <div class="no-results">(;-;)</div>
   <div>
     <p style="font-size: 2rem; margin-top: 1rem;">Empieza por escribir un nombre</p>
@@ -28,15 +28,15 @@
         <p style="width: calc(100% - 40px);">
           {{person.name}} {{person.last_name}} {{person.mother_last_name}}
         </p>
-        <div class="edit-button" *ngIf="!person.phone_number">
-          <button mat-mini-fab aria-label="Actualizar información"
-                  matTooltip="Actualizar información"
-                  (click)="updateInformation(person)">
+        <div *ngIf="!person.phone_number" class="edit-button">
+          <button (click)="updateInformation(person)" aria-label="Actualizar información"
+                  mat-mini-fab
+                  matTooltip="Actualizar información">
             <mat-icon>edit_note</mat-icon>
           </button>
         </div>
       </mat-card-title>
-      <mat-card-content class="mt-3">
+      <mat-card-content class="mt-3 mat-card-vote"  matTooltip="Click para ver más información" matTooltipPosition="above" (click)="showInformation(person)">
         <p class="title">CATEGORIA/PUESTO</p>
         <p class="subtitle">{{person.denomination_jod_description}} </p>
         <p class="title">ADSC</p>
@@ -54,7 +54,7 @@
         <p class="subtitle">INFORMACION OBTENIDA DE LA PLATAFORMA NACIONAL DE TRANSPARENCIA</p>
         <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
       </mat-card-content>
-      <mat-card-actions class="d-flex justify-content-between" [ngSwitch]="actions">
+      <mat-card-actions [ngSwitch]="actions" class="d-flex justify-content-between">
 
         <ng-container *ngSwitchCase="'user'">
           <button (click)="createUser(person)"
@@ -66,7 +66,7 @@
         </ng-container>
 
         <ng-container *ngSwitchCase="'assistance'">
-          <button *ngIf="!person?.number_list" (click)="passAttendance(person)"
+          <button (click)="passAttendance(person)" *ngIf="!person?.number_list"
                   color="accent"
                   mat-flat-button>
             Pasar Asistencia
