@@ -250,6 +250,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
     let htmlArray = [
       // '<div class="container">',
+      '<div class="container">',
       '<div class="row">',
       '<div class="col-6"><span class="dialog__label">Nombre Completo:</span></div>',
       `<div class="col-6"><span class="dialog__value">${fullName}</span></div>`,
@@ -280,18 +281,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
       person.list_number ? '<div class="col-6"><span class="dialog__label">Número de Lista:</span></div>' +
         `<div class="col-6"><span class="dialog__value">${person.list_number}</span></div>` : '',
       '</div>',
-      // '</div>'
+      '</div>'
     ];
-    const content = document.createElement('div');
-    content.classList.add('container');
-    content.innerHTML = htmlArray.join('');
-
     Swal.fire({
       title: `Información completa de ${fullName}`,
-      html: content,
+      html: htmlArray.join(''),
       icon: "info",
       confirmButtonText: 'Cerrar',
-      customClass: {}
+      confirmButtonColor: '#DC107E',
     }).then(r => {
     });
   }
