@@ -8,7 +8,14 @@
   </mat-form-field>
 </div>
 
-<div *ngIf="(searchResults$ | async)?.length === 0" class="no-results-container">
+<div *ngIf="(searchResults$ | async)?.length === 0 && (searchControl.value).length >= 3" class="no-results-container">
+  <div class="no-results">(≥o≤)</div>
+  <div>
+    <p style="font-size: 2rem; margin-top: 1rem;">No hay resultados</p>
+  </div>
+</div>
+
+<div *ngIf="(searchResults$ | async)?.length === 0 && (searchControl.value).length < 3" class="no-results-container">
   <div class="no-results">(;-;)</div>
   <div>
     <p style="font-size: 2rem; margin-top: 1rem;">Empieza por escribir un nombre</p>
