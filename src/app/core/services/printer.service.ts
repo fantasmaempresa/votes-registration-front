@@ -19,6 +19,21 @@ export class PrinterService {
     }
   }
 
+  printAddBaseStaffTicket(staff: any) {
+    if (this.printCharacteristic !== null) {
+      this.printBaseStaffTicket(staff,).then(() => console.log('Terminado'));
+    }
+  }
+
+  async printBaseStaffTicket(staff: any) {
+    let date = new Date().toISOString();
+    let text =
+      SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + `${staff.name} ${staff.last_name} ${staff.mother_last_name}`;
+    await this.writeText(text);
+  }
+
   async printVoteTicket(voter: any, option: string) {
     let date = new Date().toISOString()
     let text =
