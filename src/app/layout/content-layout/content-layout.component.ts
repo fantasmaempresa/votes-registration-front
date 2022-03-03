@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SocketService} from "../../core/services/socket.service";
 import {AuthService} from "../../core/services/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
+import {MatDialog} from "@angular/material/dialog";
+import {AddBaseStaffComponent} from "../../shared/components/dialog/add-base-staff/add-base-staff.component";
 
 @Component({
   selector: 'app-content-layout',
@@ -13,7 +15,8 @@ export class ContentLayoutComponent implements OnInit {
 
   constructor(private socketService: SocketService,
               private authService: AuthService,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +53,13 @@ export class ContentLayoutComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action);
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AddBaseStaffComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Todo chido')
+    })
   }
 
 }

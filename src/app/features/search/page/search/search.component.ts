@@ -9,6 +9,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {UserModel} from "../../../../data/models/user.model";
 import {AttendanceService} from "../../../../core/services/attendance.service";
 import {PrinterService} from "../../../../core/services/printer.service";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-search',
@@ -35,7 +36,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
     private basePersonalService: BasePersonalService,
     private attendanceService: AttendanceService,
     private printerService: PrinterService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    public dialog: MatDialog,
   ) {
   }
 

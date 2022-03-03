@@ -1,9 +1,26 @@
 <h1 mat-dialog-title>Agregar nuevo usuario</h1>
 <div mat-dialog-content>
-  <form (ngSubmit)="createUser()" [formGroup]="form">
+  <form [formGroup]="form">
+    <mat-form-field color="accent" class="w-100 mt-3">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text"
+             formControlName="name">
+    </mat-form-field>
 
+    <mat-form-field color="accent" class="w-100 mt-3">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput placeholder="ejemplo@email.com" type="email"
+             formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field color="accent" class="w-100 mt-3">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password"
+             formControlName="password">
+    </mat-form-field>
   </form>
 </div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+<div mat-dialog-actions class="d-flex justify-content-between">
+  <button mat-button color="accent" (click)="createUser()">Guardar</button>
+  <button mat-button mat-dialog-close>Cancelar</button>
 </div>

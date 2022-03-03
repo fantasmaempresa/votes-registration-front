@@ -2,6 +2,14 @@
   <mat-toolbar class="mb-2" color="accent">
     <span>Agregando usuario</span>
     <span class="spacer"></span>
+    <button (click)="openDialog()"
+            [matTooltipPosition]="'below'"
+            aria-label="Agregar nuevo usuario"
+            mat-icon-button
+            matTooltip="Agregar nuevo usuario"
+    >
+      <mat-icon>person_add</mat-icon>
+    </button>
     <button [matTooltipPosition]="'below'"
             aria-label="Regresar"
             mat-icon-button

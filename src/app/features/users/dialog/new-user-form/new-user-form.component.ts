@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {FormGroup} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {UserService} from "../../../../data/services/user.service";
 
 @Component({
   selector: 'app-new-user-form',
@@ -10,13 +12,29 @@ export class NewUserFormComponent implements OnInit {
 
   form!: FormGroup;
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<NewUserFormComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private userService: UserService) { }
 
   ngOnInit(): void {
+    this.createFormGroup();
+    console.log(this.data);
+  }
+
+  createFormGroup() {
+    this.form = new FormGroup({
+      'name': new FormControl('', [Validators.required]),
+      'email': new FormControl('', [Validators.required]),
+      'password': new FormControl('', [Validators.required]),
+      'type': new FormControl(2, [Validators.required]),
+    })
   }
 
   createUser() {
+    if(this.data.user) {
 
+    }
+    this.userService.save(this.form.value).subscribe(res => console.log(res))
   }
 
 }

@@ -7,13 +7,15 @@ import {MaterialModule} from "./material/material.module";
 import {NavbarComponent} from "../layout/navbar/navbar.component";
 import {FooterComponent} from "../layout/footer/footer.component";
 import {HttpClientModule} from "@angular/common/http";
+import {AddBaseStaffComponent} from './components/dialog/add-base-staff/add-base-staff.component';
 
 
 @NgModule({
     declarations: [
         PageNotFoundComponent,
         NavbarComponent,
-        FooterComponent
+        FooterComponent,
+        AddBaseStaffComponent
     ],
     imports: [
         CommonModule,
