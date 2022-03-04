@@ -30,7 +30,21 @@ export class PrinterService {
     let text =
       SPACE_CONSTANT
       + SPACE_CONSTANT
-      + `${staff.name} ${staff.last_name} ${staff.mother_last_name}`;
+      + `${staff.name} ${staff.last_name} ${staff.mother_last_name}`
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + `${staff.dependency}`
+      + SPACE_CONSTANT
+      + 'AREA'
+      + `${staff.affiliation_area}`;
+    await this.writeText(text);
+    text =
+      SPACE_CONSTANT
+    + `${date}`
+    + SPACE_CONSTANT
+    + SPACE_CONSTANT
+    + SPACE_CONSTANT
+    + SPACE_CONSTANT;
     await this.writeText(text);
   }
 

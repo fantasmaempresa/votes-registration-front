@@ -31,7 +31,7 @@ export class AddBaseStaffComponent implements OnInit {
       'denomination_job': new FormControl(''),
       'denomination_job_description': new FormControl(''),
       'cve_job_level': new FormControl(''),
-      'phone_number': new FormControl('', ),
+      'phone_number': new FormControl('', [Validators.maxLength(10), Validators.minLength(10)]),
       'expedient': new FormControl('', [Validators.required]),
       'dependency': new FormControl('', [Validators.required]),
       'affiliation_area': new FormControl('', [Validators.required]),
@@ -44,6 +44,10 @@ export class AddBaseStaffComponent implements OnInit {
       // this.printerService.messageConnectPrinter();
       // return;
     // }
+    this.form.markAllAsTouched();
+    if(this.form.invalid) {
+      return;
+    }
     this.basePersonalService.save(this.form.value).subscribe({
       next: async () => {
         await Swal.fire('Compañero registrado', 'Se ha registrado correctamente', 'success');
