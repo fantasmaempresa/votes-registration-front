@@ -31,9 +31,6 @@ export class NewUserFormComponent implements OnInit {
   }
 
   createUser() {
-    if(this.data.user) {
-
-    }
     this.userService.save(this.form.value).subscribe(res => console.log(res))
   }
 

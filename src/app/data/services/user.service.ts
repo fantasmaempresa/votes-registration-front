@@ -24,7 +24,7 @@ export class UserService {
   }
 
   update(user: any) {
-    return this.http.get(`${environment.base_url}/users/${user.id}`).pipe(
+    return this.http.put(`${environment.base_url}/users/${user.id}`, user).pipe(
       map((data: any) => data.data)
     )
   }

@@ -21,7 +21,7 @@ export class SearchService {
                 map((res: any) => res.data),
                 map((res: any) => {
                     return res.map((x: any) => {
-                        x.denomination_jod_description = x.denomination_jod_description.replace(/\\/g, '');
+                        x.denomination_job_description = x.denomination_job_description.replace(/\\/g, '');
                         return x;
                     })
                 })

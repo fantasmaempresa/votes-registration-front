@@ -27,13 +27,12 @@ export class AddBaseStaffComponent implements OnInit {
       'name': new FormControl('', [Validators.required]),
       'last_name': new FormControl('', [Validators.required]),
       'mother_last_name': new FormControl('', [Validators.required]),
-      'gender': new FormControl('N/A'),
-      'denomination_jod': new FormControl('N/A'),
-      'denomination_jod_description': new FormControl('N/A'),
-      'cve_job_level': new FormControl('N/A'),
-      'phone_number': new FormControl('', [Validators.required]),
-      'expedient': new FormControl('N/A', [Validators.required]),
-      'id_register': new FormControl('', [Validators.required]),
+      'gender': new FormControl('', [Validators.required]),
+      'denomination_job': new FormControl(''),
+      'denomination_job_description': new FormControl(''),
+      'cve_job_level': new FormControl(''),
+      'phone_number': new FormControl('', ),
+      'expedient': new FormControl('', [Validators.required]),
       'dependency': new FormControl('', [Validators.required]),
       'affiliation_area': new FormControl('', [Validators.required]),
       'exercise': new FormControl('N/A', [Validators.required]),
@@ -41,10 +40,10 @@ export class AddBaseStaffComponent implements OnInit {
   }
 
   save() {
-    if (!this.printerService.printCharacteristic) {
-      this.printerService.messageConnectPrinter();
-      return;
-    }
+    // if (!this.printerService.printCharacteristic) {
+      // this.printerService.messageConnectPrinter();
+      // return;
+    // }
     this.basePersonalService.save(this.form.value).subscribe({
       next: async () => {
         await Swal.fire('Compañero registrado', 'Se ha registrado correctamente', 'success');

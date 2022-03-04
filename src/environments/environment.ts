@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   base_url: 'http://back.movimientoporlademocracia.com/api',
   grant_type: 'password',
-  client_id: '95bbcc7a-27c9-46d6-8757-5fd0636bc4d9',
-  client_secret: 'du9gQi5dh8u4G4XhWwbuEB0xVjsrvQhN4x5155An',
+  client_id: '95bc23ff-6e20-4ea7-9340-5d9bb580fb21',
+  client_secret: 'zoSKpHtM1RUd21CMfyGtVAZYOsWk2MJl4sBJVK2C',
   mix_pusher_app_key: '123456',
   mix_pusher_app_cluster: 'mt1'
 };
