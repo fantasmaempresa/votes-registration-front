@@ -35,11 +35,17 @@ export class PrinterService {
       + SPACE_CONSTANT
       + `${staff.dependency}`
       + SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + 'Dado de alta en la plataforma sindical MPLD'
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
       + 'AREA'
       + `${staff.affiliation_area}`;
     await this.writeText(text);
     text =
       SPACE_CONSTANT
+      + SPACE_CONSTANT
+      + SPACE_CONSTANT
     + `${date}`
     + SPACE_CONSTANT
     + SPACE_CONSTANT
