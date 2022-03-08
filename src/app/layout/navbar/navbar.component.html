@@ -12,7 +12,7 @@
       <a routerLink="results" routerLinkActive="active-link">Resultados</a>
     </li>
     <li>
-      <a routerLink="assembly" routerLinkActive="active-link">Detalle de firmas</a>
+      <a routerLink="assembly" routerLinkActive="active-link">Asambleas</a>
     </li>
     <li *ngIf="user.type === 1">
       <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
@@ -23,6 +23,12 @@
   </ul>
 
   <span class="spacer"></span>
+
+  <button mat-flat-button color="accent" class="fab-toggler" (click)="openDialog()">
+    <i class="material-icons">add</i>
+    Agregar base
+  </button>
+
   <button mat-icon-button
           color="warn"
           matTooltip="Conectar impresora"

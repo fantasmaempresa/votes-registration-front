@@ -229,10 +229,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
 
   passAttendance(person: any) {
-    if (!this.printerService.printCharacteristic) {
-      this.printerService.messageConnectPrinter();
-      return;
-    }
+    // if (!this.printerService.printCharacteristic) {
+    //   this.printerService.messageConnectPrinter();
+    //   return;
+    // }
     const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
     const randNumber = this.attendanceService.generateRandomNumber();
 

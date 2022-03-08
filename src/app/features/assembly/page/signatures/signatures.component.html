@@ -6,35 +6,40 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-6">
-            <mat-form-field appearance="outline" class="w-100 mt-3 ms-3">
-                <mat-label>Dependencia</mat-label>
-                <mat-select [formControl]="dependencyFilter">
-                    <mat-option>Ninguna</mat-option>
-                    <mat-option
-                            *ngFor="let dependency of dependencies$ | async"
-                            [value]="dependency"
-                    >{{ dependency.dependency }}</mat-option
-                    >
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </div>
-
     <mat-toolbar class="mb-2" color="accent">
         <span>Asamblea</span>
         <span class="spacer"></span>
+        <button mat-button [matMenuTriggerFor]="assemblyHistory">Selección de asamblea</button>
+        <mat-menu #assemblyHistory="matMenu">
+          <button mat-menu-item>Item 1</button>
+        </mat-menu>
         <button mat-icon-button aria-label="Descargar datos" matTooltip="Descargar csv" (click)="downloadCSV()">
             <mat-icon>file_download</mat-icon>
         </button>
     </mat-toolbar>
 
     <div class="example-table-container">
-        <mat-form-field appearance="standard" class="w-100 ps-3 pe-3">
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field appearance="outline" class="w-100 ps-3 pe-3">
             <mat-label>Buscar...</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="Nombre" #input>
-        </mat-form-field>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field appearance="outline" class="w-100 ps-3 pe-3">
+            <mat-label>Dependencia</mat-label>
+            <mat-select [formControl]="dependencyFilter">
+              <mat-option>Ninguna</mat-option>
+              <mat-option
+                *ngFor="let dependency of dependencies$ | async"
+                [value]="dependency"
+              >{{ dependency.dependency }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
         <table mat-table [dataSource]="dataSource" class="example-table w-100"
                matSort matSortActive="created" matSortDisableClear matSortDirection="desc">

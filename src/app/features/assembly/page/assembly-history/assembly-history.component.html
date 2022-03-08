@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <mat-toolbar color="accent">
+    <span>Historial de asambleas</span>
+    <span class="spacer"></span>
+    <button (click)="deleteAssembly(assembly)"
+            *ngIf="assemblies.selectedOptions.selected[0]?.value as assembly"
+            [matTooltipPosition]="'below'"
+            aria-label="Eliminar asamblea"
+            mat-icon-button
+            matTooltip="Eliminar asamblea"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button (click)="openDialog()"
+            [matTooltipPosition]="'below'"
+            aria-label="Agregar asamblea"
+            mat-icon-button
+            matTooltip="Agregar asamblea"
+    >
+      <mat-icon>group_add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-selection-list #assemblies [multiple]="false">
+    <mat-list-option *ngFor="let assembly of (assemblies$ | async)" [value]="assembly">
+      <div class="row">
+        <div class="col-10">
+          <div class="d-flex flex-column">
+            <div mat-line class="col">
+              Ejemplo
+            </div>
+            <div mat-line class="col">
+              Fecha
+            </div>
+          </div>
+        </div>
+        <div class="col d-flex justify-content-end">
+          <button
+            color="accent"
+            mat-icon-button
+            [matTooltip]="'Bloquear asistencia de esta asamblea'"
+          >
+            <mat-icon>lock</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+</div>

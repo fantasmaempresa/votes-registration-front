@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AttendanceComponent implements OnInit {
 
+  selectedAssembly: any = null;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  selectAssembly() {
+    console.log('Asamble seleccionada')
   }
 
 }

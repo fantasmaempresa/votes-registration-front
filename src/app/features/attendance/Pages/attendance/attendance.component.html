@@ -2,6 +2,10 @@
   <mat-toolbar class="mb-2" color="accent">
     <span>Pase de Lista</span>
     <span class="spacer"></span>
+    <button mat-button [matMenuTriggerFor]="assemblyHistory">Selección de asamblea</button>
+    <mat-menu #assemblyHistory="matMenu">
+      <button mat-menu-item (click)="selectAssembly()">Item 1</button>
+    </mat-menu>
     <button [matTooltipPosition]="'below'"
             aria-label="Ver Lista de personas que confirmaron asistencia"
             mat-icon-button
@@ -12,6 +16,13 @@
     </button>
   </mat-toolbar>
 
-  <app-search actions="assistance">
+  <app-search actions="assistance" >
   </app-search>
+
+  <div *ngIf="!selectedAssembly" class="no-results-container">
+    <div class="no-results">\(o_o)/</div>
+    <div>
+      <p style="font-size: 2rem; margin-top: 1rem;">Empieza por seleccionar una asamblea</p>
+    </div>
+  </div>
 </div>

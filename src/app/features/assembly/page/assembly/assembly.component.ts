@@ -15,14 +15,19 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 export class AssemblyComponent {
   links = [
     {
+      label: 'Historial',
+      link: './history',
+      index: 0
+    },
+    {
       label: 'Firmas para asamblea',
       link: './signatures',
-      index: 0
+      index: 1
     },
     {
       label: 'Resumen de firmas',
       link: './resume',
-      index: 1
+      index: 2
     },
   ];
   activeLink = this.links[0];

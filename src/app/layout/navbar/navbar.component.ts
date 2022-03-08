@@ -3,6 +3,8 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../core/services/auth.service";
 import {UserModel} from "../../data/models/user.model";
 import {PrinterService} from "../../core/services/printer.service";
+import {AddBaseStaffComponent} from "../../shared/components/dialog/add-base-staff/add-base-staff.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +15,8 @@ export class NavbarComponent implements OnInit {
 
   user!: UserModel;
 
-  constructor(private router: Router, private authService: AuthService, private printerService: PrinterService) {
+  constructor(private router: Router, private authService: AuthService, private printerService: PrinterService,
+              public dialog: MatDialog,) {
   }
 
   ngOnInit(): void {
@@ -27,5 +30,12 @@ export class NavbarComponent implements OnInit {
 
   findDevice() {
     this.printerService.findDevice();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AddBaseStaffComponent, {});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Todo chido')
+    })
   }
 }
