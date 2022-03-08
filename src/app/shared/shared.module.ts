@@ -8,6 +8,7 @@ import {NavbarComponent} from "../layout/navbar/navbar.component";
 import {FooterComponent} from "../layout/footer/footer.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AddBaseStaffComponent} from './components/dialog/add-base-staff/add-base-staff.component';
+import {DigitOnlyModule} from "@uiowa/digit-only";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {AddBaseStaffComponent} from './components/dialog/add-base-staff/add-base
         ReactiveFormsModule,
         RouterModule,
         MaterialModule,
-        HttpClientModule
+        HttpClientModule,
+        DigitOnlyModule,
     ],
     exports: [
         CommonModule,
@@ -33,7 +35,8 @@ import {AddBaseStaffComponent} from './components/dialog/add-base-staff/add-base
         MaterialModule,
         HttpClientModule,
         NavbarComponent,
-        FooterComponent
+        FooterComponent,
+        DigitOnlyModule
     ]
 })
 export class SharedModule {

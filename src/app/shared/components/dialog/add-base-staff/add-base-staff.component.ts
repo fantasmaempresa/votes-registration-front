@@ -13,6 +13,10 @@ import {PrinterService} from "../../../../core/services/printer.service";
 export class AddBaseStaffComponent implements OnInit {
   form!: FormGroup;
 
+  get phoneNumber() {
+    return this.form.get('phone_number');
+  }
+
   constructor(public dialogRef: MatDialogRef<AddBaseStaffComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private basePersonalService: BasePersonalService,
@@ -31,7 +35,10 @@ export class AddBaseStaffComponent implements OnInit {
       'denomination_job': new FormControl(''),
       'denomination_job_description': new FormControl(''),
       'cve_job_level': new FormControl(''),
-      'phone_number': new FormControl('', [Validators.maxLength(10), Validators.minLength(10)]),
+      'phone_number': new FormControl('', {
+        validators: [Validators.maxLength(10)],
+        updateOn: 'change'
+      }),
       'expedient': new FormControl('', [Validators.required]),
       'dependency': new FormControl('', [Validators.required]),
       'affiliation_area': new FormControl('', [Validators.required]),
