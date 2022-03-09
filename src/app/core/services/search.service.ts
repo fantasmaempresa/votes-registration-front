@@ -12,7 +12,7 @@ export class SearchService {
     }
 
     search(query: string) {
-        let url = `${environment.base_url}/searchPerson`;
+        let url = `${environment.base_url}/basePersonals/filter/search/person`;
         let body = {
             search: query
         }
@@ -26,20 +26,5 @@ export class SearchService {
                     })
                 })
             );
-    }
-
-    voteFavor(id:number) {
-        let url = `${environment.base_url}/voteLaborUnion/${id}`
-        return this.http.get(url);
-    }
-
-    voteNoFavor(id: number) {
-        let url = `${environment.base_url}/noVoteLaborUnion/${id}`
-        return this.http.get(url);
-    }
-
-    voteAttendance(id: number) {
-        let url = `${environment.base_url}/attendanceVoteLaborUnion/${id}`
-        return this.http.get(url);
     }
 }

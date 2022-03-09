@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   tryOfLogin({username, password}: any) {
-    let url = `${environment.base_url}/requestToLogin`;
+    let url = `${environment.base_url}/users/auth/requestToLogin`;
     let body = {
       username,
       password
@@ -38,24 +38,24 @@ export class AuthService {
   }
 
   authorizeLogin(id: number) {
-    let url = `${environment.base_url}/authorizeUser/${id}`
+    let url = `${environment.base_url}/users/auth/authorize/${id}`
     return this.http.get(url);
   }
 
   unauthorizeLogin(id: number) {
-    let url = `${environment.base_url}/notAuthorizeUser/${id}`;
+    let url = `${environment.base_url}/users/auth/notAuthorize/${id}`;
     return this.http.get(url);
   }
 
   getDataUserLogged() {
-    let url = `${environment.base_url}/getDataUserLogged`
+    let url = `${environment.base_url}/users/auth/getDataLogged`
     return this.http.get(url).pipe(
       map((data: any) => data.data)
     );
   }
 
   logout() {
-    this.doLogoutUser();
+    this.removeTokens();
   }
 
   isLoggedIn() {
@@ -97,14 +97,6 @@ export class AuthService {
   removeTokens() {
     localStorage.removeItem(this.JWT_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
-  }
-
-  private doLoginUser(username: string, tokens: Tokens) {
-    this.storeTokens(tokens);
-  }
-
-  private doLogoutUser() {
-    this.removeTokens();
   }
 
   private getRefreshToken() {

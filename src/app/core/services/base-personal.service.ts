@@ -12,7 +12,7 @@ export class BasePersonalService {
   }
 
   createUser(id: number) {
-    let url = `${environment.base_url}/createUser/${id}`;
+    let url = `${environment.base_url}/basePersonals/operation/createUser/${id}`;
     return this.http.post(url, {}).pipe(pluck('data'));
   }
 
@@ -27,17 +27,32 @@ export class BasePersonalService {
   }
 
   createReferred(id: number) {
-    let url = `${environment.base_url}/referred/${id}`;
+    let url = `${environment.base_url}/basePersonals/operation/referred/${id}`;
     return this.http.post(url, {});
   }
 
   deleteReferred(id: number) {
-    let url = `${environment.base_url}/referred/${id}`;
+    let url = `${environment.base_url}/basePersonals/operation/referred/${id}`;
     return this.http.delete(url);
   }
 
   getAllReferred() {
-    let url = `${environment.base_url}/referred`;
+    let url = `${environment.base_url}/basePersonals/operation/referred`;
+    return this.http.get(url);
+  }
+
+  voteFavor(id:number) {
+    let url = `${environment.base_url}/basePersonals/vote/laborUnion/${id}`
+    return this.http.get(url);
+  }
+
+  voteNoFavor(id: number) {
+    let url = `${environment.base_url}/basePersonals/vote/noLaborUnion/${id}`
+    return this.http.get(url);
+  }
+
+  voteAttendance(id: number) {
+    let url = `${environment.base_url}/basePersonals/vote/attendanceLaborUnion/${id}`
     return this.http.get(url);
   }
 }

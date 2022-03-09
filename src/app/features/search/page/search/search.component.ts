@@ -70,14 +70,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   register(option: string, voter: any) {
-    if (!this.printerService.printCharacteristic) {
-      this.printerService.messageConnectPrinter();
-      return;
-    }
+    // if (!this.printerService.printCharacteristic) {
+    //   this.printerService.messageConnectPrinter();
+    //   return;
+    // }
 
     let vote: Observable<any>
     Swal.fire({
-      title: `¿Confirmar voto por ${option}`,
+      title: `¿Confirmar voto por ${option}?`,
       showDenyButton: true,
       // showCancelButton: true,
       denyButtonText: `Cancelar`,
@@ -87,15 +87,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
         if (option === 'MPLD') {
-          vote = this.searchService.voteFavor(voter.id);
+          vote = this.basePersonalService.voteFavor(voter.id);
         } else if (option === 'attendance') {
-          vote = this.searchService.voteAttendance(voter.id);
+          vote = this.basePersonalService.voteAttendance(voter.id);
         } else {
-          vote = this.searchService.voteNoFavor(voter.id);
+          vote = this.basePersonalService.voteNoFavor(voter.id);
         }
         vote.subscribe(res => {
+          Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
           const searchString$ = merge(
             defer(() => of(this.searchControl.value)),
             this.searchControl.valueChanges

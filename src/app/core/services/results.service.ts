@@ -12,28 +12,28 @@ export class ResultsService {
     }
 
     getTotalFavor() {
-        return this.http.get(`${environment.base_url}/totalVoteLaborUnion`)
+        return this.http.get(`${environment.base_url}/basePersonals/filter/total/voteLaborUnion`)
             .pipe(
                 map((res: any) => res.data)
             )
     }
 
     getTotalNoFavor() {
-        return this.http.get(`${environment.base_url}/totalNoVoteLaborUnion`)
+        return this.http.get(`${environment.base_url}/basePersonals/filter/total/noVoteLaborUnion`)
             .pipe(
                 map((res: any) => res.data),
             )
     }
 
     getTotalAttendance() {
-        return this.http.get(`${environment.base_url}/totalAttendanceVote`)
+        return this.http.get(`${environment.base_url}/basePersonals/filter/total/attendanceVote`)
             .pipe(
                 map((res: any) => res.data),
             )
     }
 
     getByDependencies() {
-        return this.http.get(`${environment.base_url}/filterCountByDependency`)
+        return this.http.get(`${environment.base_url}/basePersonals/filter/countByDependency`)
             .pipe(
                 map((res: any) => res.data)
             )
