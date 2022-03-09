@@ -4,7 +4,7 @@
     <span class="spacer"></span>
     <button mat-button [matMenuTriggerFor]="assemblyHistory">Selección de asamblea</button>
     <mat-menu #assemblyHistory="matMenu">
-      <button mat-menu-item (click)="selectAssembly()">Item 1</button>
+      <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)">{{assembly.name}}</button>
     </mat-menu>
     <button [matTooltipPosition]="'below'"
             aria-label="Ver Lista de personas que confirmaron asistencia"

@@ -11,7 +11,7 @@
         <span class="spacer"></span>
         <button mat-button [matMenuTriggerFor]="assemblyHistory">Selección de asamblea</button>
         <mat-menu #assemblyHistory="matMenu">
-          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)">{{assembly.name}}</button>
         </mat-menu>
         <button mat-icon-button aria-label="Descargar datos" matTooltip="Descargar csv" (click)="downloadCSV()">
             <mat-icon>file_download</mat-icon>

@@ -2,17 +2,18 @@ import {AfterViewInit, Component, OnInit, SecurityContext, ViewChild} from '@ang
 import {MatTableDataSource} from "@angular/material/table";
 import {FormControl} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
-import {Observable, switchMap, tap} from "rxjs";
+import {map, Observable, switchMap, tap} from "rxjs";
 import {FilterService} from "../../../../core/services/filter.service";
 import {ActivatedRoute} from "@angular/router";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {AssemblyService} from "../../../../core/services/assembly.service";
 
 @Component({
   selector: 'app-signatures',
   templateUrl: './signatures.component.html',
   styleUrls: ['./signatures.component.scss']
 })
-export class SignaturesComponent implements AfterViewInit {
+export class SignaturesComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     "id_register",
@@ -41,13 +42,16 @@ export class SignaturesComponent implements AfterViewInit {
 
   dependencyFilter!: FormControl;
 
+  assemblies$!: Observable<any>;
+
   @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
   dataSource$!: Observable<Object>;
 
   constructor(
       private filterService: FilterService,
       private route: ActivatedRoute,
-      private domSanitizer: DomSanitizer
+      private domSanitizer: DomSanitizer,
+      private assemblyService: AssemblyService
   ) {
     this.fetchData();
     this.dependencies$ = this.filterService.fetchDependencies();
@@ -60,6 +64,10 @@ export class SignaturesComponent implements AfterViewInit {
           }
         }
     )
+  }
+
+  ngOnInit() {
+    this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
   }
 
   ngAfterViewInit() {

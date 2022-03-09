@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {map, Observable} from "rxjs";
+import {AssemblyService} from "../../../../core/services/assembly.service";
 
 @Component({
   selector: 'app-attendance',
@@ -9,9 +11,12 @@ export class AttendanceComponent implements OnInit {
 
   selectedAssembly: any = null;
 
-  constructor() { }
+  assemblies$!: Observable<any>;
 
-  ngOnInit(): void {
+  constructor(private assemblyService: AssemblyService) { }
+
+  ngOnInit() {
+    this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
   }
 
   selectAssembly() {

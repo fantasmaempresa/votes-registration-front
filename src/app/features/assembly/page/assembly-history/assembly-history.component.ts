@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {map, Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
-import {AddBaseStaffComponent} from "../../../../shared/components/dialog/add-base-staff/add-base-staff.component";
 import {CreateAssemblyComponent} from "../../dialog/create-assembly/create-assembly.component";
+import {AssemblyService} from "../../../../core/services/assembly.service";
 
 @Component({
   selector: 'app-assembly-history',
@@ -12,9 +12,10 @@ import {CreateAssemblyComponent} from "../../dialog/create-assembly/create-assem
 export class AssemblyHistoryComponent implements OnInit {
   assemblies$!: Observable<any>
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private assemblyService: AssemblyService) { }
 
   ngOnInit(): void {
+    this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
   }
 
   deleteAssembly(assembly: any) {
