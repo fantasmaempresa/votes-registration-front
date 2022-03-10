@@ -2,21 +2,21 @@
   <mat-toolbar class="mb-2" color="accent">
     <span>Pase de Lista</span>
     <span class="spacer"></span>
-    <button mat-button [matMenuTriggerFor]="assemblyHistory">Selección de asamblea</button>
+    <button mat-button [matMenuTriggerFor]="assemblyHistory">{{selectAssemblyLabel}}</button>
     <mat-menu #assemblyHistory="matMenu">
-      <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)">{{assembly.name}}</button>
+      <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)" (click)="selectAssembly(assembly)">{{assembly.name}}</button>
     </mat-menu>
-    <button [matTooltipPosition]="'below'"
-            aria-label="Ver Lista de personas que confirmaron asistencia"
-            mat-icon-button
-            matTooltip="Ver Lista de personas que confirmaron asistencia"
-            routerLink="/app/attendance/list"
-    >
-      <mat-icon>checklist</mat-icon>
-    </button>
+<!--    <button [matTooltipPosition]="'below'"-->
+<!--            aria-label="Ver Lista de personas que confirmaron asistencia"-->
+<!--            mat-icon-button-->
+<!--            matTooltip="Ver Lista de personas que confirmaron asistencia"-->
+<!--            routerLink="/app/attendance/list"-->
+<!--    >-->
+<!--      <mat-icon>checklist</mat-icon>-->
+<!--    </button>-->
   </mat-toolbar>
 
-  <app-search actions="assistance" >
+  <app-search actions="assistance" [assembly]="selectedAssembly" *ngIf="selectedAssembly">
   </app-search>
 
   <div *ngIf="!selectedAssembly" class="no-results-container">

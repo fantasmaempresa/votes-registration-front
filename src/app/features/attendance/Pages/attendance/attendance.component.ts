@@ -10,6 +10,7 @@ import {AssemblyService} from "../../../../core/services/assembly.service";
 export class AttendanceComponent implements OnInit {
 
   selectedAssembly: any = null;
+  selectAssemblyLabel = 'Selección de asamblea'
 
   assemblies$!: Observable<any>;
 
@@ -19,8 +20,9 @@ export class AttendanceComponent implements OnInit {
     this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
   }
 
-  selectAssembly() {
-    console.log('Asamble seleccionada')
+  selectAssembly(assembly: any) {
+    this.selectedAssembly = assembly;
+    this.selectAssemblyLabel = assembly.name;
   }
 
 }

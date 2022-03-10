@@ -17,6 +17,7 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, AfterViewInit {
+  @Input() assembly: any;
   @ViewChild("searchInput") searchInput!: ElementRef;
   // define your services and characteristics
   searchControl!: FormControl;
@@ -236,16 +237,29 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // }
     const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
     const randNumber = this.attendanceService.generateRandomNumber();
+    if(this.assembly) {
+      this.attendanceService.passAttendance(this.assembly, person).subscribe({
+        next: () => {
+              Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+              this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+              });
+        },
+        error: ({error}) => {
+          console.log(error);
+              Swal.fire('Algo salio mal...', error.error, 'error');
+        }
+      })
+    }
 
-    this.attendanceService.passAttendance(person.id, randNumber).subscribe(
-      response => {
-        Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
-        this.printerService.printAttendanceTicket(person, randNumber).then(r => {
-        });
-      }, () => {
-        Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
-      }
-    );
+    // this.attendanceService.passAttendance(person.id, randNumber).subscribe(
+    //   response => {
+    //     Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+    //     this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+    //     });
+    //   }, () => {
+    //     Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
+    //   }
+    // );
   }
 
   showInformation(person: any) {

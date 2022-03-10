@@ -8,10 +8,10 @@ import {AttendanceService} from "../../../../core/services/attendance.service";
   styleUrls: ['./list-attendance.component.scss']
 })
 export class ListAttendanceComponent implements OnInit {
-  users$: Observable<any>;
+  users$!: Observable<any>;
 
   constructor(private attendanceService: AttendanceService) {
-    this.users$ = attendanceService.filterByAttendance();
+    // this.users$ = attendanceService.filterByAttendance();
   }
 
   ngOnInit(): void {

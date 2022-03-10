@@ -12,14 +12,19 @@ export class AttendanceService {
   constructor(private http: HttpClient) {
   }
 
-  passAttendance(id: number, number_list: string) {
-    let url = `${environment.base_url}/basePersonals/${id}`;
-    return this.http.put(url, {number_list});
+  passAttendance(assembly: any, baseStaff: any) {
+    let url = `${environment.base_url}/assemblies/operations/rollCall/assembly/${assembly.id}/basePersonal/${baseStaff.id}`
+    return this.http.get(url);
+    // let url = `${environment.base_url}/basePersonals/${id}`;
+    // return this.http.put(url, {number_list});
   }
 
-  filterByAttendance() {
-    let url = `${environment.base_url}/filterByNumberList`;
-    return this.http.get(url).pipe(pluck('data'));
+  filterByAttendance(assembly: any, dependency = '') {
+    let url = `${environment.base_url}/assemblies/filter/assistanceByDependency/${assembly.id}`;
+    let body = {
+      dependency
+    }
+    return this.http.post(url, body).pipe(pluck('data'));
   }
 
   totalAttendance() {
