@@ -2,6 +2,15 @@
   <mat-toolbar color="accent">
     <span>Historial de asambleas</span>
     <span class="spacer"></span>
+    <button (click)="editAssembly(assembly)"
+            *ngIf="assemblies.selectedOptions.selected[0]?.value as assembly"
+            [matTooltipPosition]="'below'"
+            aria-label="Editar asamblea"
+            mat-icon-button
+            matTooltip="Editar asamblea"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
     <button (click)="deleteAssembly(assembly)"
             *ngIf="assemblies.selectedOptions.selected[0]?.value as assembly"
             [matTooltipPosition]="'below'"
@@ -37,9 +46,11 @@
           <button
             color="accent"
             mat-icon-button
-            [matTooltip]="'Bloquear asistencia de esta asamblea'"
+            (click)="blockEdition(assembly)"
+            [matTooltip]="assembly.lock === 0 ? 'Bloquear asistencia de esta asamblea' : 'Desbloquear asistencia de esta asamblea'"
           >
-            <mat-icon>lock</mat-icon>
+            <mat-icon *ngIf="assembly.lock === 1">lock</mat-icon>
+            <mat-icon *ngIf="assembly.lock === 0">lock_open</mat-icon>
           </button>
         </div>
       </div>

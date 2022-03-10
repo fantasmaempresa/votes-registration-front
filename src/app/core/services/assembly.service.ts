@@ -29,4 +29,12 @@ export class AssemblyService {
   delete(id: number) {
     return this.http.delete(`${environment.base_url}/assemblies/${id}`)
   }
+
+  lockAssembly(assembly: any) {
+    return this.http.get(`${environment.base_url}/assemblies/operations/lockAssembly/${assembly.id}`)
+  }
+
+  unlockAssembly(assembly: any) {
+    return this.http.get(`${environment.base_url}/assemblies/operations/unlockAssembly/${assembly.id}`)
+  }
 }

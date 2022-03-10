@@ -27,6 +27,11 @@ export class CreateAssemblyComponent implements OnInit {
       'name': new FormControl('', [Validators.required]),
       'description': new FormControl('', [Validators.required]),
     })
+
+    if(this.data.edit) {
+      this.form.addControl('id', new FormControl());
+      this.form.patchValue(this.data.payload)
+    }
   }
 
   save() {
@@ -35,14 +40,28 @@ export class CreateAssemblyComponent implements OnInit {
       return;
     }
 
-    this.assemblyService.save(this.form.value).subscribe({
-      next: (resp) => {
-        Swal.fire('Exito', 'Se ha creado la asamblea', 'success');
-        this.dialogRef.close(true)
-      },
-      error: () => {
-        Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
-      }
-    })
-  }
+    if(this.data.edit) {
+      this.assemblyService.update(this.form.value).subscribe({
+        next: (resp) => {
+          Swal.fire('Exito', 'Se ha actualizado la asamblea', 'success');
+          this.dialogRef.close(true)
+        },
+        error: () => {
+          Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
+        }
+      })
+    } else {
+      this.assemblyService.save(this.form.value).subscribe({
+        next: (resp) => {
+          Swal.fire('Exito', 'Se ha creado la asamblea', 'success');
+          this.dialogRef.close(true)
+        },
+        error: () => {
+          Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
+        }
+      })
+    }
+
+
+    }
 }
