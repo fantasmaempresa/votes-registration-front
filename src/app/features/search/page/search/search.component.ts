@@ -42,6 +42,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.authService.getDataUserLogged().subscribe(res => console.log(res));
     this.user = this.authService.getUser();
     this.searchControl = new FormControl('');
     this.areMinimumCharactersTyped$ = this.searchControl.valueChanges.pipe(
