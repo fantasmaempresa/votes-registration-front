@@ -78,32 +78,32 @@ export class AuthService {
   }
 
   getJwtToken() {
-    return localStorage.getItem(this.JWT_TOKEN);
+    return sessionStorage.getItem(this.JWT_TOKEN);
   }
 
   storeUser(user: any) {
-    localStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('user', JSON.stringify(user));
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem('user') ?? '');
+    return JSON.parse(sessionStorage.getItem('user') ?? '');
   }
 
   storeTokens(tokens: Tokens) {
-    localStorage.setItem(this.JWT_TOKEN, tokens.access_token);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
+    sessionStorage.setItem(this.JWT_TOKEN, tokens.access_token);
+    sessionStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
   }
 
   removeTokens() {
-    localStorage.removeItem(this.JWT_TOKEN);
-    localStorage.removeItem(this.REFRESH_TOKEN);
+    sessionStorage.removeItem(this.JWT_TOKEN);
+    sessionStorage.removeItem(this.REFRESH_TOKEN);
   }
 
   private getRefreshToken() {
-    return localStorage.getItem(this.REFRESH_TOKEN);
+    return sessionStorage.getItem(this.REFRESH_TOKEN);
   }
 
   private storeJwtToken(jwt: string) {
-    localStorage.setItem(this.JWT_TOKEN, jwt);
+    sessionStorage.setItem(this.JWT_TOKEN, jwt);
   }
 }

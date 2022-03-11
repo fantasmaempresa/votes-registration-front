@@ -35,7 +35,7 @@
         <p style="width: calc(100% - 40px);">
           {{person.name}} {{person.last_name}} {{person.mother_last_name}}
         </p>
-        <div *ngIf="!person.phone_number" class="edit-button">
+        <div class="edit-button">
           <button (click)="updateInformation(person)" aria-label="Actualizar información"
                   mat-mini-fab
                   matTooltip="Actualizar información">

@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CreateAssemblyComponent} from "../../dialog/create-assembly/create-assembly.component";
 import {AssemblyService} from "../../../../core/services/assembly.service";
 import Swal from "sweetalert2";
+import {MemorandumComponent} from "../../dialog/memorandum/memorandum.component";
 
 @Component({
   selector: 'app-assembly-history',
@@ -60,10 +61,15 @@ export class AssemblyHistoryComponent implements OnInit {
 
   blockEdition(assembly: any) {
     if(assembly.lock === 0) {
-      this.assemblyService.lockAssembly(assembly).subscribe({
-        next: () => this.getAssemblies(),
-        error: () => console.log('error')
-      })
+      const dialogRef = this.dialog.open(MemorandumComponent, {data: {
+          payload: assembly
+        }});
+      dialogRef.afterClosed().subscribe(result => {
+        this.assemblyService.lockAssembly(assembly).subscribe({
+          next: () => this.getAssemblies(),
+          error: () => console.log('error')
+        })
+      });
       return;
     }
 
@@ -74,7 +80,6 @@ export class AssemblyHistoryComponent implements OnInit {
       })
       return;
     }
-
   }
 
   openDialog() {

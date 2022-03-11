@@ -21,9 +21,9 @@ export class BasePersonalService {
     return this.http.post(url, baseStaff ).pipe(map((data:any) => data.data));
   }
 
-  updateBasePersonal(id: number, data: any) {
-    let url = `${environment.base_url}/basePersonals/${id}`;
-    return this.http.put(url, data);
+  updateBasePersonal(staff: any) {
+    let url = `${environment.base_url}/basePersonals/${staff.id}`;
+    return this.http.put(url, staff);
   }
 
   createReferred(id: number) {

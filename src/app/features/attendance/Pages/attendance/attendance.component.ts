@@ -17,7 +17,12 @@ export class AttendanceComponent implements OnInit {
   constructor(private assemblyService: AssemblyService) { }
 
   ngOnInit() {
-    this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
+    this.assemblies$ = this.assemblyService.fetchAll().pipe(
+      map((resp: any) => resp.data),
+      map(data => {
+        return data.filter((x: any) => x.lock === 0)
+      })
+    );
   }
 
   selectAssembly(assembly: any) {

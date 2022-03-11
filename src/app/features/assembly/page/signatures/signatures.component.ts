@@ -1,41 +1,47 @@
-import {AfterViewInit, Component, OnInit, SecurityContext, ViewChild} from '@angular/core';
+import {Component, OnInit, SecurityContext, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {FormControl} from "@angular/forms";
-import {MatPaginator} from "@angular/material/paginator";
-import {map, Observable, switchMap, tap} from "rxjs";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {map, Observable, Subscription} from "rxjs";
 import {FilterService} from "../../../../core/services/filter.service";
 import {ActivatedRoute} from "@angular/router";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {AssemblyService} from "../../../../core/services/assembly.service";
+import {AttendanceService} from "../../../../core/services/attendance.service";
+import Swal from "sweetalert2";
+import {PrinterService} from "../../../../core/services/printer.service";
 
 @Component({
   selector: 'app-signatures',
   templateUrl: './signatures.component.html',
   styleUrls: ['./signatures.component.scss']
 })
-export class SignaturesComponent implements OnInit, AfterViewInit {
+export class SignaturesComponent implements OnInit {
+  showResumeList = false;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
-    "id_register",
+    "name",
     "last_name",
     "mother_last_name",
-    "name",
     "dependency",
     "affiliation_area",
-    "cve_job_level",
     "expedient",
     "phone_number",
-    "gender"
+    "gender",
+    "options"
   ];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 
-  resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
-  nextURL!: string;
-  prevURL!: string;
-  pageIndex = 1;
+  totalItems = 0;
+  pageSize = 10;
+  pageEvent!: PageEvent;
+
+  isLoadingResults = false;
+  // nextURL!: string;
+  // prevURL!: string;
+  // pageIndex = 1;
   party!: string;
 
   dependencies$;
@@ -44,23 +50,31 @@ export class SignaturesComponent implements OnInit, AfterViewInit {
 
   assemblies$!: Observable<any>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
-  dataSource$!: Observable<Object>;
+  assistanceSubscription!: Subscription;
+
+  selectedAssembly: any = null;
+  selectAssemblyLabel = 'Selección de asamblea'
+  byDependencies$!: Observable<any>;
 
   constructor(
       private filterService: FilterService,
       private route: ActivatedRoute,
       private domSanitizer: DomSanitizer,
-      private assemblyService: AssemblyService
+      private assemblyService: AssemblyService,
+      private attendanceService: AttendanceService,
+      private printerService: PrinterService
   ) {
-    this.fetchData();
     this.dependencies$ = this.filterService.fetchDependencies();
     this.dependencyFilter = new FormControl({});
     this.dependencyFilter.valueChanges.subscribe(
         {
           next: (val) => {
-            this.isLoadingResults = true;
-            this.updateTable(this.filterService.filterByDependency(val));
+            if(val) {
+              this.dataSource.filter = val.dependency.trim().toLowerCase();
+            } else {
+              this.dataSource.filter = ''
+            }
+            // this.updateTable(this.filterService.filterByDependency(val));
           }
         }
     )
@@ -70,38 +84,33 @@ export class SignaturesComponent implements OnInit, AfterViewInit {
     this.assemblies$ = this.assemblyService.fetchAll().pipe(map((resp: any) => resp.data));
   }
 
-  ngAfterViewInit() {
-    let url = '';
-    const paginator$ = this.paginator.page
-        .pipe(
-            tap(
-                ({pageIndex, previousPageIndex}) => {
-                  if (previousPageIndex !== undefined && pageIndex > previousPageIndex) {
-                    url = this.nextURL;
-                  } else {
-                    url = this.prevURL;
-                  }
-                  this.isLoadingResults = true;
-                }
-            ),
-            switchMap(() => this.filterService.changePage(url)));
-    this.updateTable(paginator$);
+  fetchData(assembly: any) {
+    this.isLoadingResults = true;
+    this.assemblyService.fetch(assembly.id)
+      .pipe(
+        map(({base_personal}: any) => base_personal)
+      )
+      .subscribe({
+      next: (data: any) => {
+        this.isLoadingResults = false;
+        if (data) {
+          // this.totalItems = data.total;
+          this.dataSource = new MatTableDataSource<any>(data);
+        }
+      }
+    })
   }
 
-  fetchData() {
-    this.dataSource$ = this.filterService.filterByDependency();
-    this.dataSource$.subscribe(
-        () => {
-          this.dataSource.paginator = this.paginator;
-        }
-    );
-
-    this.updateTable(this.dataSource$);
+  selectAssembly(assembly: any) {
+    this.selectedAssembly = assembly;
+    this.selectAssemblyLabel = assembly.name;
+    this.fetchData(assembly);
+    this.byDependencies$ = this.attendanceService.filterByAttendance(this.selectedAssembly);
   }
 
   downloadCSV() {
     let downloadResult: SafeResourceUrl;
-    this.filterService.fetchCSV(this.dependencyFilter.value).subscribe(resp => {
+    this.attendanceService.fetchCSV(this.selectedAssembly).subscribe(resp => {
       downloadResult = this.domSanitizer.bypassSecurityTrustResourceUrl(
           URL.createObjectURL(resp)
       );
@@ -114,36 +123,42 @@ export class SignaturesComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private updateTable(observable$: Observable<any>) {
-    observable$
-        .pipe(
-            tap(
-                () => {
-                  this.isLoadingResults = false;
-                }
-            ),
-        )
-        .subscribe((data: any) => {
-          this.pageIndex = data.current_page - 1;
-          this.prevURL = data.prev_page_url;
-          this.nextURL = data.next_page_url;
-          this.resultsLength = data.total;
-
-          this.dataSource.data = data.data;
-
-          this.resultsLength += 1;
-          // fix to solve visual bug;
-          setTimeout(
-              () => {
-                this.resultsLength -= 1;
-              }
-          );
-        });
+  printTicket(person: any) {
+    const randNumber = this.attendanceService.generateRandomNumber();
+    this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+    });
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  removeRollCall(assembly: any, staff: any) {
+    Swal.fire({
+      title: `¿Esta seguro de quitar la asistencia de ${staff.name} ${staff.mother_last_name} ${staff.last_name}?`,
+      showDenyButton: true,
+      // showCancelButton: true,
+      icon: 'warning',
+      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#00d203',
+      reverseButtons: false
+    }).then((result) => {
+      console.log(result);
+      if(result.isConfirmed) {
+        this.attendanceService.removeAttendance(assembly, staff).subscribe({
+          next: async (resp) => {
+            await Swal.fire('Asistencia removida', `Se ha removida la asistencia a ${staff.name} ${staff.mother_last_name} ${staff.last_name}`, 'success');
+            this.fetchData(this.selectedAssembly);
+          }
+        })
+      }
+    });
+  }
+
+  showResume() {
+    this.showResumeList = true;
   }
 
 }

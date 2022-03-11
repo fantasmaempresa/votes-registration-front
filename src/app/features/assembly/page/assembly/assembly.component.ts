@@ -1,11 +1,4 @@
-import {AfterViewInit, Component, SecurityContext, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {Observable, switchMap, tap} from "rxjs";
-import {FilterService} from "../../../../core/services/filter.service";
-import {ActivatedRoute} from "@angular/router";
-import {FormControl} from "@angular/forms";
-import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-assembly',
@@ -20,15 +13,10 @@ export class AssemblyComponent {
       index: 0
     },
     {
-      label: 'Firmas para asamblea',
+      label: 'Listas de asistencia',
       link: './signatures',
       index: 1
-    },
-    {
-      label: 'Resumen de firmas',
-      link: './resume',
-      index: 2
-    },
+    }
   ];
   activeLink = this.links[0];
 }

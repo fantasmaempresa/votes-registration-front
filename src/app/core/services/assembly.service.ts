@@ -19,7 +19,7 @@ export class AssemblyService {
   }
 
   fetch(id: number) {
-    return this.http.get(`${environment.base_url}/assemblies/${id}`)
+    return this.http.get(`${environment.base_url}/assemblies/${id}`).pipe(map((resp: any) => resp.data))
   }
 
   update(assembly: any) {

@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   user!: UserModel;
 
   constructor(private router: Router, private authService: AuthService, private printerService: PrinterService,
-              public dialog: MatDialog,) {
+              public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -33,7 +33,12 @@ export class NavbarComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(AddBaseStaffComponent, {});
+    const dialogRef = this.dialog.open(AddBaseStaffComponent, {
+      data: {
+        text: 'Agregar personal de base',
+        edit: false
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       console.log('Todo chido')
     })

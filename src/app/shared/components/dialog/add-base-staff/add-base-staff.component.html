@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Agregar personal de base</h1>
+<h1 mat-dialog-title>{{data.text}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field color="accent" class="w-100">
@@ -34,11 +34,11 @@
     <mat-form-field class="w-100">
       <mat-label>Género</mat-label>
       <mat-select formControlName="gender">
-        <mat-option value="HOMBRE">
-          HOMBRE
+        <mat-option value="MASCULINO">
+          MASCULINO
         </mat-option>
-        <mat-option value="MUJER">
-          MUJER
+        <mat-option value="FEMENINO">
+          FEMENINO
         </mat-option>
         <mat-option value="OTRO">
           OTRO

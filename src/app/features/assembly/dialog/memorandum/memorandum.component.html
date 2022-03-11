@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>¿Deseas agregar una minuta a esta asamblea?</h1>
+<div mat-dialog-content *ngIf="saveMemorandum">
+  <form [formGroup]="form">
+    <mat-form-field color="accent" class="w-100">
+      <mat-label>Minuta</mat-label>
+      <textarea matInput type="text"
+             formControlName="memorandum">
+      </textarea>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-between" *ngIf="!saveMemorandum">
+  <button mat-button color="accent" (click)="saveMemorandum = true">Si</button>
+  <button mat-button mat-dialog-close>No</button>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-between" *ngIf="saveMemorandum">
+  <button mat-button color="accent" (click)="save()">Guardar</button>
+  <button mat-button mat-dialog-close>Cancelar</button>
+</div>

@@ -46,7 +46,7 @@ export class FilterService {
         map((res: any) => {
           return new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
         })
-    );;
+    );
   }
 
   changePage(url: string) {

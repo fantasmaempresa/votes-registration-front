@@ -21,8 +21,11 @@ export class SearchService {
                 map((res: any) => res.data),
                 map((res: any) => {
                     return res.map((x: any) => {
+                      if(x.denomination_job_description) {
                         x.denomination_job_description = x.denomination_job_description.replace(/\\/g, '');
                         return x;
+                      }
+                      return x;
                     })
                 })
             );

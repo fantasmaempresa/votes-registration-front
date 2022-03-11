@@ -2,7 +2,7 @@
   <mat-toolbar class="mb-2" color="accent">
     <span>Pase de Lista</span>
     <span class="spacer"></span>
-    <button mat-button [matMenuTriggerFor]="assemblyHistory">{{selectAssemblyLabel}}</button>
+    <button mat-stroked-button [matMenuTriggerFor]="assemblyHistory">{{selectAssemblyLabel}} <mat-icon>expand_more</mat-icon></button>
     <mat-menu #assemblyHistory="matMenu">
       <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)" (click)="selectAssembly(assembly)">{{assembly.name}}</button>
     </mat-menu>

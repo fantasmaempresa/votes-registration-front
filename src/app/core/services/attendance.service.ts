@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import random from "string-random";
-import {pluck} from "rxjs";
+import {map, pluck} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,10 @@ export class AttendanceService {
   passAttendance(assembly: any, baseStaff: any) {
     let url = `${environment.base_url}/assemblies/operations/rollCall/assembly/${assembly.id}/basePersonal/${baseStaff.id}`
     return this.http.get(url);
-    // let url = `${environment.base_url}/basePersonals/${id}`;
-    // return this.http.put(url, {number_list});
+  }
+
+  removeAttendance(assembly: any, baseStaff: any) {
+    return this.http.get(`${environment.base_url}/assemblies/operations/deleteRollCall/assembly/${assembly.id}/basePersonal/${baseStaff.id}`)
   }
 
   filterByAttendance(assembly: any, dependency = '') {
@@ -34,5 +36,19 @@ export class AttendanceService {
 
   generateRandomNumber() {
     return random(10, {letters: false}).toString();
+  }
+
+  fetchCSV(assembly: any) {
+    let url = `${environment.base_url}/assemblies/export/assemblyAssistance/${assembly.id}`;
+    return this.http.get(url, {responseType: 'blob'}).pipe(
+      map((res: any) => {
+        return new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      })
+    );
+    // return this.http.post(url, filter, {responseType: 'blob'}).pipe(
+    //   map((res: any) => {
+    //     return new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    //   })
+    // );
   }
 }

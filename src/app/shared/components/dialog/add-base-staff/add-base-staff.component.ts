@@ -39,11 +39,16 @@ export class AddBaseStaffComponent implements OnInit {
         validators: [Validators.maxLength(10)],
         updateOn: 'change'
       }),
-      'expedient': new FormControl('', [Validators.required]),
+      'expedient': new FormControl(''),
       'dependency': new FormControl('', [Validators.required]),
-      'affiliation_area': new FormControl('', [Validators.required]),
+      'affiliation_area': new FormControl('', ),
       'exercise': new FormControl('N/A', [Validators.required]),
     })
+
+    if(this.data.edit) {
+      this.form.addControl('id', new FormControl())
+      this.form.patchValue(this.data.payload);
+    }
   }
 
   save() {
@@ -55,16 +60,43 @@ export class AddBaseStaffComponent implements OnInit {
     if(this.form.invalid) {
       return;
     }
-    this.basePersonalService.save(this.form.value).subscribe({
-      next: async () => {
-        await Swal.fire('Compañero registrado', 'Se ha registrado correctamente', 'success');
-        this.printerService.printAddBaseStaffTicket(this.form.value);
-        this.dialogRef.close(true);
-      },
-      error: async err => {
-        await Swal.fire('Error al registrar', 'Ha ocurrido un error, intentelo más tarde', 'error');
-      }
-    })
+    if(this.data.edit) {
+      const fullName = `${this.data.payload.name} ${this.data.payload.last_name} ${this.data.payload.mother_last_name}`;
+      this.basePersonalService.updateBasePersonal(this.form.value).subscribe({
+        next: () => {
+          Swal.fire('Información Actualizada', `La información de ${fullName} ha sido actualizada correctamente`, 'success');
+          // const searchString$ = merge(
+          //   defer(() => of(this.searchControl.value)),
+          //   this.searchControl.valueChanges
+          // ).pipe(
+          //   debounceTime(1000),
+          //   distinctUntilChanged()
+          // );
+          // this.searchResults$ = searchString$.pipe(
+          //   tap(() => this.isLoadingResults = true),
+          //   switchMap((searchString: string) =>
+          //     this.searchService.search(searchString)
+          //   ),
+          //   share(),
+          //   tap(() => this.isLoadingResults = false),
+          // );
+        },
+        error:  () => {
+          Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
+        }
+      });
+    } else {
+      this.basePersonalService.save(this.form.value).subscribe({
+        next: async () => {
+          await Swal.fire('Compañero registrado', 'Se ha registrado correctamente', 'success');
+          this.printerService.printAddBaseStaffTicket(this.form.value);
+          this.dialogRef.close(true);
+        },
+        error: async err => {
+          await Swal.fire('Error al registrar', 'Ha ocurrido un error, intentelo más tarde', 'error');
+        }
+      })
+    }
   }
 
 }

@@ -10,6 +10,7 @@ import {UserModel} from "../../../../data/models/user.model";
 import {AttendanceService} from "../../../../core/services/attendance.service";
 import {PrinterService} from "../../../../core/services/printer.service";
 import {MatDialog} from "@angular/material/dialog";
+import {AddBaseStaffComponent} from "../../../../shared/components/dialog/add-base-staff/add-base-staff.component";
 
 @Component({
   selector: 'app-search',
@@ -169,64 +170,33 @@ export class SearchComponent implements OnInit, AfterViewInit {
   updateInformation(voter: any) {
     const fullName = `${voter.name} ${voter.last_name} ${voter.mother_last_name}`;
     const {phone_number, expedient} = voter;
-    Swal.fire({
-      title: `Actualizando información de ${fullName}`,
-      html: `
-                <input type="tel" id="phoneSwal" class="swal2-input" placeholder="Teléfono">
-                <input type="text" id="recordSwal" class="swal2-input" placeholder="Expediente">`,
-      confirmButtonText: 'Actualizar Información',
-      showCancelButton: true,
-      confirmButtonColor: '#00d203',
-      cancelButtonText: 'Omitir',
-      focusConfirm: false,
-      allowOutsideClick: false,
-      didOpen: (popup: HTMLElement) => {
-        const phone = (document.querySelector('#phoneSwal') as HTMLInputElement);
-        const record = (document.querySelector('#recordSwal') as HTMLInputElement);
-
-        phone.value = phone_number || '';
-        record.value = expedient || '';
-      },
-      preConfirm: () => {
-        const phone = (document.querySelector('#phoneSwal') as HTMLInputElement).value;
-        const record = (document.querySelector('#recordSwal') as HTMLInputElement).value;
-        if (!phone || !record) {
-          Swal.showValidationMessage(`Ambos campos son requeridos`);
-        }
-
-        return {record, phone};
-      }
-    }).then((result: any) => {
-      console.log({result, voter});
-      if (result.isConfirmed) {
-        const info = {
-          phone_number: result.value.phone,
-          expedient: result.value.record,
-        };
-        this.basePersonalService.updateBasePersonal(voter.id, info).subscribe(
-          () => {
-            Swal.fire('Información Actualizada', `La información de ${fullName} ha sido actualizada correctamente`, 'success');
-            const searchString$ = merge(
-              defer(() => of(this.searchControl.value)),
-              this.searchControl.valueChanges
-            ).pipe(
-              debounceTime(1000),
-              distinctUntilChanged()
-            );
-            this.searchResults$ = searchString$.pipe(
-              tap(() => this.isLoadingResults = true),
-              switchMap((searchString: string) =>
-                this.searchService.search(searchString)
-              ),
-              share(),
-              tap(() => this.isLoadingResults = false),
-            );
-          }, () => {
-            Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
-          }
-        );
+    const dialogRef = this.dialog.open(AddBaseStaffComponent, {
+      data: {
+        payload: voter,
+        title: `Actualizando información de ${fullName}`,
+        edit: true
       }
     });
+
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        const searchString$ = merge(
+          defer(() => of(this.searchControl.value)),
+          this.searchControl.valueChanges
+        ).pipe(
+          debounceTime(1000),
+          distinctUntilChanged()
+        );
+        this.searchResults$ = searchString$.pipe(
+          tap(() => this.isLoadingResults = true),
+          switchMap((searchString: string) =>
+            this.searchService.search(searchString)
+          ),
+          share(),
+          tap(() => this.isLoadingResults = false),
+        );
+      }
+    })
   }
 
 
