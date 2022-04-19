@@ -11,6 +11,7 @@ import {AttendanceService} from "../../../../core/services/attendance.service";
 import {PrinterService} from "../../../../core/services/printer.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AddBaseStaffComponent} from "../../../../shared/components/dialog/add-base-staff/add-base-staff.component";
+import {TemplateSelectionComponent} from "../../../templates/dialog/template-selection/template-selection.component";
 
 @Component({
   selector: 'app-search',
@@ -99,25 +100,33 @@ export class SearchComponent implements OnInit, AfterViewInit {
         // }
         vote.subscribe(res => {
           Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
-          const searchString$ = merge(
-            defer(() => of(this.searchControl.value)),
-            this.searchControl.valueChanges
-          ).pipe(
-            debounceTime(1000),
-            distinctUntilChanged()
-          );
-          this.searchResults$ = searchString$.pipe(
-            tap(() => this.isLoadingResults = true),
-            switchMap((searchString: string) =>
-              this.searchService.search(searchString)
-            ),
-            share(),
-            tap(() => this.isLoadingResults = false),
-          );
+          this.search();
         })
         this.printerService.printTicket(voter, option);
       }
     })
+  }
+
+  removeFromTemplate(basePersonal: any) {
+    Swal.fire({
+      title: `¿Seguro de remover registro?`,
+      showDenyButton: true,
+      // showCancelButton: true,
+      denyButtonText: `Cancelar`,
+      confirmButtonText: 'Remover',
+      confirmButtonColor: '#00d203',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.basePersonalService.removeFromTemplate(basePersonal.id)
+          .subscribe({
+            next: () => {
+              Swal.fire('Éxito', 'Registro removido', 'success');
+              this.search();
+            }
+          })
+      }
+    });
   }
 
   createUser(person: any) {
@@ -180,21 +189,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe({
       next: () => {
-        const searchString$ = merge(
-          defer(() => of(this.searchControl.value)),
-          this.searchControl.valueChanges
-        ).pipe(
-          debounceTime(1000),
-          distinctUntilChanged()
-        );
-        this.searchResults$ = searchString$.pipe(
-          tap(() => this.isLoadingResults = true),
-          switchMap((searchString: string) =>
-            this.searchService.search(searchString)
-          ),
-          share(),
-          tap(() => this.isLoadingResults = false),
-        );
+        this.search();
       }
     })
   }
@@ -278,5 +273,37 @@ export class SearchComponent implements OnInit, AfterViewInit {
       confirmButtonColor: '#DC107E',
     }).then(r => {
     });
+  }
+
+  openModalToSelectTemplate(person: any) {
+    const dialogRef = this.dialog.open(TemplateSelectionComponent, {
+      data: {
+        payload: person
+      },
+      width: '100vw',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.search();
+      }
+    })
+  }
+
+  search() {
+    const searchString$ = merge(
+      defer(() => of(this.searchControl.value)),
+      this.searchControl.valueChanges
+    ).pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    );
+    this.searchResults$ = searchString$.pipe(
+      tap(() => this.isLoadingResults = true),
+      switchMap((searchString: string) =>
+        this.searchService.search(searchString)
+      ),
+      share(),
+      tap(() => this.isLoadingResults = false),
+    );
   }
 }

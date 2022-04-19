@@ -6,13 +6,15 @@ import { TemplatePageComponent } from './page/template-page/template-page.compon
 import {SharedModule} from "../../shared/shared.module";
 import { TemplateListComponent } from './page/template-list/template-list.component';
 import { TemplateFormComponent } from './dialog/template-form/template-form.component';
+import { TemplateSelectionComponent } from './dialog/template-selection/template-selection.component';
 
 
 @NgModule({
   declarations: [
     TemplatePageComponent,
     TemplateListComponent,
-    TemplateFormComponent
+    TemplateFormComponent,
+    TemplateSelectionComponent
   ],
   imports: [
     CommonModule,

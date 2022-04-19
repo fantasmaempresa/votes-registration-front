@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Selección de plantilla</h1>
+<mat-radio-group name="flavors" class="row justify-content-evenly"
+                 [formControl]="selectedTemplate"
+>
+  <mat-card *ngFor="let template of templates$ | async" class="col-3 d-flex flex-column justify-content-center align-items-center"
+  (click)="option._markForCheck()">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <img [src]="template.config ? template.config[0].image : 'assets/img/imagen_no_disponible.svg'"
+           alt="logo"
+           class="template-img"
+      >
+    </div>
+    <mat-radio-button #option [value]="template.id" class="mt-3">{{template.name}}</mat-radio-button>
+  </mat-card>
+</mat-radio-group>
+<div mat-dialog-actions class="d-flex justify-content-between mt-3">
+  <button mat-button color="accent" (click)="submit()" cdkFocusInitial>Aceptar</button>
+  <button mat-button [mat-dialog-close]="false">Cancelar</button>
+</div>

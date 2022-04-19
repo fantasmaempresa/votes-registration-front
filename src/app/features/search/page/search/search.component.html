@@ -83,30 +83,23 @@
 
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="user.type === 1; else promote">
-<!--            <button (click)="register('attendance', person)"-->
-<!--                    [class.vote-attendance]="person.vote_labor_union === 2"-->
-<!--                    [disabled]="person.vote_labor_union !== null"-->
-<!--                    color="primary"-->
-<!--                    mat-flat-button>-->
-<!--              Asistencia-->
-<!--              <mat-icon *ngIf="person.vote_labor_union === 2">done</mat-icon>-->
-<!--            </button>-->
-<!--            <button (click)="register('otro', person)"-->
-<!--                    [class.vote-other]="person.vote_labor_union === 0"-->
-<!--                    [disabled]="person.vote_labor_union !== null"-->
-<!--                    color="primary"-->
-<!--                    mat-flat-button>-->
-<!--              Otro-->
-<!--              <mat-icon *ngIf="person.vote_labor_union === 0">done</mat-icon>-->
-<!--            </button>-->
-<!--            <button (click)="register('MPLD', person)"-->
-<!--                    [class.vote-mpld]="person.vote_labor_union === 1"-->
-<!--                    [disabled]="person.vote_labor_union !== null"-->
-<!--                    color="accent"-->
-<!--                    mat-flat-button>-->
-<!--              MPLD-->
-<!--              <mat-icon *ngIf="person.vote_labor_union === 1">done</mat-icon>-->
-<!--            </button>-->
+              <button
+                (click)="removeFromTemplate(person)"
+                color="primary"
+                      class="w-100"
+                      mat-flat-button
+                      *ngIf="person.template_id"
+              >
+                Quitar de estructura
+              </button>
+              <button (click)="openModalToSelectTemplate(person)"
+                      color="accent"
+                      class="w-100"
+                      mat-flat-button
+                      *ngIf="!person.template_id"
+              >
+                Registrar en estructura
+              </button>
           </ng-container>
 
           <ng-template #promote>
