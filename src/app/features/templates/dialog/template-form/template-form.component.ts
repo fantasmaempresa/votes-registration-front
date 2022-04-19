@@ -13,16 +13,18 @@ import {catchError, switchMap} from "rxjs";
 })
 export class TemplateFormComponent implements OnInit {
   form!: FormGroup;
-  files!: FileHandle[]
+  files: FileHandle[] = [];
+  showUploadImage = false;
 
   constructor(
     public dialogRef: MatDialogRef<TemplateFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateService: TemplatesService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-    this.createFormGroup()
+    this.createFormGroup();
   }
 
   createFormGroup() {
@@ -31,60 +33,103 @@ export class TemplateFormComponent implements OnInit {
       'description': new FormControl('', [Validators.required]),
     })
 
-    if(this.data.edit) {
+    if (this.data.edit) {
       this.form.addControl('id', new FormControl());
       this.form.patchValue(this.data.payload)
     }
   }
 
-  save() {
-    console.log(this.files);
+  submit() {
     this.form.markAllAsTouched();
-    if(this.form.invalid) {
+
+    if (this.form.invalid) {
       return;
     }
-    if(this.data.edit) {
-      this.templateService.update(this.form.value)
-        .pipe(
-          catchError(({error}) => {
-            throw error.error
-          }),
-          switchMap((data: any) => {
-            console.log(data);
-            return this.templateService.uploadImage(this.files, data.id);
-          })
-        )
-        .subscribe({
-          next: (resp) => {
-            Swal.fire('Exito', 'Se ha actualizado la plantilla', 'success');
-            this.dialogRef.close(true)
-          },
-          error: ({error}) => {
-            console.log(error)
-            Swal.fire('Algo ha salido mal', error.error, 'error')
-          }
-      })
+
+    if (this.data.edit) {
+      this.updateTemplate();
     } else {
-      this.templateService.save(this.form.value)
-        .pipe(
-          catchError(({error}) => {
-            throw error.error
-          }),
-          switchMap((data: any) => {
-            console.log(data);
-            return this.templateService.uploadImage(this.files, data.id);
-          })
-        )
-        .subscribe({
-        next: (resp) => {
-          Swal.fire('Exito', 'Se ha creado la plantilla', 'success');
-          this.dialogRef.close(true)
-        },
-        error: () => {
-          Swal.fire('Servicio no disponible', 'Algo ha salido mal', 'error')
-        }
-      })
+      this.createTemplate();
     }
   }
 
+  createTemplate() {
+    let request$;
+    if (this.files.length > 0) {
+      request$ = this.templateService.save(this.form.value)
+        .pipe(
+          catchError(({error}) => {
+            throw error.error
+          }),
+          switchMap((data: any) => {
+            console.log(data);
+            return this.templateService.uploadImage(this.files, data.id).pipe(
+              catchError(({error}) => {
+                throw error.error
+              })
+            );
+          })
+        )
+    } else {
+      request$ = this.templateService.save(this.form.value).pipe(
+        catchError(({error}) => {
+          throw error.error
+        })
+      );
+    }
+    request$.subscribe({
+      next: (resp) => {
+        Swal.fire('Exito', 'Se ha creado la plantilla', 'success');
+        this.dialogRef.close(true)
+      },
+      error: (error) => {
+        Swal.fire('Servicio no disponible', error, 'error')
+      }
+    })
+  }
+
+  updateTemplate() {
+    let request$ = this.templateService.update(this.form.value).pipe(
+      catchError(({error}) => {
+        throw error.error
+      })
+    );
+
+    if (this.form.dirty && this.files.length > 0) {
+      request$ = this.templateService.update(this.form.value)
+        .pipe(
+          catchError(({error}) => {
+            throw error.error
+          }),
+          switchMap((data: any) => {
+            console.log(data);
+            return this.templateService.uploadImage(this.files, data.id).pipe(
+              catchError(({error}) => {
+                throw error.error
+              })
+            );
+          })
+        )
+    }
+
+    if (this.form.pristine && this.files.length > 0) {
+      request$ = this.templateService.uploadImage(this.files, this.data.payload.id)
+        .pipe(
+          catchError(({error}) => {
+            throw error.error
+          })
+        );
+    }
+
+    request$.subscribe({
+      next: (resp) => {
+        Swal.fire('Exito', 'Se ha actualizado la plantilla', 'success');
+        this.dialogRef.close(true)
+      },
+      error: (error) => {
+        console.log(error)
+        Swal.fire('Algo ha salido mal', error, 'error')
+      }
+    })
+  }
 }

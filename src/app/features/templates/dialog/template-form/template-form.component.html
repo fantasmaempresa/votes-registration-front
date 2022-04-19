@@ -12,12 +12,27 @@
       <input matInput type="text"
              formControlName="description">
     </mat-form-field>
+    <div class="row justify-content-center position-relative" *ngIf="data.edit">
+      <div class="row edit-button justify-content-end">
+<!--        <button mat-icon-button color="primary" aria-label="Example icon button with a delete icon" class="me-3">-->
+<!--          <mat-icon>delete</mat-icon>-->
+<!--        </button>-->
+        <button mat-mini-fab color="accent" aria-label="Edit image button" (click)="showUploadImage = !showUploadImage">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <img [src]="data.payload.config ? data.payload.config[0].image : 'assets/img/imagen_no_disponible.svg'"
+           alt="logo"
+           class="template-img"
+      >
+    </div>
 
-    <app-upload-images (files)="files = $event"></app-upload-images>
+
+    <app-upload-images (files)="files = $event" *ngIf="showUploadImage || !data.edit"></app-upload-images>
 
   </form>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-between">
-  <button mat-button color="accent" (click)="save()">Guardar</button>
+  <button mat-button color="accent" (click)="submit()">Guardar</button>
   <button mat-button mat-dialog-close>Cancelar</button>
 </div>
