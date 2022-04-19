@@ -9,6 +9,8 @@ import {FooterComponent} from "../layout/footer/footer.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AddBaseStaffComponent} from './components/dialog/add-base-staff/add-base-staff.component';
 import {DigitOnlyModule} from "@uiowa/digit-only";
+import { UploadImagesComponent } from './components/upload-images/upload-images.component';
+import {DropFilesDirective} from "./directives/drop-files.directive";
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {DigitOnlyModule} from "@uiowa/digit-only";
         PageNotFoundComponent,
         NavbarComponent,
         FooterComponent,
-        AddBaseStaffComponent
+        AddBaseStaffComponent,
+        UploadImagesComponent,
+      DropFilesDirective
     ],
     imports: [
         CommonModule,
@@ -27,17 +31,18 @@ import {DigitOnlyModule} from "@uiowa/digit-only";
         HttpClientModule,
         DigitOnlyModule,
     ],
-    exports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterModule,
-        MaterialModule,
-        HttpClientModule,
-        NavbarComponent,
-        FooterComponent,
-        DigitOnlyModule
-    ]
+  exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MaterialModule,
+    HttpClientModule,
+    NavbarComponent,
+    FooterComponent,
+    DigitOnlyModule,
+    UploadImagesComponent
+  ]
 })
 export class SharedModule {
 }

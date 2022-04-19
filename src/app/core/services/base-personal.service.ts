@@ -41,18 +41,20 @@ export class BasePersonalService {
     return this.http.get(url);
   }
 
-  voteFavor(id:number) {
-    let url = `${environment.base_url}/basePersonals/vote/laborUnion/${id}`
-    return this.http.get(url);
-  }
 
-  voteNoFavor(id: number) {
-    let url = `${environment.base_url}/basePersonals/vote/noLaborUnion/${id}`
-    return this.http.get(url);
-  }
 
-  voteAttendance(id: number) {
-    let url = `${environment.base_url}/basePersonals/vote/attendanceLaborUnion/${id}`
-    return this.http.get(url);
-  }
+  // voteFavor(id:number) {
+  //   let url = `${environment.base_url}/basePersonals/vote/laborUnion/${id}`
+  //   return this.http.get(url);
+  // }
+  //
+  // voteNoFavor(id: number) {
+  //   let url = `${environment.base_url}/basePersonals/vote/noLaborUnion/${id}`
+  //   return this.http.get(url);
+  // }
+  //
+  // voteAttendance(id: number) {
+  //   let url = `${environment.base_url}/basePersonals/vote/attendanceLaborUnion/${id}`
+  //   return this.http.get(url);
+  // }
 }

@@ -1,0 +1,41 @@
+<div class="container">
+  <mat-toolbar color="accent">
+    <span>Lista de plantillas</span>
+    <span class="spacer"></span>
+    <button (click)="editTemplate(template)"
+            *ngIf="templates.selectedOptions.selected[0]?.value as template"
+            [matTooltipPosition]="'below'"
+            aria-label="Editar asamblea"
+            mat-icon-button
+            matTooltip="Editar asamblea"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button (click)="deleteTemplate(template)"
+            *ngIf="templates.selectedOptions.selected[0]?.value as template"
+            [matTooltipPosition]="'below'"
+            aria-label="Eliminar plantilla"
+            mat-icon-button
+            matTooltip="Eliminar plantilla"
+    >
+      <mat-icon>person_remove</mat-icon>
+    </button>
+    <button (click)="openDialog()"
+            [matTooltipPosition]="'below'"
+            aria-label="Agregar plantilla"
+            mat-icon-button
+            matTooltip="Agregar plantilla"
+    >
+      <mat-icon>person_add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-selection-list #templates [multiple]="false">
+    <mat-list-option *ngFor="let template of (templates$ | async)" [value]="template">
+      <div class="row">
+        <div class="col-md-10">
+          {{template.name}}
+        </div>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+</div>

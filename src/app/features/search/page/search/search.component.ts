@@ -90,13 +90,13 @@ export class SearchComponent implements OnInit, AfterViewInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        if (option === 'MPLD') {
-          vote = this.basePersonalService.voteFavor(voter.id);
-        } else if (option === 'attendance') {
-          vote = this.basePersonalService.voteAttendance(voter.id);
-        } else {
-          vote = this.basePersonalService.voteNoFavor(voter.id);
-        }
+        // if (option === 'MPLD') {
+        //   vote = this.basePersonalService.voteFavor(voter.id);
+        // } else if (option === 'attendance') {
+        //   vote = this.basePersonalService.voteAttendance(voter.id);
+        // } else {
+        //   vote = this.basePersonalService.voteNoFavor(voter.id);
+        // }
         vote.subscribe(res => {
           Swal.fire('Voto registrado', 'Se imprimira el comprobante', 'success');
           const searchString$ = merge(

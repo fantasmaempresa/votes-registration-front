@@ -1,0 +1,23 @@
+/* Drop Zone */
+.drop-zone {
+  border: dotted 3px lightgray;
+  opacity: 0.5;
+  color: #666;
+  text-align: center
+}
+
+.no-drop-zone {
+  border: dotted 3px lightgray;
+  opacity: 1;
+  color: #666;
+  text-align: center
+}
+
+.file-over {
+  border: dotted 3px dodgerblue;
+}
+
+.preview {
+  max-width: 250px;
+  vertical-align: middle;
+}

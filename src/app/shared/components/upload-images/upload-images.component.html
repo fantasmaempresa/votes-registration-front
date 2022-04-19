@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-12">
+    <h3>Seleccione archivos</h3>
+    <div (files)="filesDropped($event)"
+         [ngStyle]="{'opacity': uploadedFiles.length > 0 ? '1' : '0.5'}"
+         appDropFiles class="drop-zone">
+      <h4>Deje caer aquí los archivos</h4>
+      <img [src]="uploadedFiles.length > 0 ? uploadedFiles[0].url : 'assets/img/drop-images.png'" class="preview">
+    </div>
+
+    <div class="row justify-content-between my-3">
+      <button (click)="fileInput.click()" mat-stroked-button class="col-5">
+        Seleccionar archivo
+      </button>
+      <input #fileInput
+             (change)="onFileChange($event)"
+             [formControl]="fileControl"
+             accept="image/*"
+             style="display: none"
+             type="file"
+      />
+      <button (click)="clear()" mat-stroked-button class="col-5" *ngIf="uploadedFiles.length > 0">
+        Quitar archivo
+      </button>
+    </div>
+  </div>
+</div>

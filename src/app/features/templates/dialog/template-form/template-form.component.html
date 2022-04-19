@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Crear plantilla</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field color="accent" class="w-100">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text"
+             formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field color="accent" class="w-100">
+      <mat-label>Descripción</mat-label>
+      <input matInput type="text"
+             formControlName="description">
+    </mat-form-field>
+
+    <app-upload-images (files)="files = $event"></app-upload-images>
+
+  </form>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-between">
+  <button mat-button color="accent" (click)="save()">Guardar</button>
+  <button mat-button mat-dialog-close>Cancelar</button>
+</div>

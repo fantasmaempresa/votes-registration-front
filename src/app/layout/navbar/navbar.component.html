@@ -6,19 +6,22 @@
       <a routerLink="attendance" routerLinkActive="active-link">Asistencia</a>
     </li>
     <li>
-      <a routerLink="search" routerLinkActive="active-link">Busqueda</a>
+      <a routerLink="search" routerLinkActive="active-link">Estructura</a>
     </li>
     <li>
       <a routerLink="results" routerLinkActive="active-link">Resultados</a>
     </li>
+    <li *ngIf="user.type === 1">
+      <a routerLink="templates" routerLinkActive="active-link">Plantillas</a>
+    </li>
     <li>
-      <a routerLink="assembly" routerLinkActive="active-link">Asambleas</a>
+    <a routerLink="assembly" routerLinkActive="active-link">Asambleas</a>
     </li>
     <li *ngIf="user.type === 1">
-      <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
+    <a routerLink="users" routerLinkActive="active-link">Usuarios</a>
     </li>
     <li *ngIf="user.type === 2">
-      <a routerLink="referred" routerLinkActive="active-link">Mis Promovidos</a>
+    <a routerLink="referred" routerLinkActive="active-link">Mis Promovidos</a>
     </li>
   </ul>
 
