@@ -1,47 +1,19 @@
 <div class="row mb-3">
-    <div class="col-4" *ngFor="let result of results$ | async">
-        <mat-card class="example-card">
-            <mat-card-title>{{result.name}}</mat-card-title>
-            <mat-card-content
-                    class="d-flex justify-content-center align-items-center" style="min-height: 50vh"
-            >
-                <p class="text-result">
-                    {{result.total}}
-                </p>
-            </mat-card-content>
-            <mat-card-actions>
-                <button mat-raised-button color="accent" class="w-100" (click)="goToVoters(result.id)">Ver integrantes</button>
-            </mat-card-actions>
-        </mat-card>
-    </div>
-<!--    <div class="col-4">-->
-<!--        <mat-card class="example-card">-->
-<!--            <mat-card-title>ASISTENCIA</mat-card-title>-->
-<!--            <mat-card-content-->
-<!--                    class="d-flex justify-content-center align-items-center" style="min-height: 50vh"-->
-<!--            >-->
-<!--                <p class="text-result">-->
-<!--                    {{attendance$ | async}}-->
-<!--                </p>-->
-<!--            </mat-card-content>-->
-<!--            <mat-card-actions>-->
-<!--                <button mat-raised-button color="accent" class="w-100" (click)="goToVoters('attendance')">Ver votantes</button>-->
-<!--            </mat-card-actions>-->
-<!--        </mat-card>-->
-<!--    </div>-->
-<!--    <div class="col-4">-->
-<!--        <mat-card class="example-card">-->
-<!--            <mat-card-title>Otro</mat-card-title>-->
-<!--            <mat-card-content class="d-flex justify-content-center align-items-center" style="min-height: 50vh">-->
-<!--                <p class="text-result">-->
-<!--                    {{totalNoFavor$ | async}}-->
-<!--                </p>-->
-<!--            </mat-card-content>-->
-<!--            <mat-card-actions>-->
-<!--                <button mat-raised-button color="accent" class="w-100"-->
-<!--                        (click)="goToVoters('other')"-->
-<!--                >Ver votantes</button>-->
-<!--            </mat-card-actions>-->
-<!--        </mat-card>-->
-<!--    </div>-->
+  <div class="col-4" *ngFor="let result of results$ | async">
+    <mat-card class="example-card">
+      <mat-card-title>{{result.name}}</mat-card-title>
+      <mat-card-content
+        class="d-flex flex-column justify-content-center align-items-center" style="min-height: 50vh"
+      >
+        <img [src]="result.config ? result.config[0].image : 'assets/img/imagen_no_disponible.svg'" alt="Template logo"
+             class="template-img">
+        <p class="text-result mt-3">
+          {{result.total}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" class="w-100" (click)="goToVoters(result.id)">Ver integrantes</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>
