@@ -1,13 +1,11 @@
 <div class="example-container mat-elevation-z8">
     <div class="loading-shade"
-         *ngIf="isLoadingResults || isRateLimitReached">
+         *ngIf="isLoadingResults">
         <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-        <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-        </div>
     </div>
 
     <mat-toolbar class="mb-2" color="accent">
-        <span>Lista de votantes por {{party}}</span>
+        <span>Lista de integrantes en {{partyName}}</span>
         <span class="spacer"></span>
         <button [matTooltipPosition]="'below'"
                 aria-label="Regresar"
@@ -18,6 +16,13 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
     </mat-toolbar>
+
+  <div class="row mx-3">
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>Buscar...</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+  </div>
 
     <div class="example-table-container">
 
@@ -71,6 +76,5 @@
         </table>
     </div>
 
-    <mat-paginator [length]="resultsLength" pageSize="100"
-                   aria-label="Select page of search results" [pageIndex]="pageIndex"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of members"></mat-paginator>
 </div>

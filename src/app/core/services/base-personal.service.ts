@@ -41,6 +41,16 @@ export class BasePersonalService {
     return this.http.get(url);
   }
 
+  registerInTemplate(baseId: number, templateId: number) {
+    const url = `${environment.base_url}/basePersonals/vote/basePersonal/${baseId}/template/${templateId}`;
+    return this.http.get(url);
+  }
+
+  removeFromTemplate(baseId: number) {
+    const url = `${environment.base_url}/basePersonals/vote/remove/basePersonal/${baseId}`;
+    return this.http.get(url);
+  }
+
 
 
   // voteFavor(id:number) {

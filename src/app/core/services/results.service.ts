@@ -11,6 +11,13 @@ export class ResultsService {
     constructor(private http: HttpClient) {
     }
 
+    fetch() {
+      return this.http.get(`${environment.base_url}/basePersonals/filter/votes/templates`)
+        .pipe(
+          map((res: any) => res.data)
+        )
+    }
+
     getTotalFavor() {
         return this.http.get(`${environment.base_url}/basePersonals/filter/total/voteLaborUnion`)
             .pipe(
