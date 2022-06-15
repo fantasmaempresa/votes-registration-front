@@ -1,1 +1,25 @@
-<p>docs works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <mat-list>
+        <div mat-subheader>Archivos</div>
+        <mat-list-item (click)="pdfSrc = 'assets/docs/sample.pdf'">
+          <mat-icon mat-list-icon>description</mat-icon>
+          <div mat-line>Archivo 1</div>
+        </mat-list-item>
+        <mat-list-item (click)="pdfSrc = 'assets/docs/test.pdf'">
+          <mat-icon mat-list-icon>description</mat-icon>
+          <div mat-line>Archivo 2</div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="col-6">
+      <pdf-viewer [src]="pdfSrc"
+                  [render-text]="true"
+                  [original-size]="false"
+                  style="width: 100%; height: 100vh"
+      ></pdf-viewer>
+    </div>
+  </div>
+</div>
+

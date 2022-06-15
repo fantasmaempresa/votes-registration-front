@@ -6,6 +6,7 @@ import {PageNotFoundComponent} from "./shared/components/page-not-found/page-not
 import {AuthGuard} from "./core/guards/auth.guard";
 import {AppGuard} from "./core/guards/app.guard";
 import {CountingComponent} from "./features/assembly/page/counting/counting.component";
+import {DocsComponent} from "./public/docs/docs.component";
 
 const routes: Routes = [
   {
@@ -105,7 +106,7 @@ const routes: Routes = [
   },
   {
     path: 'docs',
-    component: CountingComponent,
+    component: DocsComponent,
   },
 ];
 

@@ -19,6 +19,7 @@ import { NewUserComponent } from './features/users/page/new-user/new-user.compon
 import {SearchModule} from "./features/search/search.module";
 import {WINDOW_PROVIDERS} from "./core/providers/window.provider";
 import { DocsComponent } from './public/docs/docs.component';
+import {PdfViewerModule} from "ng2-pdf-viewer";
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { DocsComponent } from './public/docs/docs.component';
             registrationStrategy: 'registerWhenStable:30000'
         }),
         SearchModule,
+      PdfViewerModule,
         // WebBluetoothModule.forRoot({
         //     enableTracing: true // or false, this will enable logs in the browser's console
         // })

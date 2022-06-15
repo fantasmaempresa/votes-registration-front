@@ -13,9 +13,9 @@ export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const hostname = window.location.hostname
     console.log(hostname)
-      if(hostname === 'coalicion2022-stspepyod.info.com' || hostname === 'votes-registration-front.vercel.app') {
-        this.router.navigate(['/docs'])
-      }
+      // if(hostname === 'coalicion2022-stspepyod.info.com' || hostname === 'votes-registration-front.vercel.app') {
+      //   this.router.navigate(['/docs'])
+      // }
       if (this.authService.isLoggedIn()) {
           this.router.navigate(['/app']);
       }

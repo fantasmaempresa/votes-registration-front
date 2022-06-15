@@ -1,5 +1,4 @@
-import {Component, Inject} from '@angular/core';
-import {WINDOW} from "./core/providers/window.provider";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +6,6 @@ import {WINDOW} from "./core/providers/window.provider";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor() {
-    const host = window.location.hostname
-    // if(host !== 'movimientoporlademocracia.com') {
-    //
-    // }
-    console.log(window.location.hostname);
-  }
+  constructor() {}
   title = 'voter-registration';
 }
