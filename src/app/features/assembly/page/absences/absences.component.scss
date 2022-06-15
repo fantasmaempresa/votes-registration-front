@@ -1,0 +1,12 @@
+.no-results-container {
+  height: calc(100% - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.no-results {
+  font-size: 200px;
+  line-height: 1.25;
+}

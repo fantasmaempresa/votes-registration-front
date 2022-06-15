@@ -17,12 +17,10 @@ const routes: Routes = [
       },
       {
         path: 'show',
-        canActivate: [AppGuard],
         component: ResultsComponent
       },
       {
         path: 'voters',
-        canActivate: [AppGuard],
         component: VotersComponent
       }
     ]

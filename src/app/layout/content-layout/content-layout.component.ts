@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import Swal from "sweetalert2";
 import {MatDialog} from "@angular/material/dialog";
 import {AddBaseStaffComponent} from "../../shared/components/dialog/add-base-staff/add-base-staff.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-content-layout',
@@ -17,7 +18,10 @@ export class ContentLayoutComponent implements OnInit {
               private authService: AuthService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-  ) { }
+              private router: Router
+  ) {
+
+  }
 
   ngOnInit(): void {
     // @ts-ignore

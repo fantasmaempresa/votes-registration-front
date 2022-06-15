@@ -1,4 +1,4 @@
-import {Component, OnInit, SecurityContext, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, SecurityContext, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {FormControl} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
@@ -62,7 +62,8 @@ export class SignaturesComponent implements OnInit {
       private domSanitizer: DomSanitizer,
       private assemblyService: AssemblyService,
       private attendanceService: AttendanceService,
-      private printerService: PrinterService
+      private printerService: PrinterService,
+      private cdr: ChangeDetectorRef
   ) {
     this.dependencies$ = this.filterService.fetchDependencies();
     this.dependencyFilter = new FormControl({});
@@ -96,6 +97,8 @@ export class SignaturesComponent implements OnInit {
         if (data) {
           // this.totalItems = data.total;
           this.dataSource = new MatTableDataSource<any>(data);
+          this.cdr.detectChanges();
+          this.dataSource.paginator = this.paginator
         }
       }
     })

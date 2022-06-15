@@ -1,4 +1,4 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {FormValidationService} from "../../../../shared/services/form-validation.service";
@@ -8,6 +8,7 @@ import {SocketService} from "../../../../core/services/socket.service";
 import {bindCallback, switchMap, tap, throwError} from "rxjs";
 import Swal from "sweetalert2";
 import {MINUTE} from "../../../../core/constants/constants";
+import {WINDOW} from "../../../../core/providers/window.provider";
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,13 @@ export class LoginComponent implements OnInit {
   formErrors: any = {};
   incorrectLogin = false;
 
-  constructor(private formValidationService: FormValidationService,
+  constructor(
+    @Inject(WINDOW) private window: Window,
+    private formValidationService: FormValidationService,
               private router: Router,
               private socketService: SocketService,
               private authService: AuthService) {
+    console.log(window.location.hostname);
   }
 
   ngOnInit(): void {

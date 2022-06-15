@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
 import { UsersComponent } from './features/users/page/users/users.component';
 import { NewUserComponent } from './features/users/page/new-user/new-user.component';
 import {SearchModule} from "./features/search/search.module";
+import {WINDOW_PROVIDERS} from "./core/providers/window.provider";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,7 @@ import {SearchModule} from "./features/search/search.module";
         ContentLayoutComponent,
         ResultsLayoutComponent,
         UsersComponent,
-        NewUserComponent
+        NewUserComponent,
     ],
     imports: [
         BrowserModule,
@@ -46,6 +47,7 @@ import {SearchModule} from "./features/search/search.module";
     ],
     exports: [],
     providers: [
+      WINDOW_PROVIDERS,
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         {
             provide: HTTP_INTERCEPTORS,

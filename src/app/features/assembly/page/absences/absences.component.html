@@ -1,0 +1,119 @@
+<div class="example-container mat-elevation-z8">
+  <div class="loading-shade"
+       *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
+
+  <mat-toolbar class="mb-2" color="accent">
+    <span>Asamblea</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button [matMenuTriggerFor]="assemblyHistory">{{selectAssemblyLabel}}<mat-icon>expand_more</mat-icon></button>
+    <mat-menu #assemblyHistory="matMenu">
+      <button mat-menu-item *ngFor="let assembly of (assemblies$ | async)" (click)="selectAssembly(assembly)">{{assembly.name}}</button>
+    </mat-menu>
+    <button mat-icon-button aria-label="Descargar datos" matTooltip="Descargar csv" (click)="downloadCSV()" *ngIf="selectedAssembly">
+      <mat-icon>file_download</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Resumen por dependencia" matTooltip="Resumen por dependencia" (click)="showResume()" *ngIf="!showResumeList && selectedAssembly">
+      <mat-icon>fact_check</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Regresar" matTooltip="Regresar a lista de asistencia" (click)="showResumeList = false" *ngIf="showResumeList">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="example-table-container" *ngIf="selectedAssembly && !showResumeList">
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 ps-3 pe-3">
+          <mat-label>Buscar...</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Nombre" #input>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="outline" class="w-100 ps-3 pe-3">
+          <mat-label>Dependencia</mat-label>
+          <mat-select [formControl]="dependencyFilter">
+            <mat-option>Ninguna</mat-option>
+            <mat-option
+              *ngFor="let dependency of dependencies$ | async"
+              [value]="dependency"
+            >{{ dependency.dependency }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="example-table w-100"
+           matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
+      <ng-container matColumnDef="dependency">
+        <th mat-header-cell *matHeaderCellDef>Dependencia</th>
+        <td mat-cell *matCellDef="let row">{{row.dependency}}</td>
+      </ng-container>
+      <ng-container matColumnDef="phone_number">
+        <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+        <td mat-cell *matCellDef="let row">{{row.phone_number}}</td>
+      </ng-container>
+      <ng-container matColumnDef="expedient">
+        <th mat-header-cell *matHeaderCellDef>No. de expediente</th>
+        <td mat-cell *matCellDef="let row">{{row.expedient}}</td>
+      </ng-container>
+      <ng-container matColumnDef="affiliation_area">
+        <th mat-header-cell *matHeaderCellDef>Área de afiliación</th>
+        <td mat-cell *matCellDef="let row">{{row.affiliation_area}}</td>
+      </ng-container>
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef>Género</th>
+        <td mat-cell *matCellDef="let row">{{row.gender}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="last_name">
+        <th mat-header-cell *matHeaderCellDef>Apellido Paterno</th>
+        <td mat-cell *matCellDef="let row">{{row.last_name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="mother_last_name">
+        <th mat-header-cell *matHeaderCellDef>Apellido Materno</th>
+        <td mat-cell *matCellDef="let row">{{row.mother_last_name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button matTooltip="Imprimir ticket de asistencia">
+            <mat-icon>print</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Quitar asistencia">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator pageSize="25"
+                 *ngIf="selectedAssembly"
+                 [pageSizeOptions]="[5, 10, 25, 100]"
+                 aria-label="Select page of search results"></mat-paginator>
+
+  <div *ngIf="showResumeList && selectedAssembly">
+    <mat-list>
+      <mat-list-item *ngFor="let item of byDependencies$ | async">
+        <div mat-line>{{item.dependency}}</div>
+        <div mat-line>Total: {{item.total}}</div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <div *ngIf="!selectedAssembly" class="no-results-container">
+    <div class="no-results">\(o_o)/</div>
+    <div>
+      <p style="font-size: 2rem; margin-top: 1rem;">Empieza por seleccionar una asamblea</p>
+    </div>
+  </div>
+</div>

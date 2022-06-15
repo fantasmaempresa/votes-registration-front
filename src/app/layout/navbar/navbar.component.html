@@ -2,19 +2,19 @@
   <img src="../../../assets/img/logo-03.png" alt="logo" height="64">
 
   <ul class="navigation-items">
-    <li>
+    <li *ngIf="user.type !== 3">
       <a routerLink="attendance" routerLinkActive="active-link">Asistencia</a>
     </li>
     <li>
       <a routerLink="search" routerLinkActive="active-link">Estructura</a>
     </li>
-    <li>
+    <li *ngIf="user.type !== 3">
       <a routerLink="results" routerLinkActive="active-link">Resultados</a>
     </li>
     <li *ngIf="user.type === 1">
       <a routerLink="templates" routerLinkActive="active-link">Plantillas</a>
     </li>
-    <li>
+    <li *ngIf="user.type !== 3">
     <a routerLink="assembly" routerLinkActive="active-link">Asambleas</a>
     </li>
     <li *ngIf="user.type === 1">
@@ -27,7 +27,7 @@
 
   <span class="spacer"></span>
 
-  <button mat-flat-button color="accent" class="fab-toggler" (click)="openDialog()">
+  <button mat-flat-button color="accent" class="fab-toggler" (click)="openDialog()" *ngIf="user.type !== 3">
     <i class="material-icons">add</i>
     Agregar base
   </button>

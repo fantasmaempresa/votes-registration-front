@@ -41,7 +41,8 @@ export class AddBaseStaffComponent implements OnInit {
       }),
       'expedient': new FormControl(''),
       'dependency': new FormControl('', [Validators.required]),
-      'affiliation_area': new FormControl('', ),
+      'affiliation_area': new FormControl(''),
+      'missing_documents': new FormControl(''),
       'exercise': new FormControl('N/A', [Validators.required]),
     })
 

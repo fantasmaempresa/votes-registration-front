@@ -1,7 +1,20 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
-import {debounceTime, defer, distinctUntilChanged, map, merge, Observable, of, share, switchMap, tap} from "rxjs";
+import {
+  catchError,
+  debounceTime,
+  defer,
+  distinctUntilChanged,
+  forkJoin,
+  map,
+  merge,
+  Observable,
+  of,
+  share,
+  switchMap,
+  tap
+} from "rxjs";
 import {SearchService} from "../../../../core/services/search.service";
 import {BasePersonalService} from "../../../../core/services/base-personal.service";
 import {ReferredService} from "../../../../data/services/referred.service";
@@ -30,7 +43,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   user!: UserModel;
 
   @Input()
-  actions = '';
+  actions = 'admin';
 
   constructor(
     private authService: AuthService,
@@ -202,16 +215,45 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // }
     const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
     const randNumber = this.attendanceService.generateRandomNumber();
-    if(this.assembly) {
-      this.attendanceService.passAttendance(this.assembly, person).subscribe({
-        next: () => {
+    let request$: Observable<any>;
+    if (this.assembly) {
+      if(person.missing_documents === 1) {
+        Swal.fire({
+          title: '¿Entrego documentación?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Si',
+          cancelButtonText: 'No!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            person.missing_documents = 0;
+            request$ = forkJoin([this.basePersonalService.updateBasePersonal(person),
+              this.attendanceService.passAttendance(this.assembly, person)])
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            request$ = this.attendanceService.passAttendance(this.assembly, person)
+          }
+          request$.subscribe({
+            next: () => {
               Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
               this.printerService.printAttendanceTicket(person, randNumber).then(r => {
               });
+            },
+            error: ({error}) => {
+              Swal.fire('Algo salio mal...', error.error, 'error');
+            }
+          })
+        })
+        return;
+      }
+      this.attendanceService.passAttendance(this.assembly, person).subscribe({
+        next: () => {
+          Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+          this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+          });
         },
         error: ({error}) => {
           console.log(error);
-              Swal.fire('Algo salio mal...', error.error, 'error');
+          Swal.fire('Algo salio mal...', error.error, 'error');
         }
       })
     }
@@ -283,7 +325,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       width: '100vw',
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.search();
       }
     })

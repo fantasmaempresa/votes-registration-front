@@ -16,6 +16,16 @@ export class AssemblyComponent {
       label: 'Listas de asistencia',
       link: './signatures',
       index: 1
+    },
+    {
+      label: 'Listas de inasistencias',
+      link: './absences',
+      index: 2
+    },
+    {
+      label: 'Conteo',
+      link: './counting',
+      index: 3
     }
   ];
   activeLink = this.links[0];

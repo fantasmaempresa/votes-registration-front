@@ -35,7 +35,7 @@
         <p style="width: calc(100% - 40px);">
           {{person.name}} {{person.last_name}} {{person.mother_last_name}}
         </p>
-        <div class="edit-button">
+        <div class="edit-button" *ngIf="user.type !== 3">
           <button (click)="updateInformation(person)" aria-label="Actualizar información"
                   mat-mini-fab
                   matTooltip="Actualizar información">
@@ -62,7 +62,6 @@
         <p class="subtitle">https://www.plataformadetransparencia.org.mx</p>
       </mat-card-content>
       <mat-card-actions [ngSwitch]="actions" class="d-flex justify-content-between">
-
         <ng-container *ngSwitchCase="'user'">
           <button (click)="createUser(person)"
                   color="accent"
@@ -82,7 +81,7 @@
         </ng-container>
 
         <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="user.type === 1; else promote">
+          <ng-container *ngIf="user.type === 1">
               <button
                 (click)="removeFromTemplate(person)"
                 color="primary"
@@ -102,13 +101,13 @@
               </button>
           </ng-container>
 
-          <ng-template #promote>
+          <ng-container *ngIf="user.type === 2">
             <button (click)="promoteVoter(person)"
                     color="accent"
                     mat-flat-button>
               Promover
             </button>
-          </ng-template>
+          </ng-container>
 
         </ng-container>
 

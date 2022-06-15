@@ -8,6 +8,8 @@ import {ResumeComponent} from './page/resume/resume.component';
 import {CreateAssemblyComponent} from './dialog/create-assembly/create-assembly.component';
 import {AssemblyHistoryComponent} from "./page/assembly-history/assembly-history.component";
 import {MemorandumComponent} from './dialog/memorandum/memorandum.component';
+import {AbsencesComponent} from "./page/absences/absences.component";
+import { CountingComponent } from './page/counting/counting.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import {MemorandumComponent} from './dialog/memorandum/memorandum.component';
     SignaturesComponent,
     ResumeComponent,
     CreateAssemblyComponent,
-    MemorandumComponent
+    MemorandumComponent,
+    AbsencesComponent,
+    CountingComponent
   ],
   imports: [
     SharedModule,
