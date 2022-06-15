@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
 import {AuthService} from "../services/auth.service";
+import {WINDOW} from "../providers/window.provider";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private authService: AuthService) {
+    constructor(private router: Router, private authService: AuthService, @Inject(WINDOW) private window: Window,) {
     }
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    const hostname = window.location.hostname
+    console.log(hostname)
+      if(hostname === 'coalicion2022-stspepyod.info.com') {
+        this.router.navigate(['/docs'])
+      }
       if (this.authService.isLoggedIn()) {
           this.router.navigate(['/app']);
       }

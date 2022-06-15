@@ -7,8 +7,12 @@ import {WINDOW} from "./core/providers/window.provider";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(@Inject(WINDOW) private window: Window,) {
-    console.log(window.location.hostname);
+  constructor() {
+    // const host = window.location.hostname
+    // if(host !== 'movimientoporlademocracia.com') {
+    //
+    // }
+    // console.log(window.location.hostname);
   }
   title = 'voter-registration';
 }
