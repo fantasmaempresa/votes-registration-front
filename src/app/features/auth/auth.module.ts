@@ -10,9 +10,6 @@ import {WINDOW_PROVIDERS} from "../../core/providers/window.provider";
   declarations: [
     LoginComponent
   ],
-  providers: [
-    WINDOW_PROVIDERS,
-  ],
   imports: [
     AuthRoutingModule,
     SharedModule

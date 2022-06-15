@@ -103,6 +103,10 @@ const routes: Routes = [
     path: 'counting',
     component: CountingComponent,
   },
+  {
+    path: 'docs',
+    component: CountingComponent,
+  },
 ];
 
 @NgModule({

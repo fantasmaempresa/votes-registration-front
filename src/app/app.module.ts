@@ -18,6 +18,7 @@ import { UsersComponent } from './features/users/page/users/users.component';
 import { NewUserComponent } from './features/users/page/new-user/new-user.component';
 import {SearchModule} from "./features/search/search.module";
 import {WINDOW_PROVIDERS} from "./core/providers/window.provider";
+import { DocsComponent } from './public/docs/docs.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import {WINDOW_PROVIDERS} from "./core/providers/window.provider";
         ResultsLayoutComponent,
         UsersComponent,
         NewUserComponent,
+        DocsComponent,
     ],
     imports: [
         BrowserModule,
