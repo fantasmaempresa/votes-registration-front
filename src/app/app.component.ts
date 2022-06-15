@@ -8,11 +8,11 @@ import {WINDOW} from "./core/providers/window.provider";
 })
 export class AppComponent {
   constructor() {
-    // const host = window.location.hostname
+    const host = window.location.hostname
     // if(host !== 'movimientoporlademocracia.com') {
     //
     // }
-    // console.log(window.location.hostname);
+    console.log(window.location.hostname);
   }
   title = 'voter-registration';
 }
