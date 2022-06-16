@@ -1,23 +1,32 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6">
+    <div class="col-4">
+      <div class="anounce-frame">
+        <div class="anounce-frame-topbar">
+          ANUNCIO
+        </div>
+        <div class="anounce-frame-main">
+          <span>
+        En estricto apego a los Artículos 365 fracción II, y 371 Fracción IX Inciso d de la Ley Federal del Trabajo de aplicación supletoria a los Estatutos Internos que rigen y norman la vida interna de nuestro Sindicato, Artículo 70 Numeral 3 y Articulo 77, se usará el gafete expedido por el Gobierno del Estado de Puebla, el Poder Ejecutivo, Poder Legislativo, Poder Judicial, Fiscalía General del Estado y Organismos Descentralizados, esto con el fin de que están debidamente requisitados para acceder al recinto sindical.
+
+Siguiendo el mismo orden y en cumplimiento de lo planteado en los párrafos anteriores se da a conocer copia certificada emitida por el H. Tribunal de Arbitraje del Estado de Puebla del padrón de integrantes de nuestro sindicato, el cual se podrá consultar en la siguiente liga electrónica:
+      </span>
+        </div>
+      </div>
       <mat-list>
-        <div mat-subheader>Archivos</div>
-        <mat-list-item (click)="pdfSrc = 'assets/docs/sample.pdf'">
+        <mat-list-item (click)="pdfSrc = 'assets/docs/padron.pdf'">
           <mat-icon mat-list-icon>description</mat-icon>
-          <div mat-line>Archivo 1</div>
-        </mat-list-item>
-        <mat-list-item (click)="pdfSrc = 'assets/docs/test.pdf'">
-          <mat-icon mat-list-icon>description</mat-icon>
-          <div mat-line>Archivo 2</div>
+          <div mat-line>Padrón S.T.S.P.E.P. y O.D.</div>
+          <div mat-line><p style="font-size: 1rem">Visto <span style="font-weight: bolder">{{views$ | async}}</span> veces</p></div>
         </mat-list-item>
       </mat-list>
     </div>
-    <div class="col-6">
+    <div class="col-8">
       <pdf-viewer [src]="pdfSrc"
                   [render-text]="true"
-                  [original-size]="false"
+                  [original-size]="true"
                   style="width: 100%; height: 100vh"
+                  class="mat-elevation-z8"
       ></pdf-viewer>
     </div>
   </div>

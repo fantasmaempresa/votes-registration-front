@@ -12,14 +12,15 @@ import {ResultsLayoutComponent} from './layout/results-layout/results-layout.com
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {JwtInterceptor} from "./core/interceptors/jwt.interceptor";
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { UsersComponent } from './features/users/page/users/users.component';
-import { NewUserComponent } from './features/users/page/new-user/new-user.component';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
+import {UsersComponent} from './features/users/page/users/users.component';
+import {NewUserComponent} from './features/users/page/new-user/new-user.component';
 import {SearchModule} from "./features/search/search.module";
 import {WINDOW_PROVIDERS} from "./core/providers/window.provider";
-import { DocsComponent } from './public/docs/docs.component';
+import {DocsComponent} from './public/docs/docs.component';
 import {PdfViewerModule} from "ng2-pdf-viewer";
+import { AnnouncementComponent } from './public/docs/dialog/announcement/announcement.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import {PdfViewerModule} from "ng2-pdf-viewer";
         UsersComponent,
         NewUserComponent,
         DocsComponent,
+        AnnouncementComponent
     ],
     imports: [
         BrowserModule,
