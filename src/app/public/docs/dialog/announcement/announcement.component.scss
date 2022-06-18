@@ -1,7 +1,17 @@
 .announcement {
-  height: 545px;
-  width: 685px;
+  height: 600px;
+  width: 455px;
+  background-image: url(/assets/img/anexo_dos.jpg);
   background-repeat: no-repeat;
+}
+
+@media (max-width: 800px) {
+  .announcement {
+    height: 425px;
+    width: 270px;
+    background-image: url(/assets/img/anexo_dos_sm.jpg);
+    background-repeat: no-repeat;
+  }
 }
 
 
