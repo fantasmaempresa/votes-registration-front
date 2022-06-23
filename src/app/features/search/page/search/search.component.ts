@@ -2,7 +2,6 @@ import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, 
 import Swal from 'sweetalert2'
 import {FormControl} from "@angular/forms";
 import {
-  catchError,
   debounceTime,
   defer,
   distinctUntilChanged,
@@ -202,7 +201,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe({
       next: (result: boolean) => {
-        if(result) {
+        if (result) {
           this.search();
         }
       }
@@ -210,7 +209,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
 
-  passAttendance(person: any) {
+  async passAttendance(person: any) {
     if (!this.printerService.printCharacteristic) {
       this.printerService.messageConnectPrinter();
     }
@@ -218,74 +217,107 @@ export class SearchComponent implements OnInit, AfterViewInit {
     person.last_name && (fullName += ` ${person.last_name}`);
     person.mother_last_name && (fullName += ` ${person.mother_last_name}`);
     const randNumber = this.attendanceService.generateRandomNumber();
-    let request$: Observable<any>[] = [];
+    let attendanceRequest$: Observable<any> | null = null;
+    let updateRequest$: Observable<any> | null = null;
     if (this.assembly) {
-      if(person.missing_documents === 1) {
-        Swal.fire({
+      if (person.missing_documents === 1) {
+        await Swal.fire({
           title: '¿Entrego documentación?',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Si',
-          confirmButtonColor:' #dd0c7c',
+          confirmButtonColor: ' #dd0c7c',
           cancelButtonColor: '#b1b1b1',
           cancelButtonText: 'No',
-        }).then((result) => {
+        }).then(async (result) => {
           if (result.isConfirmed) {
             person.missing_documents = 0;
-            request$.push(this.basePersonalService.updateBasePersonal(person));
-            Swal.fire({
+            updateRequest$ = this.basePersonalService.updateBasePersonal(person);
+            await Swal.fire({
               title: '¿Deseas seguir con el pase de lista?',
               icon: 'warning',
               showCancelButton: true,
               confirmButtonText: 'Si',
-              confirmButtonColor:' #dd0c7c',
+              confirmButtonColor: ' #dd0c7c',
               cancelButtonColor: '#b1b1b1',
               cancelButtonText: 'No',
             }).then(attendanceResult => {
               if (attendanceResult.isConfirmed) {
-                request$.push(this.attendanceService.passAttendance(this.assembly, person));
+                attendanceRequest$ = this.attendanceService.passAttendance(this.assembly, person);
               }
             })
             // request$ = forkJoin([this.basePersonalService.updateBasePersonal(person),
             //   this.attendanceService.passAttendance(this.assembly, person)])
           } else if (result.dismiss === Swal.DismissReason.cancel) {
-            request$.push(this.attendanceService.passAttendance(this.assembly, person));
+            // request$.push(this.attendanceService.passAttendance(this.assembly, person));
+            await Swal.fire({
+              title: '¿Deseas seguir con el pase de lista?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si',
+              confirmButtonColor: ' #dd0c7c',
+              cancelButtonColor: '#b1b1b1',
+              cancelButtonText: 'No',
+            }).then(attendanceResult => {
+              if (attendanceResult.isConfirmed) {
+                attendanceRequest$ = this.attendanceService.passAttendance(this.assembly, person);
+              }
+            })
           }
-          forkJoin(request$).subscribe({
-            next: () => {
-              Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
-              this.printerService.printAttendanceTicket(person, randNumber).then(r => {
-              });
+        })
+      } else {
+        updateRequest$ = of(null);
+        attendanceRequest$ = this.attendanceService.passAttendance(this.assembly, person);
+      }
+
+      console.log(updateRequest$, attendanceRequest$);
+      if (!!updateRequest$ && !!attendanceRequest$) {
+        let request$ = forkJoin([updateRequest$, attendanceRequest$]);
+        request$.subscribe({
+            next: (resp) => {
+              if (resp[1]) {
+                Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+                this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+                });
+              }
             },
             error: ({error}) => {
               Swal.fire('Algo salio mal...', error.error, 'error');
+              console.log('Error actualizando y pasando asistencia')
             }
-          })
+          }
+        )
+        return;
+      }
+
+      if (updateRequest$) {
+        updateRequest$.subscribe({
+          next: (resp) => {
+            console.log(resp);
+          },
+          error: ({error}) => {
+            console.log('Hubo un error solo actualizando');
+            Swal.fire('Algo salio mal...', error.error, 'error');
+          }
         })
         return;
       }
-      this.attendanceService.passAttendance(this.assembly, person).subscribe({
-        next: () => {
-          Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
-          this.printerService.printAttendanceTicket(person, randNumber).then(r => {
-          });
-        },
-        error: ({error}) => {
-          console.log(error);
-          Swal.fire('Algo salio mal...', error.error, 'error');
-        }
-      })
-    }
 
-    // this.attendanceService.passAttendance(person.id, randNumber).subscribe(
-    //   response => {
-    //     Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
-    //     this.printerService.printAttendanceTicket(person, randNumber).then(r => {
-    //     });
-    //   }, () => {
-    //     Swal.fire('Algo salio mal...', `Servicio no disponible`, 'error');
-    //   }
-    // );
+      if (attendanceRequest$) {
+        attendanceRequest$.subscribe({
+          next: (resp) => {
+            Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
+                this.printerService.printAttendanceTicket(person, randNumber).then(r => {
+                });
+          },
+          error: ({error}) => {
+            console.log('Hubo un error solo pasando asistencia');
+            Swal.fire('Algo salio mal...', error.error, 'error');
+          }
+        })
+        return;
+      }
+    }
   }
 
   showInformation(person: any) {
