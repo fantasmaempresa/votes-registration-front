@@ -56,10 +56,13 @@ export class PrinterService {
 
   async printVoteTicket(voter: any, option: string) {
     let date = new Date().toISOString()
+    let fullName = voter.name;
+    voter.last_name && (fullName += ` ${voter.last_name}`);
+    voter.mother_last_name && (fullName += ` ${voter.mother_last_name}`);
     let text =
       SPACE_CONSTANT
       + SPACE_CONSTANT
-      + `${voter.name} ${voter.last_name} ${voter.mother_last_name}`
+      + `${fullName} `
       + SPACE_CONSTANT
       + SPACE_CONSTANT
       + 'ADSC'
@@ -70,16 +73,9 @@ export class PrinterService {
       + `${voter.affiliation_area}`;
     await this.writeText(text);
     text = SPACE_CONSTANT
-      + 'INFORMACION OBTENIDA DE LA '
-      + 'PLATAFORMA NACIONAL DE TRANSPARENCIA'
       + SPACE_CONSTANT
       + SPACE_CONSTANT
-      + 'https://www.plataformadetransparencia.org.mx'
-      + SPACE_CONSTANT
-      + `${option} -`
       + `${date}`
-      + SPACE_CONSTANT
-      + SPACE_CONSTANT
       + SPACE_CONSTANT
       + SPACE_CONSTANT;
     await this.writeText(text);
@@ -132,11 +128,14 @@ export class PrinterService {
 
   async printAttendanceTicket(person: any, randNumber: string) {
     const date = new Date().toISOString()
+    let fullName = person.name;
+    person.last_name && (fullName += ` ${person.last_name}`);
+    person.mother_last_name && (fullName += ` ${person.mother_last_name}`);
     let text =
       SPACE_CONSTANT
       + SPACE_CONSTANT
       + SPACE_CONSTANT
-      + `${person.name} ${person.last_name} ${person.mother_last_name}`
+      + `${fullName}`
       + SPACE_CONSTANT
       + SPACE_CONSTANT
       + '# de Comprobacion'
