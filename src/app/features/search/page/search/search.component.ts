@@ -201,21 +201,24 @@ export class SearchComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe({
-      next: () => {
-        this.search();
+      next: (result: boolean) => {
+        if(result) {
+          this.search();
+        }
       }
     })
   }
 
 
   passAttendance(person: any) {
-    // if (!this.printerService.printCharacteristic) {
-    //   this.printerService.messageConnectPrinter();
-    //   return;
-    // }
-    const fullName = `${person.name} ${person.last_name} ${person.mother_last_name}`;
+    if (!this.printerService.printCharacteristic) {
+      this.printerService.messageConnectPrinter();
+    }
+    let fullName = `${person.name}`;
+    person.last_name && (fullName += ` ${person.last_name}`);
+    person.mother_last_name && (fullName += ` ${person.mother_last_name}`);
     const randNumber = this.attendanceService.generateRandomNumber();
-    let request$: Observable<any>;
+    let request$: Observable<any>[] = [];
     if (this.assembly) {
       if(person.missing_documents === 1) {
         Swal.fire({
@@ -223,16 +226,32 @@ export class SearchComponent implements OnInit, AfterViewInit {
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Si',
-          cancelButtonText: 'No!',
+          confirmButtonColor:' #dd0c7c',
+          cancelButtonColor: '#b1b1b1',
+          cancelButtonText: 'No',
         }).then((result) => {
           if (result.isConfirmed) {
             person.missing_documents = 0;
-            request$ = forkJoin([this.basePersonalService.updateBasePersonal(person),
-              this.attendanceService.passAttendance(this.assembly, person)])
+            request$.push(this.basePersonalService.updateBasePersonal(person));
+            Swal.fire({
+              title: '¿Deseas seguir con el pase de lista?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si',
+              confirmButtonColor:' #dd0c7c',
+              cancelButtonColor: '#b1b1b1',
+              cancelButtonText: 'No',
+            }).then(attendanceResult => {
+              if (attendanceResult.isConfirmed) {
+                request$.push(this.attendanceService.passAttendance(this.assembly, person));
+              }
+            })
+            // request$ = forkJoin([this.basePersonalService.updateBasePersonal(person),
+            //   this.attendanceService.passAttendance(this.assembly, person)])
           } else if (result.dismiss === Swal.DismissReason.cancel) {
-            request$ = this.attendanceService.passAttendance(this.assembly, person)
+            request$.push(this.attendanceService.passAttendance(this.assembly, person));
           }
-          request$.subscribe({
+          forkJoin(request$).subscribe({
             next: () => {
               Swal.fire(`Pase de lista`, `${fullName} confirmo asistencia`, 'success');
               this.printerService.printAttendanceTicket(person, randNumber).then(r => {
@@ -278,8 +297,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
       '<div class="row">',
       '<div class="col-6"><span class="dialog__label">Nombre Completo:</span></div>',
       `<div class="col-6"><span class="dialog__value">${fullName}</span></div>`,
-      '<div class="col-6"><span class="dialog__label">ID de registro:</span></div>',
-      `<div class="col-6"><span class="dialog__value">${person.id_register}</span></div>`,
+      '<div class="col-6"><span class="dialog__label">Expediente:</span></div>',
+      `<div class="col-6"><span class="dialog__value">${person.expedient}</span></div>`,
       person.affiliation_area ? '<div class="col-6"><span class="dialog__label">Area de Adscripción:</span></div>' +
         `<div class="col-6"><span class="dialog__value">${person.affiliation_area}</span></div>` : '',
       person.exercise ? '<div class="col-6"><span class="dialog__label">Ejercicio:</span></div>' +

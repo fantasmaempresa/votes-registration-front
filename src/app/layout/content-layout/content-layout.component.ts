@@ -26,37 +26,24 @@ export class ContentLayoutComponent implements OnInit {
   ngOnInit(): void {
     // @ts-ignore
     let user: any = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
-    if(user.type === 1) {
-      console.log('Soy admin estoy esperando usuarios')
+    if(user && user.type === 1) {
       this.socketService.subscribeToChannel('oauth', 'OauthEvent', ({user}: any) => {
-
         Swal.fire({
           title: `El usuario ${user.email} esta intentando conectarse`,
           showDenyButton: true,
-          // showCancelButton: true,
           denyButtonText: `Denegar`,
           confirmButtonText: 'Autorizar',
           confirmButtonColor: '#00d203',
           reverseButtons: true
         }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             this.authService.authorizeLogin(user.id).subscribe(res => console.log(res));
           } else {
             this.authService.unauthorizeLogin(user.id).subscribe(res => console.log(res));
           }
-        })
-        // this.openSnackBar(`El usuario ${user.email} esta intentando conectarse`, 'Aceptar');
+        });
       });
-      // this.socketService.subscribeToChannel('authorize', 'AuthorizeLoginEvent', (data: any) => {
-      //   console.log(data);
-      // });
     }
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action);
   }
 
   openDialog() {
@@ -65,5 +52,4 @@ export class ContentLayoutComponent implements OnInit {
       console.log('Todo chido')
     })
   }
-
 }
